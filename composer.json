@@ -17,10 +17,6 @@
             "email": "tasso.gama@gmail.com"
         }
     ],
-    "dist":{
-        "url": "git@github.com:magroski/frogg.git",
-        "type": "git"
-    },
     "autoload": {
         "psr-4": {
             "Frogg\\": "/"
