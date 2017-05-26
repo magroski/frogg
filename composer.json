@@ -1,0 +1,40 @@
+{
+    "name": "magroski/frogg",
+    "description": "Nogg PHP Framework/Toolset for use with Phalcon Framework",
+    "version" : 1.0,
+    "type": "library",
+    "keywords": [
+        "Phalcon",
+        "Framework",
+        "Helpers",
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lucas Magroski",
+            "email": "magroski@gmail.com"
+        },
+        {
+            "name": "Tasso Gama",
+            "email": "tasso.gama@gmail.com"
+        }
+    ],
+    "dist":{
+        "url": "git@github.com:magroski/frogg.git",
+        "type": "git"
+    },
+    "autoload": {
+        "psr-4": {
+            "Frogg\\": "/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "aws/aws-sdk-php": "^3.27",
+        "twilio/sdk": "^5.3",
+        "mobiledetect/mobiledetectlib": "^2.8",
+        "google/apiclient": "^2.1",
+        "microsoft/microsoft-graph": "1.0.*",
+		"league/oauth2-client": "^2.0"
+    }
+}
