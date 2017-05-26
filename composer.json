@@ -5,8 +5,7 @@
     "type": "library",
     "keywords": [
         "Phalcon",
-        "Framework",
-        "Helpers",
+        "Framework"
     ],
     "license": "MIT",
     "authors": [
@@ -30,6 +29,7 @@
     },
     "minimum-stability": "stable",
     "require": {
+        "php": "^7.0",
         "aws/aws-sdk-php": "^3.27",
         "twilio/sdk": "^5.3",
         "mobiledetect/mobiledetectlib": "^2.8",
