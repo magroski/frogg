@@ -26,6 +26,10 @@ class Controller extends PhalconController {
 		$this->auth = $auth;
 	}
 
+	public function getUnauthorizedUrl(){
+		return $this->unauthorizedUrl;
+	}
+
 	public function forward($uri, $params = array()){
 		$uriParts = explode('/', $uri);
 		return $this->dispatcher->forward(

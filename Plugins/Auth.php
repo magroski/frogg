@@ -14,7 +14,7 @@ class Auth extends Plugin {
 		$auth = $this->session->get($controller->authLabel);
 
 		if(!$controller->isAllowed($actionName, $auth)){
-			$controller->redirect($controller->unauthorizedUrl);
+			$controller->redirect($controller->getUnauthorizedUrl());
 			return false;
 		} else {
 			$controller->login($auth);
