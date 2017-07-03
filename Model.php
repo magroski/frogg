@@ -25,7 +25,8 @@ class Model extends PhalconModel{
 	}
 
 	public static function getByTokenId($token, $key){
-		return static::findFirst(WT::decode($token, $key)->id);
+		$data = WT::decode($token, $key);
+		return isset($data->id) ? static::findFirstById($data->id) : false ;
 	}
 
 	private function getNumeration($slug) {
