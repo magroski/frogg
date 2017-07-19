@@ -30,9 +30,15 @@ class Controller extends PhalconController {
 		return $this->unauthorizedUrl;
 	}
 
-	public function forward($uri, $params = array()){
+    /**
+     * Syntactic sugar for Phalcon's $dispatcher->forward
+     *
+     * @param string $uri       String in the following format: hyphen_case_controller/action_name
+     * @param array  $params    Key-value array containing parameters and values
+     */
+	public function forward(string $uri, $params = array()){
 		$uriParts = explode('/', $uri);
-		return $this->dispatcher->forward(
+		$this->dispatcher->forward(
 			array(
 				'controller' => $uriParts[0],
 				'action' => $uriParts[1],
