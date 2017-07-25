@@ -8,13 +8,6 @@ use Frogg\Crypto\WT;
 class Model extends PhalconModel
 {
 
-    public function __construct($id = null)
-    {
-        if (!is_null($id) && ($self = static::findFirstById($id))) {
-            return $self;
-        }
-    }
-
     public function permalinkFor($attribute)
     {
         $tmp = new Permalink($this->$attribute);
