@@ -2,6 +2,7 @@
 
 namespace Frogg\Calendar;
 
-abstract class Base{
+abstract class Base
+{
 
 }

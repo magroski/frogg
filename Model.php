@@ -2,8 +2,8 @@
 
 namespace Frogg;
 
-use Phalcon\Mvc\Model as PhalconModel;
 use Frogg\Crypto\WT;
+use Phalcon\Mvc\Model as PhalconModel;
 
 class Model extends PhalconModel
 {

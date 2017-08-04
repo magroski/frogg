@@ -2,22 +2,30 @@
 
 namespace Frogg;
 
-class Csv{
+class Csv
+{
 
-	static function export($list, $filename='data', $separator=',', $enclosure='"'){
-		header('Content-Type: text/csv; charset=utf-8');
-		header('Content-Disposition: attachment; filename='.$filename.'.csv');
+    static function export($list, $filename = 'data', $separator = ',', $enclosure = '"')
+    {
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename='.$filename.'.csv');
 
-		// create a file pointer connected to the output stream
-		$output = fopen('php://output', 'w');
+        // create a file pointer connected to the output stream
+        $output = fopen('php://output', 'w');
 
-		foreach ($list as $line) {
-			fputcsv($output, $line, $separator, $enclosure);
-		}
-	}
+        foreach ($list as $line) {
+            fputcsv($output, $line, $separator, $enclosure);
+        }
+    }
 
-	static function addVal(&$line, $value){
-		$line[] = '="'.utf8_decode($value).'"';
-	}
+    static function addVal(&$line, $value)
+    {
+        if (is_int($value)) {
+            $line[] = '='.utf8_decode($value);
+
+            return;
+        }
+        $line[] = '="'.utf8_decode($value).'"';
+    }
 
 }
