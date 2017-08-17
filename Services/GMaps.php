@@ -27,7 +27,7 @@ class GMaps
      * Obs: 1 Km = 0.62 miles but 1 meter != 0.62 yards.
      *      So, the returned value can only be in meters (if flag is active) or an approximation in miles, not yards. Thanks, America.
      */
-    public function calculateDistance($locationA, $locationB, $metric = false)
+    public function calculateDistance($locationA, $locationB, $metric = false): int
     {
         $locationA = is_array($locationA) ? implode(',', $locationA) : $locationA;
         $locationB = is_array($locationB) ? implode(',', $locationB) : $locationB;
@@ -49,6 +49,27 @@ class GMaps
         $distance = $data->rows[0]->elements[0]->distance->value;
 
         return $metric ? $distance : $distance * self::KM_TO_MILE;
+    }
+
+    /**
+     * Search the most relevant place based on a keyword and return a link to its location
+     *
+     * @param string $keyword An address or place. Ex: '5th Avenue, New York' or 'Eiffel Tower'
+     *
+     * @return string A GoogleMaps link
+     */
+    public function generateLink(string $keyword): string{
+        $response = file_get_contents('https://maps.googleapis.com/maps/api/place/textsearch/json?query='.urlencode($keyword).'&key='.$this->apiKey);
+        $data = json_decode($response);
+
+        if (empty($data->results) || $data->status == 'ZERO_RESULTS') {
+            throw new \Exception("GoogleMaps returned: ADDRESS NOT FOUND", 1);
+        }
+
+        $lat = $data->results[0]->geometry->location->lat;
+        $lng = $data->results[0]->geometry->location->lng;
+
+        return 'http://maps.google.com/maps?q='.$lat.','.$lng.'&z=17';
     }
 
 }
