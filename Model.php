@@ -8,6 +8,22 @@ use Phalcon\Mvc\Model as PhalconModel;
 class Model extends PhalconModel
 {
 
+    public function columnMap()
+    {
+        $columnMap = [];
+        $child     = new static();
+        $reflect   = new \ReflectionObject($child);
+        $props     = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
+        foreach ($props as $prop) {
+            if (substr($prop->getName(), 0, 1) !== '_') {
+                $output             = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $prop->getName()));
+                $columnMap[$output] = $prop->getName();
+            }
+        }
+
+        return $columnMap;
+    }
+
     public function permalinkFor($attribute)
     {
         $tmp = new Permalink($this->$attribute);
