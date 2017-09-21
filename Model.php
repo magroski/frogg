@@ -8,6 +8,12 @@ use Phalcon\Mvc\Model as PhalconModel;
 class Model extends PhalconModel
 {
 
+    /** @return static */
+    public static function findFirstById($id)
+    {
+        return parent::findFirstById($id);
+    }
+
     public function columnMap()
     {
         $columnMap = [];
