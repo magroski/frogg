@@ -19,7 +19,7 @@ class Controller extends PhalconController
         return in_array($actionName, $this->publicActions) || $auth;
     }
 
-    public function isMobile()
+    public function isMobile(): bool
     {
         $mobileDetector = new MobileDetect();
 

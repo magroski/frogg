@@ -17,7 +17,7 @@ class Time
     /**
      * Constructor
      *
-     * @param type $time Unix timestamp OR a string timestamp (YYYY-MM-DD)
+     * @param int|null $time Unix timestamp OR a string timestamp (YYYY-MM-DD)
      */
     public function __construct($time = 0)
     {

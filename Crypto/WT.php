@@ -8,7 +8,7 @@ class WT
     private static $encrypt_method = ENCRYPTION_TYPE;
     private static $iv             = WT_IV;
 
-    public static function encode($object, $key = WT_KEY)
+    public static function encode($object, $key = WT_KEY): string
     {
         $json = json_encode($object);
 
