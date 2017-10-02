@@ -6,7 +6,7 @@
  * Time: 13:47
  */
 
-namespace Frogg;
+namespace Frogg\Model;
 
 use Phalcon\Mvc\Model as PhalconModel;
 

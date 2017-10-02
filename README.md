@@ -1,7 +1,7 @@
 #### Model Criteria usage example:
 
 ```php
-class ModelCriteria extends Frogg\Criteria
+class ModelCriteria extends Frogg\Model\Criteria
 {
     /**
      * @return \Phalcon\Mvc\Model\Criteria

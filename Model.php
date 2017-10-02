@@ -24,12 +24,12 @@ class Model extends PhalconModel
     /**
      * @param DiInterface|null $dependencyInjector
      *
-     * @return \Frogg\Criteria $criteria
+     * @return \Frogg\Model\Criteria $criteria
      */
     public static function query(DiInterface $dependencyInjector = null)
     {
         $class = '\\'.get_called_class().'Criteria';
-        /** @var \Frogg\Criteria $criteria */
+        /** @var \Frogg\Model\Criteria $criteria */
         $criteria = new $class();
         $criteria->setDI($dependencyInjector ?? Di::getDefault());
         $criteria->setModelName(get_called_class());
