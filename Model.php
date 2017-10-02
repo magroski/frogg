@@ -7,14 +7,14 @@ use Phalcon\Di;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\Model as PhalconModel;
 
+/**        
+ * Class Model        
+ * @package Frogg        
+ *        
+ * @method static static findFirstById(int $id)        
+ */
 class Model extends PhalconModel
 {
-    /** @return static */
-    public static function findFirstById($id)
-    {
-        return parent::findFirstById($id);
-    }
-
     /**
      * @param DiInterface|null $dependencyInjector
      *
