@@ -17,7 +17,7 @@ use Phalcon\Mvc\Model as PhalconModel;
  *
  *     public static function query(DiInterface $dependencyInjector = null)
  *     {
- *         return parent::query($dependencyInjector)->addCriteriaName();
+ *         return parent::query($dependencyInjector)->softDelete();
  *     }
  *
  * @package Frogg
@@ -26,7 +26,7 @@ use Phalcon\Mvc\Model as PhalconModel;
  */
 class Criteria extends PhalconModel\Criteria
 {
-    public $modelCriterias = [];
+    private $modelCriterias = [];
 
     /**
      * removes soft deleted entries from the result.
@@ -64,7 +64,22 @@ class Criteria extends PhalconModel\Criteria
         return $instance->parentExecute();
     }
 
-    public function parentExecute()
+    public function getPhql()
+    {
+        return $this->createBuilder()->getPhql();
+    }
+
+    public function getQuery()
+    {
+        return $this->createBuilder()->getQuery();
+    }
+
+    public function getActiveCriterias()
+    {
+        return $this->modelCriterias;
+    }
+
+    private function parentExecute()
     {
         return parent::execute();
     }
