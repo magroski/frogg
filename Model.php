@@ -12,6 +12,7 @@ use Phalcon\Mvc\Model as PhalconModel;
  * @package Frogg
  *
  * @method static static findFirstById(int $id)
+ * @method static Model\ResultSet find($params = null)
  */
 class Model extends PhalconModel
 {
