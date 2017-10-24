@@ -38,7 +38,7 @@ class Criteria extends PhalconModel\Criteria
      * @internal param $add
      *
      */
-    public function softDeleteCriteria($column = 'deleted', $activeValue = 0)
+    public function softDelete($column = 'deleted', $activeValue = 0)
     {
         return $this->andWhere($column.'='.$activeValue);
     }
@@ -57,7 +57,7 @@ class Criteria extends PhalconModel\Criteria
     {
         $instance = $this;
         foreach ($this->modelCriterias as $criteria => $value) {
-            $method   = lcfirst($criteria).'Criteria';
+            $method   = lcfirst($criteria);
             $instance = $instance->$method(...$value);
         }
 
@@ -98,21 +98,38 @@ class Criteria extends PhalconModel\Criteria
     {
         if ($merge) {
             $query_types = $this->getQuery()->getBindTypes();
-            $bindTypes   = array_merge($query_types ?? [], $bindTypes);
+            $bindTypes   = array_merge($query_types ? : [], $bindTypes);
         }
         parent::bindTypes($bindTypes);
+    }
+
+    public function addCriteria($name, $arguments = [])
+    {
+        if(method_exists($this, $name)) {
+            $this->modelCriterias[$name] = $arguments;
+        } else {
+            Throw new \Exception('Criteria '.$name.' does not exist.');
+        }
+        return $this;
+    }
+
+    public function removeCriteria($name)
+    {
+        if (isset($this->modelCriterias[$name])) {
+            unset($this->modelCriterias[$name]);
+        }
+
+        return $this;
     }
 
     public function __call($name, $arguments)
     {
         if (strpos($name, 'add') !== false) {
-            $criteria                        = str_replace('add', '', $name);
-            $this->modelCriterias[$criteria] = $arguments;
+            $criteria = str_replace('add', '', $name);
+            $this->addCriteria($criteria, $arguments);
         } else if (strpos($name, 'remove') !== false) {
             $criteria = str_replace('remove', '', $name);
-            if (isset($this->modelCriterias[$criteria])) {
-                unset($this->modelCriterias[$criteria]);
-            }
+            $this->removeCriteria($criteria);
         } else {
             Throw new \Exception('Method '.$name.' does not exist.');
         }
