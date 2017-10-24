@@ -98,7 +98,7 @@ class Criteria extends PhalconModel\Criteria
     {
         if ($merge) {
             $query_types = $this->getQuery()->getBindTypes();
-            $bindTypes   = array_merge($query_types ? : [], $bindTypes);
+            $bindTypes   = array_merge($query_types ?? [], $bindTypes);
         }
         parent::bindTypes($bindTypes);
     }
