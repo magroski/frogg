@@ -81,7 +81,7 @@ class Criteria extends PhalconModel\Criteria
 
     public function findFirstById($id)
     {
-        return $this->where($this->getModelName().'.id = '.$id)->execute()->getFirst();
+        return $this->andWhere($this->getModelName().'.id = '.$id)->execute()->getFirst();
     }
 
     private function parentExecute()
