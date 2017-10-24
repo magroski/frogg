@@ -89,6 +89,20 @@ class Criteria extends PhalconModel\Criteria
         return parent::execute();
     }
 
+    public function bind(array $bindParams, $merge = true)
+    {
+        parent::bind($bindParams, $merge);
+    }
+
+    public function bindTypes(array $bindTypes, $merge = true)
+    {
+        if ($merge) {
+            $query_types = $this->getQuery()->getBindTypes();
+            $bindTypes   = array_merge($query_types ? : [], $bindTypes);
+        }
+        parent::bindTypes($bindTypes);
+    }
+
     public function __call($name, $arguments)
     {
         if (strpos($name, 'add') !== false) {
