@@ -54,6 +54,18 @@ class Criteria extends PhalconModel\Criteria
         return $this->removeSoftDelete();
     }
 
+    public function createBuilder()
+    {
+        if (method_exists(parent::class, 'createBuilder')) {
+            return parent::createBuilder();
+        } else {
+            $params = $this->getParams();
+            /** @var PhalconModel\Manager $modelsManager */
+            $modelsManager = $this->getDI()->get('modelsManager');
+            return $modelsManager->createBuilder($params);
+        }
+    }
+
     public function execute()
     {
         foreach ($this->modelCriterias as $criteria => $value) {
