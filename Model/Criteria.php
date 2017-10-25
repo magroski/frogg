@@ -26,7 +26,8 @@ use Phalcon\Mvc\Model as PhalconModel;
  */
 class Criteria extends PhalconModel\Criteria
 {
-    private $modelCriterias = [];
+    private   $modelCriterias = [];
+    protected $alias;
 
     /**
      * removes soft deleted entries from the result.
@@ -55,13 +56,16 @@ class Criteria extends PhalconModel\Criteria
 
     public function execute()
     {
-        $instance = $this;
         foreach ($this->modelCriterias as $criteria => $value) {
-            $method   = lcfirst($criteria);
-            $instance = $instance->$method(...$value);
+            $method = lcfirst($criteria);
+            $this->$method(...$value);
         }
 
-        return $instance->parentExecute();
+        /** @var PhalconModel\Query\Builder $builder */
+        $builder = $this->createBuilder();
+        $builder->from([$this->getAlias() => $this->getModelName()]);
+
+        return $builder->getQuery()->execute();
     }
 
     public function getPhql()
@@ -81,7 +85,7 @@ class Criteria extends PhalconModel\Criteria
 
     public function findFirstById($id)
     {
-        return $this->andWhere($this->getModelName().'.id = '.$id)->execute()->getFirst();
+        return $this->andWhere($this->getAlias().'.id = '.$id)->execute()->getFirst();
     }
 
     private function parentExecute()
@@ -89,11 +93,27 @@ class Criteria extends PhalconModel\Criteria
         return parent::execute();
     }
 
+    /**
+     * Defaults merge to true on bind params
+     *
+     * @param array $bindParams
+     * @param bool  $merge
+     *
+     * @return PhalconModel\Criteria|void
+     */
     public function bind(array $bindParams, $merge = true)
     {
         parent::bind($bindParams, $merge);
     }
 
+    /**
+     * Add merge feature to bindTypes (lazy phalcon developers should made that) and defaults it to true
+     *
+     * @param array $bindTypes
+     * @param bool  $merge
+     *
+     * @return PhalconModel\Criteria|void
+     */
     public function bindTypes(array $bindTypes, $merge = true)
     {
         if ($merge) {
@@ -105,11 +125,12 @@ class Criteria extends PhalconModel\Criteria
 
     public function addCriteria($name, $arguments = [])
     {
-        if(method_exists($this, $name)) {
+        if (method_exists($this, $name)) {
             $this->modelCriterias[$name] = $arguments;
         } else {
             Throw new \Exception('Criteria '.$name.' does not exist.');
         }
+
         return $this;
     }
 
@@ -118,6 +139,18 @@ class Criteria extends PhalconModel\Criteria
         if (isset($this->modelCriterias[$name])) {
             unset($this->modelCriterias[$name]);
         }
+
+        return $this;
+    }
+
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
 
         return $this;
     }
