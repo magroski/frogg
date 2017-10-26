@@ -14,7 +14,7 @@ use Phalcon\Mvc\Model as PhalconModel;
  * @method static static findFirstById(int $id)
  * @method static Model\ResultSet find($params = null)
  */
-class Model extends PhalconModel
+class Model extends PhalconModel implements \JsonSerializable
 {
 
     public function getResultsetClass()
@@ -112,5 +112,20 @@ class Model extends PhalconModel
         return $slug;
     }
 
-}
+    public function jsonSerialize()
+    {
+        $myData  = [];
+        $child   = new static();
+        $reflect = new \ReflectionObject($child);
+        $props   = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
+        foreach ($props as $prop) {
+            $propName = $prop->getName();
+            if (substr($propName, 0, 1) !== '_') {
+                $myData[$propName] = $this->{$propName};
+            }
+        }
 
+        return $myData;
+    }
+
+}
