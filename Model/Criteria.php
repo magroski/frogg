@@ -62,6 +62,7 @@ class Criteria extends PhalconModel\Criteria
             $params = $this->getParams();
             /** @var PhalconModel\Manager $modelsManager */
             $modelsManager = $this->getDI()->get('modelsManager');
+
             return $modelsManager->createBuilder($params)->from($this->getModelName());
         }
     }
