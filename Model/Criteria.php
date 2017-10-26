@@ -62,7 +62,7 @@ class Criteria extends PhalconModel\Criteria
             $params = $this->getParams();
             /** @var PhalconModel\Manager $modelsManager */
             $modelsManager = $this->getDI()->get('modelsManager');
-            return $modelsManager->createBuilder($params);
+            return $modelsManager->createBuilder($params)->from($this->getModelName());
         }
     }
 
@@ -73,17 +73,8 @@ class Criteria extends PhalconModel\Criteria
             $this->$method(...$value);
         }
 
-        if (method_exists($this, 'createBuilder')) {
-            /** @var PhalconModel\Query\Builder $builder */
-            $builder = $this->createBuilder();
-            $builder->from([$this->getAlias() => $this->getModelName()]);
-        } else {
-            $params = $this->getParams();
-            /** @var PhalconModel\Manager $modelsManager */
-            $modelsManager = $this->getDI()->get('modelsManager');
-            $builder       = $modelsManager->createBuilder($params);
-            $builder->addFrom($this->getModelName(), $this->getAlias());
-        }
+        $builder = $this->createBuilder();
+        $builder->from([$this->getAlias() => $this->getModelName()]);
 
         return $builder->getQuery()->execute();
     }
