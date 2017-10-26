@@ -1,8 +1,18 @@
 version: 2
 jobs:
-   build:
-     docker:
-       - image: circleci/php:7-cli-node
-     steps:
-       - checkout
-       - run: echo "hello world"
+  build:
+    docker:
+      - image: circleci/php:7-cli-node
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "composer.json" }}
+          - v1-dependencies-
+      - run: composer install -n --prefer-dist
+      - save_cache:
+          paths:
+            - ./vendor
+          key: v1-dependencies-{{ checksum "composer.json" }}
+      - run: phpunit
