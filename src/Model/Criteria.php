@@ -100,6 +100,11 @@ class Criteria extends PhalconModel\Criteria
         return $this->andWhere($this->getAlias().'.id = '.$id)->execute()->getFirst();
     }
 
+    public function count($column = '*')
+    {
+        return $this->columns('count('.$column.') as total')->execute()->getFirst()->total;
+    }
+
     private function parentExecute()
     {
         return parent::execute();
