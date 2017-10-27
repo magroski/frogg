@@ -3,6 +3,7 @@
 namespace Frogg;
 
 use Detection\MobileDetect;
+use Phalcon\Http\Response;
 use Phalcon\Mvc\Controller as PhalconController;
 use Phalcon\Mvc\View as PhalconView;
 
@@ -115,6 +116,20 @@ class Controller extends PhalconController
         if ($this->request->hasQuery($name)) $decodedParam = $this->request->getQuery($name);
 
         return $decodedParam;
+    }
+
+    /**
+     * Short way to build and return a JSON response
+     *
+     * @param array|mixed $data Data to be json encoded
+     *
+     * @return Response
+     */
+    public function setJsonResponse($data = []): Response
+    {
+        $response = new Response();
+
+        return $response->setJsonContent($data, JSON_NUMERIC_CHECK);
     }
 
 }

@@ -123,6 +123,7 @@ class ResultSet extends Simple
         }
 
         $skeleton = $this->_model;
+
         return array_map(function ($entry) use ($skeleton) {
             return Model::cloneResult($skeleton, $entry);
         }, $this->toArray());

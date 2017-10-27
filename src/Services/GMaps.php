@@ -58,9 +58,10 @@ class GMaps
      *
      * @return string A GoogleMaps link
      */
-    public function generateLink(string $keyword): string{
+    public function generateLink(string $keyword): string
+    {
         $response = file_get_contents('https://maps.googleapis.com/maps/api/place/textsearch/json?query='.urlencode($keyword).'&key='.$this->apiKey);
-        $data = json_decode($response);
+        $data     = json_decode($response);
 
         if (empty($data->results) || $data->status == 'ZERO_RESULTS') {
             throw new \Exception("GoogleMaps returned: ADDRESS NOT FOUND", 1);
