@@ -80,6 +80,24 @@ class Criteria extends PhalconModel\Criteria
         return $builder->getQuery()->execute();
     }
 
+    public function getSql(): string
+    {
+        foreach ($this->modelCriterias as $criteria => $value) {
+            $method = lcfirst($criteria);
+            $this->$method(...$value);
+        }
+
+        $builder = $this->createBuilder();
+        $builder->from([$this->getAlias() => $this->getModelName()]);
+
+        return $builder->getQuery()->getSql()['sql'];
+    }
+
+    public function clone()
+    {
+        return clone $this;
+    }
+
     public function getPhql()
     {
         return $this->createBuilder()->getPhql();
