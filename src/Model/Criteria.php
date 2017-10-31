@@ -90,7 +90,7 @@ class Criteria extends PhalconModel\Criteria
         $builder = $this->createBuilder();
         $builder->from([$this->getAlias() => $this->getModelName()]);
 
-        return $builder->getQuery()->getSql()['sql'];
+        return $builder->getQuery()->getSql();
     }
 
     public function clone()
