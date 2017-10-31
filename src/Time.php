@@ -100,6 +100,8 @@ class Time
     /**
      * Returns the minute of the hour of the stored time variable  <br/>
      * Value between 00 and 59 (with leading zeros)
+     *
+     * @return string Date minute as string
      */
     public function getMinutes(): string
     {
