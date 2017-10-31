@@ -3,6 +3,7 @@
 namespace Frogg;
 
 use Frogg\Crypto\WT;
+use Frogg\Model\Criteria;
 use Phalcon\Di;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\Model as PhalconModel;
@@ -30,10 +31,14 @@ class Model extends PhalconModel implements \JsonSerializable
     public static function query(DiInterface $dependencyInjector = null)
     {
         $class = '\\'.get_called_class().'Criteria';
-        /** @var \Frogg\Model\Criteria $criteria */
-        $criteria = new $class();
-        $criteria->setDI($dependencyInjector ?? Di::getDefault());
-        $criteria->setModelName(get_called_class());
+        if(class_exists($class)) {
+            /** @var \Frogg\Model\Criteria $criteria */
+            $criteria = new $class();
+            $criteria->setDI($dependencyInjector ?: Di::getDefault());
+            $criteria->setModelName(get_called_class());
+        } else {
+            $criteria = (new Criteria())->setModelName(get_called_class())->setAlias(get_called_class());
+        }
 
         return $criteria;
     }
