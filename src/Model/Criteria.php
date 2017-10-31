@@ -93,7 +93,10 @@ class Criteria extends PhalconModel\Criteria
         return $builder->getQuery()->getSql();
     }
 
-    public function clone()
+    /**
+     * @return static
+     */
+    public function clone(): static
     {
         return clone $this;
     }
