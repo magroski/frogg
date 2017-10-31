@@ -13,7 +13,6 @@ class Permalink
      * Default constructor for class Frogg\Permalink
      *
      * @param string $title  The original string from where the permalink will be created
-     * @param string $table  The database table where the permalink will be stored
      * @param string $prefix Default value is ''
      * @param string $suffix Default value is ''
      */
@@ -46,8 +45,10 @@ class Permalink
 
     /**
      * Creates the permalink
+     *
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         return $this->prefix.self::createSlug($this->title).$this->suffix;
     }
@@ -56,8 +57,10 @@ class Permalink
      * Creates the first version of the Permalink
      *
      * @param string $title Text that used to create the permalink
+     *
+     * @return string
      */
-    public static function createSlug($title)
+    public static function createSlug($title): string
     {
 
         $normalizeChars = [

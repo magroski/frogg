@@ -18,11 +18,23 @@ class PermalinkTest extends TestCase
         $this->assertEquals('my-name', $permalink->create());
     }
 
-    public function testCreatSlugWithPrefix()
+    public function testCreateSlugWithPrefix()
     {
         $permalink = new Permalink('Slug');
         $permalink->setPrefix('prefixed');
         $this->assertEquals('prefixedslug', $permalink->create());
+    }
+
+    public function testCreateSlugWithSuffix()
+    {
+        $permalink = new Permalink('Slug');
+        $permalink->setSuffix('suffix');
+        $this->assertEquals('slugsuffix', $permalink->create());
+    }
+
+    public function testStaticCreateSlug()
+    {
+        $this->assertEquals('metalslug', Permalink::createSlug('MetalSlug'));
     }
 
 }

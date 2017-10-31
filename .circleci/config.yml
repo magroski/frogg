@@ -5,7 +5,6 @@ jobs:
       - image: circleci/php:7-cli-node
     steps:
       - checkout
-      # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "composer.json" }}
