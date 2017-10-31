@@ -96,7 +96,7 @@ class Criteria extends PhalconModel\Criteria
     /**
      * @return static
      */
-    public function clone(): static
+    public function clone()
     {
         return clone $this;
     }
