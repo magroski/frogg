@@ -25,7 +25,9 @@ class GMaps
      *             0.621371)
      *
      * Obs: 1 Km = 0.62 miles but 1 meter != 0.62 yards.
-     *      So, the returned value can only be in meters (if flag is active) or an approximation in miles, not yards. Thanks, America.
+     * So, the returned value can only be in meters (if flag is active) or an approximation in miles, not yards. Thanks, America.
+     *
+     * @throws \Exception When one of the given addresses is not found
      */
     public function calculateDistance($locationA, $locationB, $metric = false): int
     {
@@ -40,7 +42,7 @@ class GMaps
         $data     = json_decode($response);
 
         if ($data->rows[0]->elements[0]->status == 'NOT_FOUND') {
-            throw new \Exception("GoogleMaps returned: ADDRESS NOT FOUND", 1);
+            throw new \Exception('GoogleMaps exception: ADDRESS NOT FOUND. ['.$locationA.' | '.$locationB.']', 1);
         }
         if ($data->rows[0]->elements[0]->status == 'ZERO_RESULTS') {
             return 9999999;
@@ -57,6 +59,8 @@ class GMaps
      * @param string $keyword An address or place. Ex: '5th Avenue, New York' or 'Eiffel Tower'
      *
      * @return string A GoogleMaps link
+     *
+     * @throws \Exception When the given address was not found
      */
     public function generateLink(string $keyword): string
     {
@@ -64,7 +68,7 @@ class GMaps
         $data     = json_decode($response);
 
         if (empty($data->results) || $data->status == 'ZERO_RESULTS') {
-            throw new \Exception("GoogleMaps returned: ADDRESS NOT FOUND", 1);
+            throw new \Exception('GoogleMaps exception: ADDRESS NOT FOUND. ['.$keyword.']', 1);
         }
 
         $lat = $data->results[0]->geometry->location->lat;
