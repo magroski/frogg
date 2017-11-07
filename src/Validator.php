@@ -45,18 +45,22 @@ class Validator
      *
      * @param string $regex A regular expression. You can use one of the defined above or one of your own creation
      * @param string $var   String variable to be validated
+     *
+     * @return bool is the value is valid
      */
-    public static function validate($regex, $var)
+    public static function validate($regex, $var): bool
     {
-        return preg_match($regex, $var);
+        return preg_match($regex, $var) == 1;
     }
 
     /**
      * This function chekcs whether a given string is UTF-8
      *
      * @param string $string String to be checked
+     *
+     * @return bool if the encoding is UTF-8
      */
-    public static function isUTF8($string)
+    public static function isUTF8(string $string): bool
     {
         return mb_detect_encoding($string, 'UTF-8', true) == 'UTF-8';
     }
@@ -65,19 +69,22 @@ class Validator
      * This function is used to sanitize a given string
      *
      * @param string $string String variable to be sanitized
+     *
+     * @return string Returns the string trimmed, without tags and encoded with htmlspecialchars
      */
-    public static function sanitize($string)
+    public static function sanitize(string $string): string
     {
         return htmlspecialchars(strip_tags(trim($string)), ENT_QUOTES);
     }
 
     /**
-     *
      * Remove the protocol and the last '/' from a given URL
      *
      * @param string $url URL to be sanitized
+     *
+     * @return string The string without protocol (http[s]://) and the last /
      */
-    public static function sanitizeUrl($url)
+    public static function sanitizeUrl(string $url): string
     {
         $url_no_protocol = $url;
         if (stristr($url, "https://")) {
@@ -88,8 +95,8 @@ class Validator
             $url_no_protocol = $tmp[1];
         }
 
-        if ($url_no_protocol == "") {
-            return false;
+        if ($url_no_protocol == '') {
+            return '';
         }
 
         return rtrim($url_no_protocol, '/');
@@ -99,6 +106,8 @@ class Validator
      * This function is used to validate a CPF (Cadastro de Pessoa F�sica) number.
      *
      * @param string $cpf CPF as string containing only numbers (no points or score)
+     *
+     * @return bool
      */
     public static function valCPF($cpf)
     {

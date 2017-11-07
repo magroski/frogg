@@ -9,7 +9,7 @@ class Calendar
 {
     /**
      *
-     * @var SocialAuth\Networks\Base
+     * @var \SocialAuth\Networks\Base
      */
     protected $provider;
 
