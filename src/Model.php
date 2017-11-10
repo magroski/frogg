@@ -43,6 +43,12 @@ class Model extends PhalconModel implements \JsonSerializable
         return $criteria;
     }
 
+    /**
+     * Uses reflection to get all "public" properties (those that don't begin with a underscore)
+     * and parses their names from camelCase to snake_case to be used in Phalcon column mapping
+     *
+     * @return array
+     */
     public function columnMap()
     {
         $columnMap = [];

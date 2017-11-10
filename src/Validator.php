@@ -3,8 +3,8 @@
 namespace Frogg;
 
 /**
- * This class is used to validate (not sanitize) data inputs from the system and/or user.
- * Some of the most used regular expressions are defined above.
+ * This class is used to validate data inputs.
+ * Some of the most used regular expressions are defined below.
  */
 class Validator
 {
