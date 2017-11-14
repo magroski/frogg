@@ -116,9 +116,23 @@ class Criteria extends PhalconModel\Criteria
         return $this->modelCriterias;
     }
 
+    public function findFirst($conditions = false, $bindParams = null, $bindTypes = null)
+    {
+        if($conditions){
+            $this->andWhere($conditions, $bindParams, $bindTypes);
+        }
+
+        return $this->execute()->getFirst();
+    }
+
+    public function findFirstBy($column, $value)
+    {
+        return $this->findFirst($this->getAlias().'.'.$column.' = :value:', ['value' => $value]);
+    }
+
     public function findFirstById($id)
     {
-        return $this->andWhere($this->getAlias().'.id = '.$id)->execute()->getFirst();
+        return $this->findFirstBy('id', $id);
     }
 
     public function count($column = '*')
@@ -126,6 +140,9 @@ class Criteria extends PhalconModel\Criteria
         return $this->columns('count('.$column.') as total')->execute()->getFirst()->total;
     }
 
+    /**
+     * @deprecated
+     */
     private function parentExecute()
     {
         return parent::execute();
