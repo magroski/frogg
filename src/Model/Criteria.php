@@ -80,7 +80,7 @@ class Criteria extends PhalconModel\Criteria
         return $builder->getQuery()->execute();
     }
 
-    public function getSql(): string
+    public function getSql(): array
     {
         foreach ($this->modelCriterias as $criteria => $value) {
             $method = lcfirst($criteria);
