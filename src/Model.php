@@ -153,7 +153,8 @@ class Model extends PhalconModel implements \JsonSerializable
     {
         $newObject = PhalconModel::cloneResult(
             new static(),
-            $this->toArray()
+            $this->toArray(),
+            PhalconModel::DIRTY_STATE_TRANSIENT
         );
 
         foreach ($options as $option) {
