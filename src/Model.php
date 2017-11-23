@@ -18,6 +18,11 @@ use Phalcon\Mvc\Model as PhalconModel;
 class Model extends PhalconModel implements \JsonSerializable
 {
 
+    //This option will set the id of the clone to null
+    const CLONE_RM_ID      = 1;
+    //This option will set the id of the clone to null AND save it to the DB
+    const CLONE_CREATE_NEW = 2;
+
     public function getResultsetClass()
     {
         return 'Frogg\Model\ResultSet';
@@ -31,10 +36,10 @@ class Model extends PhalconModel implements \JsonSerializable
     public static function query(DiInterface $dependencyInjector = null)
     {
         $class = '\\'.get_called_class().'Criteria';
-        if(class_exists($class)) {
+        if (class_exists($class)) {
             /** @var \Frogg\Model\Criteria $criteria */
             $criteria = new $class();
-            $criteria->setDI($dependencyInjector ?: Di::getDefault());
+            $criteria->setDI($dependencyInjector ? : Di::getDefault());
             $criteria->setModelName(get_called_class());
         } else {
             $criteria = (new Criteria())->setModelName(get_called_class())->setAlias(get_called_class());
@@ -137,6 +142,33 @@ class Model extends PhalconModel implements \JsonSerializable
         }
 
         return $myData;
+    }
+
+    /**
+     * @param array $options Array of options found in Frogg\Model
+     *
+     * @return static |\Phalcon\Mvc\ModelInterface Returns a copy of the current object
+     */
+    public function clone($options = [])
+    {
+        $newObject = PhalconModel::cloneResult(
+            new static(),
+            $this->toArray()
+        );
+
+        foreach ($options as $option) {
+            switch ($option) {
+                case self::CLONE_RM_ID:
+                    $newObject->id = null;
+                    break;
+                case self::CLONE_CREATE_NEW:
+                    $newObject->id = null;
+                    $newObject->create();
+                    break;
+            }
+        }
+
+        return $newObject;
     }
 
 }
