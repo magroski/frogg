@@ -224,4 +224,33 @@ class Criteria extends PhalconModel\Criteria
 
         return $this;
     }
+
+    /**
+     * Apply $filters for query
+     *
+     * @param array $filters
+     * @param bool  $strict Exception return if property not exists on model
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function applyFilters(array $filters, bool $strict = false)
+    {
+        foreach ($filters ?? [] as $filterName => $filterValue) {
+            if ($filterValue === null) {
+                continue;
+            }
+
+            if (!property_exists($this->getModelName(), $filterName)) {
+                if ($strict) {
+                    throw new \Exception("Param $filterName not found for class {$this->getModelName()}");
+                }
+                continue;
+            }
+
+            $this->andWhere("{$this->getAlias()}.{$filterName} = :{$filterName}:", [$filterName => $filterValue]);
+        }
+
+        return $this;
+    }
 }
