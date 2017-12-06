@@ -5,6 +5,7 @@ namespace Frogg\Time;
 class DateInterval
 {
 
+    /** @var int $time */
     private $time;
 
     /**
@@ -24,100 +25,51 @@ class DateInterval
     }
 
     /**
-     * Returns the length of the interval in years
+     * @return int Interval in years
      */
-    public function toYears()
+    public function toYears(): int
     {
         return floor($this->toDays() / 365);
     }
 
     /**
-     * Returns the length of the interval in months
+     * @return int Interval in months
      */
-    public function toMonths()
+    public function toMonths(): int
     {
         return floor(($this->toDays()) / 30);
     }
 
     /**
-     * Returns the length of the interval in days
+     * @return int Interval in days
      */
-    public function toDays()
+    public function toDays(): int
     {
         return floor(($this->toHours()) / 24);
     }
 
     /**
-     * Returns the length of the interval in hours
+     * @return int Interval in hours
      */
-    public function toHours()
+    public function toHours(): int
     {
         return floor(($this->toMinutes()) / 60);
     }
 
     /**
-     * Returns the length of the interval in minutes
+     * @return int Interval in minutes
      */
-    public function toMinutes()
+    public function toMinutes(): int
     {
         return floor(($this->toSeconds()) / 60);
     }
 
     /**
-     * Returns the length of the interval in seconds
+     * @return int Interval in seconds
      */
-    public function toSeconds()
+    public function toSeconds(): int
     {
         return $this->time * 1;
     }
 
-    // /**
-    //  * Returns the interval as a string. <br/>
-    //  * Example: 4 seconds ago , 5 days ago, 1 hour ago...
-    //  */
-    // public function __toString() {
-    // 	require APPLICATION_PATH.'/../library/Frogg/lang/'.LANGUAGE.'.php';
-    // 	if($this->time < 60){
-    // 		return ($this->time==1)?$this->time.$lang['second_ago']:$this->time.$lang['seconds_ago'];
-    // 	}
-    // 	if($this->time < 3600){
-    // 		return ($this->toMinutes()==1)?$this->toMinutes().$lang['minute_ago']:$this->toMinutes().$lang['minutes_ago'];
-    // 	}
-    // 	if($this->time < 86400){
-    // 		return ($this->toHours()==1)?$this->toHours().$lang['hour_ago']:$this->toHours().$lang['hours_ago'];
-    // 	}
-    // 	if($this->time < 2592000){
-    // 		return ($this->toDays()==1)?$this->toDays().$lang['day_ago']:$this->toDays().$lang['days_ago'];
-    // 	}
-    // 	if($this->time < 31536000){
-    // 		return ($this->toMonths()==1)?$this->toMonths().$lang['month_ago']:$this->toMonths().$lang['months_ago'];
-    // 	} else {
-    // 		return ($this->toYears()==1)?$this->toYears().$lang['year_ago']:$this->toYears().$lang['years_ago'];
-    // 	}
-    // }
-
-    // /**
-    //  * Returns the interval as a string with no whitespaces. <br/>
-    //  * Example: 4s , 5d, 1h...
-    //  */
-    // public function shortString() {
-    // 	require APPLICATION_PATH.'/../library/Frogg/lang/'.LANGUAGE.'.php';
-    // 	if($this->time < 60){
-    // 		return ($this->time==1)?$this->time.$lang['second_ago']:$this->time.$lang['seconds_ago'];
-    // 	}
-    // 	if($this->time < 3600){
-    // 		return ($this->toMinutes()==1)?$this->toMinutes().$lang['minute_ago']:$this->toMinutes().$lang['minutes_ago'];
-    // 	}
-    // 	if($this->time < 86400){
-    // 		return ($this->toHours()==1)?$this->toHours().$lang['hour_ago']:$this->toHours().$lang['hours_ago'];
-    // 	}
-    // 	if($this->time < 2592000){
-    // 		return ($this->toDays()==1)?$this->toDays().$lang['day_ago']:$this->toDays().$lang['days_ago'];
-    // 	}
-    // 	if($this->time < 31536000){
-    // 		return ($this->toMonths()==1)?$this->toMonths().$lang['month_ago']:$this->toMonths().$lang['months_ago'];
-    // 	} else {
-    // 		return ($this->toYears()==1)?$this->toYears().$lang['year_ago']:$this->toYears().$lang['years_ago'];
-    // 	}
-    // }
 }

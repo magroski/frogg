@@ -75,6 +75,10 @@ class Calendar
      *    ];
      *
      *    $calendar->setAccessToken($accessToken);
+     *
+     * @param $accessToken
+     *
+     * @return array
      */
     public function setAccessToken($accessToken)
     {
@@ -95,6 +99,9 @@ class Calendar
      *            'end'            => $selectedSlot['end'],
      *        ]);
      *
+     * @param $params
+     *
+     * @return mixed
      */
     public function addEvent($params)
     {
@@ -112,6 +119,9 @@ class Calendar
      *            'end'            => $selectedSlot['end'],
      *        ]);
      *
+     * @param $params
+     *
+     * @return mixed
      */
     public function updateEvent($params)
     {

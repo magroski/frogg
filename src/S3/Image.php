@@ -28,7 +28,6 @@ class Image
      * @param string $secretKey Amazon S3 secret key
      * @param string $bucket    Amazon S3 bucket name
      *
-     * @return -
      */
     public function __construct($accesKey, $secretKey, $bucket)
     {
@@ -38,9 +37,9 @@ class Image
     /**
      * Load an image from a form file input
      *
-     * @param string $name File input name attribute
+     * @param bool $name File input name attribute
      *
-     * @return -
+     * @return void -
      */
     public function getFromInput($name = false)
     {
@@ -54,10 +53,10 @@ class Image
     /**
      * Load an image from a system path
      *
-     * @param string $name File name
-     * @param string $path File path
+     * @param bool $name File name
+     * @param bool $path File path
      *
-     * @return -
+     * @return void -
      */
     public function getFromPath($name = false, $path = false)
     {
@@ -72,9 +71,9 @@ class Image
      * Load an image from a given url
      *
      * @param string $url  File url
-     * @param string $name Optional name of the destiny file
+     * @param bool   $name Optional name of the destiny file
      *
-     * @return -
+     * @return bool -
      */
     public function getFromURL($url, $name = false)
     {
@@ -139,6 +138,7 @@ class Image
 
     /**
      * Sets whether the image format will be converted or not
+     * @param $format
      */
     public function setImageConvert($format)
     {
@@ -146,8 +146,8 @@ class Image
     }
 
     /**
-     * @param mixed  $url  URL of the image
-     * @param string $name Name of the image
+     * @param mixed $url URL of the image
+     * @return bool
      */
     public static function checkMinImageSize($url)
     {
@@ -163,6 +163,8 @@ class Image
     /**
      * @param string $filename name of the file
      * @param string $path     path to the file
+     *
+     * @return bool
      */
     public function delete($filename, $path)
     {
@@ -172,7 +174,7 @@ class Image
     /**
      * Sets the file name for the new image
      *
-     * @param string $path File system path to save the image to
+     * @param $name
      */
     public function setName($name)
     {
@@ -291,6 +293,8 @@ class Image
      * Checks whether a file is an image
      *
      * @param string $name Name of the $_FILES[] field to be checked
+     *
+     * @return bool
      */
     public static function isImage($name)
     {
@@ -325,6 +329,8 @@ class Image
      * Returns the image width ans height
      *
      * @param string $name Name of the $_FILES[] field to be checked
+     *
+     * @return array|bool
      */
     public static function getImageSize($name)
     {

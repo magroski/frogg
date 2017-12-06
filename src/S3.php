@@ -40,6 +40,10 @@ class S3
      *
      * @param string $source Full path to the file, including the filename
      *
+     * @param bool   $path
+     * @param bool   $filename
+     * @param bool   $contentType
+     *
      * @return boolean
      */
     public function sendFile($source, $path = false, $filename = false, $contentType = false)
@@ -69,7 +73,7 @@ class S3
                 $objectInfo['ContentType'] = $contentType;
             }
             $this->obj->putObject($objectInfo);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             error_log($e);
 
             return false;
@@ -90,7 +94,7 @@ class S3
     {
         try {
             $this->obj->deleteObject(['Bucket' => $this->bucket_name, 'Key' => $file_path,]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
 
