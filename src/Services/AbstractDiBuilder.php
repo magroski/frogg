@@ -1,14 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: alexandre
- * Date: 12/4/17
- * Time: 4:02 PM
- */
 
 namespace Frogg\Services;
 
-class AbstractDiBuilder
+use Phalcon\Di\FactoryDefault;
+
+class AbstractDiBuilder extends FactoryDefault
 {
     /**
      * AbstractService constructor.
