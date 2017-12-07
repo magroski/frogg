@@ -10,6 +10,8 @@ class TextParser
      *
      * @param string $str The string you want to shorten
      * @param int    $len the string maximum length
+     *
+     * @return null|string|string[]
      */
     static function maxLengthByWords($str, $len = 50)
     {

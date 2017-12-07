@@ -11,8 +11,6 @@ class Tww
      * Constructor
      *
      * @param array $credentials TWW credentials in the following format ['TWW_USER'=>x,'TWW_PASS'=>y]
-     *
-     * @return -
      */
     public function __construct(array $credentials)
     {
@@ -26,8 +24,6 @@ class Tww
      *                    * 'id'   - recipient unique identifier
      *                    * 'text' - message that will be sent
      *                    * 'to'     - number without country code,
-     *
-     * @return -
      */
     public function send(array $data)
     {

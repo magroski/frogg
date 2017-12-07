@@ -15,8 +15,6 @@ class Sms
      *
      * @param array  $credentials Gateway client credentials
      * @param string $cc          Country code ('us', 'br', 'jp', ...)
-     *
-     * @return -
      */
     public function __construct(array $credentials, string $cc)
     {
@@ -42,8 +40,6 @@ class Sms
      *                    * 'text' - message that will be sent
      *                    * 'to'     - number without country code,
      *                    * 'from' - number that will send the message,
-     *
-     * @return -
      */
     public function send(array $data)
     {

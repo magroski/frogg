@@ -13,8 +13,6 @@ class Twilio
      * Constructor
      *
      * @param array $credentials Twilio credentials in the following format ['TWILIO_ACCOUNT_ID'=>x,'TWILIO_AUTH_TOKEN'=>y]
-     *
-     * @return -
      */
     public function __construct(array $credentials)
     {
@@ -39,7 +37,7 @@ class Twilio
 
         try {
             $message = $this->client->messages->create($to, ['from' => $from, 'body' => $text]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
 
