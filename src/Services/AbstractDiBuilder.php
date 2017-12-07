@@ -16,7 +16,7 @@ class AbstractDiBuilder extends FactoryDefault
     {
         parent::__construct();
         if ($bugsnag) {
-            $this->set('bugsnag', $config);
+            $this->set('bugsnag', $bugsnag);
         }
         $this->setShared('config', $config);
         $this->bindServices();
