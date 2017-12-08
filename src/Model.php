@@ -171,5 +171,4 @@ class Model extends PhalconModel implements \JsonSerializable
 
         return $newObject;
     }
-
 }
