@@ -172,4 +172,8 @@ class Model extends PhalconModel implements \JsonSerializable
         return $newObject;
     }
 
+    public function softDelete($column = 'deleted', $deletedValue = 1)
+    {
+        return $this->update([$column => $deletedValue]);
+    }
 }
