@@ -8,6 +8,7 @@
 
 namespace Frogg\Model;
 
+use Frogg\Exceptions\DuplicatedBindException;
 use Phalcon\Mvc\Model as PhalconModel;
 
 /**
@@ -42,6 +43,41 @@ class Criteria extends PhalconModel\Criteria
     public function softDelete($column = 'deleted', $activeValue = 0)
     {
         return $this->andWhere($column.'='.$activeValue);
+    }
+
+    /**
+     * add duplicated bind check.
+     *
+     * eg: given a criteria with an 'alreadyAddedBind' in an previously `andWhere` call. When you try:
+     * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'])
+     * it will @throws DuplicatedBindException;
+     *
+     * but if you want to reassign this bind to another value, you can skip this check using a bind type 'skipBindCheck' = true:
+     * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'], ['skipBindCheck' => true])
+     *
+     * I'm not proud of it, but some times we will need to skip it and we can't add more
+     * parameters to this function cuz it's interfaced...
+     *
+     * @param string $conditions
+     * @param null   $bindParams
+     * @param null   $bindTypes
+     *
+     * @return PhalconModel\Criteria
+     */
+    public function where($conditions, $bindParams = null, $bindTypes = null)
+    {
+        if (is_array($bindParams)) {
+            $params = $this->getParams();
+            if (is_array($params['bind'])) {
+                foreach ($bindParams as $bind => $value) {
+                    if (array_key_exists($bind, $params['bind'])) {
+                        throw new DuplicatedBindException($bind);
+                    }
+                }
+            }
+        }
+
+        return parent::where($conditions, $bindParams, $bindTypes);
     }
 
     /**
@@ -118,7 +154,7 @@ class Criteria extends PhalconModel\Criteria
 
     public function findFirst($conditions = false, $bindParams = null, $bindTypes = null)
     {
-        if($conditions){
+        if ($conditions) {
             $this->andWhere($conditions, $bindParams, $bindTypes);
         }
 
@@ -178,6 +214,13 @@ class Criteria extends PhalconModel\Criteria
         parent::bindTypes($bindTypes);
     }
 
+    /**
+     * @param       $name
+     * @param array $arguments
+     *
+     * @return $this
+     * @throws \Exception
+     */
     public function addCriteria($name, $arguments = [])
     {
         if (method_exists($this, $name)) {
