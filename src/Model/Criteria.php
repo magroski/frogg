@@ -68,7 +68,7 @@ class Criteria extends PhalconModel\Criteria
     {
         if (is_array($bindParams)) {
             $params = $this->getParams();
-            if (is_array($params['bind'])) {
+            if (isset($params['bind'])) {
                 foreach ($bindParams as $bind => $value) {
                     if (array_key_exists($bind, $params['bind'])) {
                         throw new DuplicatedBindException($bind);
