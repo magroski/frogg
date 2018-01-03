@@ -46,6 +46,47 @@ class Criteria extends PhalconModel\Criteria
     }
 
     /**
+     * sugar sintax to call instances using their classNames other than his aliases
+     * eg:
+     *
+     * $dripCandidates = CandidateOpening::query()
+     *       ->joinOpening()
+     *       ->joinExternalReference()
+     *       ->columns([CandidateOpening::class, ExternalReference::class])
+     *       ->execute();
+     *
+     * @param array|string $columns
+     *
+     * @return static
+     */
+    public function columns($columns)
+    {
+        $columns = array_map(function($column) {
+            if (preg_match("/\.\*/", $column)) {
+                return $column;
+            }
+
+            if($column == $this->getModelName()) {
+                return $this->getAlias().'.*';
+            }
+
+            $joins = $this->createBuilder()->getJoins() ?? [];
+
+            foreach ($joins as $join) {
+                if ($join[0] == $column) {
+                    if (!empty($join[2])) {
+                        return $join[2].'.*';
+                    }
+                }
+            }
+
+            return $column;
+        }, $columns);
+
+        return parent::columns($columns);
+    }
+
+    /**
      * add duplicated bind check.
      *
      * eg: given a criteria with an 'alreadyAddedBind' in an previously `andWhere` call. When you try:
@@ -69,9 +110,11 @@ class Criteria extends PhalconModel\Criteria
         if (is_array($bindParams)) {
             $params = $this->getParams();
             if (isset($params['bind'])) {
-                foreach ($bindParams as $bind => $value) {
-                    if (array_key_exists($bind, $params['bind'])) {
-                        throw new DuplicatedBindException($bind);
+                if (!(is_array($bindTypes) && array_key_exists('skipBindCheck', $bindTypes))) {
+                    foreach ($bindParams as $bind => $value) {
+                        if (array_key_exists($bind, $params['bind'])) {
+                            throw new DuplicatedBindException($bind);
+                        }
                     }
                 }
             }
