@@ -50,7 +50,7 @@ class Controller extends PhalconController
             $routeInfo = $this->extractRoutePath($routeInfo);
         }
         $requestData         = $routeInfo;
-        $routeInfo['params'] = $params;
+        $requestData['params'] = $params;
         $this->dispatcher->forward($requestData);
     }
 
