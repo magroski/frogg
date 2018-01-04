@@ -61,6 +61,10 @@ class Criteria extends PhalconModel\Criteria
      */
     public function columns($columns)
     {
+        if(!is_array($columns)){
+            return parent::columns($columns);
+        }
+
         $columns = array_map(function($column) {
             if (preg_match("/\.\*/", $column)) {
                 return $column;
