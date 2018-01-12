@@ -91,43 +91,6 @@ class Criteria extends PhalconModel\Criteria
     }
 
     /**
-     * add duplicated bind check.
-     *
-     * eg: given a criteria with an 'alreadyAddedBind' in an previously `andWhere` call. When you try:
-     * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'])
-     * it will @throws DuplicatedBindException;
-     *
-     * but if you want to reassign this bind to another value, you can skip this check using a bind type 'skipBindCheck' = true:
-     * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'], ['skipBindCheck' => true])
-     *
-     * I'm not proud of it, but some times we will need to skip it and we can't add more
-     * parameters to this function cuz it's interfaced...
-     *
-     * @param string $conditions
-     * @param null   $bindParams
-     * @param null   $bindTypes
-     *
-     * @return PhalconModel\Criteria
-     */
-    public function where($conditions, $bindParams = null, $bindTypes = null)
-    {
-        if (is_array($bindParams)) {
-            $params = $this->getParams();
-            if (isset($params['bind'])) {
-                if (!(is_array($bindTypes) && array_key_exists('skipBindCheck', $bindTypes))) {
-                    foreach ($bindParams as $bind => $value) {
-                        if (array_key_exists($bind, $params['bind'])) {
-                            throw new DuplicatedBindException($bind);
-                        }
-                    }
-                }
-            }
-        }
-
-        return parent::where($conditions, $bindParams, $bindTypes);
-    }
-
-    /**
      * alias to make more sense when calling it on query building.
      *
      * @return $this
@@ -245,7 +208,19 @@ class Criteria extends PhalconModel\Criteria
     }
 
     /**
-     * Add merge feature to bindTypes (lazy phalcon developers should made that) and defaults it to true
+     * Add merge feature to bindTypes (lazy phalcon developers should made that) and defaults it to true.
+     * Also add duplicated bind check.
+     *
+     * eg: given a criteria with an 'alreadyAddedBind' in an previously `andWhere` call. When you try:
+     * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'])
+     * it will @throws DuplicatedBindException;
+     *
+     * but if you want to reassign this bind to another value, you can skip this check using a bind type 'skipBindCheck' = true:
+     * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'], ['skipBindCheck' => true])
+     *
+     * I'm not proud of it, but some times we will need to skip it and we can't add more
+     * parameters to this function cuz it's interfaced...
+     *
      *
      * @param array $bindTypes
      * @param bool  $merge
@@ -254,6 +229,19 @@ class Criteria extends PhalconModel\Criteria
      */
     public function bindTypes(array $bindTypes, $merge = true)
     {
+        if (is_array($bindTypes)) {
+            $params = $this->getParams();
+            if (isset($params['bind'])) {
+                if (!(is_array($bindTypes) && array_key_exists('skipBindCheck', $bindTypes))) {
+                    foreach ($bindTypes as $bind => $value) {
+                        if (array_key_exists($bind, $params['bind'])) {
+                            throw new DuplicatedBindException($bind);
+                        }
+                    }
+                }
+            }
+        }
+
         if ($merge) {
             $query_types = $this->getQuery()->getBindTypes();
             $bindTypes   = array_merge($query_types ? : [], $bindTypes);
