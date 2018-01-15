@@ -40,28 +40,13 @@ class SqsClient
     /**
      * Sends a message to AWS SQS service
      *
-     * @param string $route   The route to which the message will be forwarded by the daemon. Ex: /worker/process-url
      * @param string $message The content of the message, must be text or a json_encoded array
      */
-    public function sendMessage(string $route, string $message)
+    public function sendMessage(string $message)
     {
         $this->sqsClient->sendMessage([
-            'MessageBody'       => $message,
-            'QueueUrl'          => $this->queueUrl,
-            'MessageAttributes' => [
-                'beanstalk.sqsd.path'           => [
-                    'DataType'    => 'String',
-                    'StringValue' => $route,
-                ],
-                'beanstalk.sqsd.task_name'      => [
-                    'DataType'    => 'String',
-                    'StringValue' => str_replace('/', '', $route),
-                ],
-                'beanstalk.sqsd.scheduled_time' => [
-                    'DataType'    => 'String',
-                    'StringValue' => date('Y-m-d H:i:s T'),
-                ],
-            ],
+            'MessageBody' => $message,
+            'QueueUrl'    => $this->queueUrl,
         ]);
     }
 

@@ -40,19 +40,18 @@ class Controller extends PhalconController
     /**
      * Syntactic sugar for Phalcon's $dispatcher->forward
      *
-     * @param string $uri    String in the following format: hyphen_case_controller/action_name
-     * @param array  $params Key-value array containing parameters and values
+     * @param array|string $routeInfo Array : Key-value array containing route information [namespace, module, controller, action, ...]
+     *                                String : Route url or route name
+     * @param array        $params    Key-value array containing parameters and values
      */
-    public function forward(string $uri, $params = [])
+    public function forward($routeInfo, $params = [])
     {
-        $uriParts = explode('/', $uri);
-        $this->dispatcher->forward(
-            [
-                'controller' => $uriParts[0],
-                'action'     => $uriParts[1],
-                'params'     => $params,
-            ]
-        );
+        if (is_string($routeInfo)) {
+            $routeInfo = $this->extractRoutePath($routeInfo);
+        }
+        $requestData           = $routeInfo;
+        $requestData['params'] = $params;
+        $this->dispatcher->forward($requestData);
     }
 
     public function redirect($url)
@@ -130,6 +129,21 @@ class Controller extends PhalconController
         $response = new Response();
 
         return $response->setJsonContent($data, JSON_NUMERIC_CHECK);
+    }
+
+    /**
+     * Extract path data (namespace, controller, action) from a given route name.
+     *
+     * @param string $route
+     *
+     * @return mixed
+     */
+    public function extractRoutePath(string $route)
+    {
+        $url = (strpos($route, '/') === FALSE) ? url($route) : $route;
+        $this->router->handle($url);
+
+        return $this->router->getMatchedRoute()->getPaths();
     }
 
 }

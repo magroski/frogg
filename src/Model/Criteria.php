@@ -8,6 +8,7 @@
 
 namespace Frogg\Model;
 
+use Frogg\Exceptions\DuplicatedBindException;
 use Phalcon\Mvc\Model as PhalconModel;
 
 /**
@@ -42,6 +43,51 @@ class Criteria extends PhalconModel\Criteria
     public function softDelete($column = 'deleted', $activeValue = 0)
     {
         return $this->andWhere($column.'='.$activeValue);
+    }
+
+    /**
+     * sugar sintax to call instances using their classNames other than his aliases
+     * eg:
+     *
+     * $dripCandidates = CandidateOpening::query()
+     *       ->joinOpening()
+     *       ->joinExternalReference()
+     *       ->columns([CandidateOpening::class, ExternalReference::class])
+     *       ->execute();
+     *
+     * @param array|string $columns
+     *
+     * @return static
+     */
+    public function columns($columns)
+    {
+        if(!is_array($columns)){
+            return parent::columns($columns);
+        }
+
+        $columns = array_map(function($column) {
+            if (preg_match("/\.\*/", $column)) {
+                return $column;
+            }
+
+            if($column == $this->getModelName()) {
+                return $this->getAlias().'.*';
+            }
+
+            $joins = $this->createBuilder()->getJoins() ?? [];
+
+            foreach ($joins as $join) {
+                if ($join[0] == $column) {
+                    if (!empty($join[2])) {
+                        return $join[2].'.*';
+                    }
+                }
+            }
+
+            return $column;
+        }, $columns);
+
+        return parent::columns($columns);
     }
 
     /**
@@ -118,7 +164,7 @@ class Criteria extends PhalconModel\Criteria
 
     public function findFirst($conditions = false, $bindParams = null, $bindTypes = null)
     {
-        if($conditions){
+        if ($conditions) {
             $this->andWhere($conditions, $bindParams, $bindTypes);
         }
 
@@ -162,7 +208,19 @@ class Criteria extends PhalconModel\Criteria
     }
 
     /**
-     * Add merge feature to bindTypes (lazy phalcon developers should made that) and defaults it to true
+     * Add merge feature to bindTypes (lazy phalcon developers should made that) and defaults it to true.
+     * Also add duplicated bind check.
+     *
+     * eg: given a criteria with an 'alreadyAddedBind' in an previously `andWhere` call. When you try:
+     * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'])
+     * it will @throws DuplicatedBindException;
+     *
+     * but if you want to reassign this bind to another value, you can skip this check using a bind type 'skipBindCheck' = true:
+     * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'], ['skipBindCheck' => true])
+     *
+     * I'm not proud of it, but some times we will need to skip it and we can't add more
+     * parameters to this function cuz it's interfaced...
+     *
      *
      * @param array $bindTypes
      * @param bool  $merge
@@ -171,6 +229,19 @@ class Criteria extends PhalconModel\Criteria
      */
     public function bindTypes(array $bindTypes, $merge = true)
     {
+        if (is_array($bindTypes)) {
+            $params = $this->getParams();
+            if (isset($params['bind'])) {
+                if (!(is_array($bindTypes) && array_key_exists('skipBindCheck', $bindTypes))) {
+                    foreach ($bindTypes as $bind => $value) {
+                        if (array_key_exists($bind, $params['bind'])) {
+                            throw new DuplicatedBindException($bind);
+                        }
+                    }
+                }
+            }
+        }
+
         if ($merge) {
             $query_types = $this->getQuery()->getBindTypes();
             $bindTypes   = array_merge($query_types ? : [], $bindTypes);
@@ -178,6 +249,13 @@ class Criteria extends PhalconModel\Criteria
         parent::bindTypes($bindTypes);
     }
 
+    /**
+     * @param       $name
+     * @param array $arguments
+     *
+     * @return $this
+     * @throws \Exception
+     */
     public function addCriteria($name, $arguments = [])
     {
         if (method_exists($this, $name)) {
