@@ -85,7 +85,7 @@ class Controller extends PhalconController
         return $encodedArray;
     }
 
-    public function getParam($name)
+    public function getParam($name, $defaultValue = null)
     {
         $encodedParam = null;
         if ($this->dispatcher->hasParam($name)) $encodedParam = $this->dispatcher->getParam($name);
@@ -94,11 +94,15 @@ class Controller extends PhalconController
         if ($this->request->hasPut($name)) $encodedParam = $this->request->getPut($name);
         if ($this->request->hasQuery($name)) $encodedParam = $this->request->getQuery($name);
 
+        if ($encodedParam === null) {
+            return $defaultValue;
+        }
+
         if (is_array($encodedParam)) {
             $encodedParam = $this->encodedArray($encodedParam);
         }
 
-        if ($encodedParam === null || is_numeric($encodedParam) || is_array($encodedParam)) {
+        if (is_numeric($encodedParam) || is_array($encodedParam)) {
             return $encodedParam;
         } else {
             return htmlspecialchars($encodedParam);
