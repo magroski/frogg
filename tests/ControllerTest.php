@@ -18,5 +18,8 @@ class ControllerTest extends TestCase
 
         $this->assertEquals($nameGET, $controller->getParam('name', $defaultValue));
         $this->assertEquals($defaultValue, $controller->getParam('color', $defaultValue));
+
+        $this->assertEquals($nameGET, $controller->getDecodedParam('name', $defaultValue));
+        $this->assertEquals($defaultValue, $controller->getDecodedParam('color', $defaultValue));
     }
 }

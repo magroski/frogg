@@ -109,7 +109,7 @@ class Controller extends PhalconController
         }
     }
 
-    public function getDecodedParam($name)
+    public function getDecodedParam($name, $defaultValue = null)
     {
         $decodedParam = null;
         if ($this->dispatcher->hasParam($name)) $decodedParam = $this->dispatcher->getParam($name);
@@ -118,7 +118,7 @@ class Controller extends PhalconController
         if ($this->request->hasPut($name)) $decodedParam = $this->request->getPut($name);
         if ($this->request->hasQuery($name)) $decodedParam = $this->request->getQuery($name);
 
-        return $decodedParam;
+        return $decodedParam ? $decodedParam : $defaultValue;
     }
 
     /**
