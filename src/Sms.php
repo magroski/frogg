@@ -40,10 +40,13 @@ class Sms
      *                    * 'text' - message that will be sent
      *                    * 'to'     - number without country code,
      *                    * 'from' - number that will send the message,
+     *
+     * @throws \Exception
+     * @return bool
      */
     public function send(array $data)
     {
-        $this->gateway->send($data);
+        return $this->gateway->send($data);
     }
 
 }

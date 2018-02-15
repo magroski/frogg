@@ -24,6 +24,8 @@ class Tww
      *                    * 'id'   - recipient unique identifier
      *                    * 'text' - message that will be sent
      *                    * 'to'     - number without country code,
+     *
+     * @return bool|string
      */
     public function send(array $data)
     {
@@ -48,7 +50,8 @@ class Tww
             ],
         ];
         $context = stream_context_create($options);
-        file_get_contents($url, false, $context);
+
+        return file_get_contents($url, false, $context);
     }
 
     /**

@@ -27,7 +27,7 @@ class Twilio
      *                    * 'to'     - number without country code,
      *                    * 'from' - number that will send the message,
      *
-     * @return boolean
+     * @return bool
      */
     public function send(array $data)
     {
@@ -35,11 +35,7 @@ class Twilio
         $to   = preg_replace("/[(,),\-,\s]/", "", $data['to']);
         $from = preg_replace("/[(,),\-,\s]/", "", $data['from']);
 
-        try {
-            $message = $this->client->messages->create($to, ['from' => $from, 'body' => $text]);
-        } catch (\Exception $e) {
-            return false;
-        }
+        $this->client->messages->create($to, ['from' => $from, 'body' => $text]);
 
         return true;
     }
