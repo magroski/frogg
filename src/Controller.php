@@ -77,7 +77,7 @@ class Controller extends PhalconController
                 if ($value === null || is_numeric($value)) {
                     $encodedArray[$key] = $value;
                 } else {
-                    $encodedArray[$key] = htmlspecialchars($value);
+                    $encodedArray[$key] = $this->utf8WithoutBom(htmlspecialchars($value));
                 }
             }
         }
@@ -104,9 +104,9 @@ class Controller extends PhalconController
 
         if (is_numeric($encodedParam) || is_array($encodedParam)) {
             return $encodedParam;
-        } else {
-            return htmlspecialchars($encodedParam);
         }
+
+        return $this->utf8WithoutBom(htmlspecialchars($encodedParam));
     }
 
     public function getDecodedParam($name, $defaultValue = null)
@@ -148,6 +148,26 @@ class Controller extends PhalconController
         $this->router->handle($url);
 
         return $this->router->getMatchedRoute()->getPaths();
+    }
+
+    /**
+     * Remove BOM of UTF8 string
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    protected function utf8WithoutBom($string)
+    {
+        if ($string === null) {
+            return null;
+        }
+
+        $bom = pack('H*', 'EFBBBF');
+
+        $string = str_replace($bom, '', $string);
+
+        return $string;
     }
 
 }
