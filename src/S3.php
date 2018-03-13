@@ -2,6 +2,7 @@
 
 namespace Frogg;
 
+use Aws\Credentials\Credentials;
 use Aws\S3\S3Client;
 
 /**
@@ -24,13 +25,13 @@ class S3
      */
     public function __construct($access_key, $secret_key, $bucket_name = "")
     {
-        $this->obj         = new S3Client(['version'     => 'latest',
-                                           'region'      => 'us-east-1',
-                                           'credentials' => [
-                                               'key'    => $access_key,
-                                               'secret' => $secret_key,
-                                           ],
+        $credentialsInst = new Credentials($access_key, $secret_key);
+        $this->obj       = new S3Client([
+            'version'     => 'latest',
+            'region'      => 'us-east-1',
+            'credentials' => $credentialsInst,
         ]);
+
         $this->bucket_name = $bucket_name;
     }
 

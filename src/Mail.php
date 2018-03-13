@@ -2,6 +2,7 @@
 
 namespace Frogg;
 
+use Aws\Credentials\Credentials;
 use Aws\Ses\SesClient;
 
 class Mail
@@ -19,10 +20,10 @@ class Mail
 
         $credentialsInst = new Credentials(
             $credentials['AWS_ACCESS_KEY'],
-            $credentials['AWS_SECRET_KEY'],
+            $credentials['AWS_SECRET_KEY']
         );
 
-        $this->ses       = new SesClient([
+        $this->ses = new SesClient([
             'credentials' => $credentialsInst,
             'region'      => $credentials['AWS_SES_REGION'],
             'version'     => 'latest',
