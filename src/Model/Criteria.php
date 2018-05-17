@@ -204,7 +204,7 @@ class Criteria extends PhalconModel\Criteria
      */
     public function bind(array $bindParams, $merge = true)
     {
-        parent::bind($bindParams, $merge);
+        return parent::bind($bindParams, $merge);
     }
 
     /**
@@ -246,7 +246,7 @@ class Criteria extends PhalconModel\Criteria
             $query_types = $this->getQuery()->getBindTypes();
             $bindTypes   = array_merge($query_types ? : [], $bindTypes);
         }
-        parent::bindTypes($bindTypes);
+        return parent::bindTypes($bindTypes);
     }
 
     /**
