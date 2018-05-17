@@ -10,6 +10,8 @@ class Image
 {
 
     private $img;
+
+    /** @var \Frogg\Upload */
     private $handle;
 
     public $s3;
@@ -22,16 +24,13 @@ class Image
     private $_new_name;
 
     /**
-     * Creates a new instance of Frogg\S3\Image
-     *
-     * @param string $accesKey  Amazon S3 access key
+     * @param string $accessKey Amazon S3 access key
      * @param string $secretKey Amazon S3 secret key
      * @param string $bucket    Amazon S3 bucket name
-     *
      */
-    public function __construct($accesKey, $secretKey, $bucket)
+    public function __construct($accessKey, $secretKey, $bucket)
     {
-        $this->s3 = new S3($accesKey, $secretKey, $bucket);
+        $this->s3 = new S3($accessKey, $secretKey, $bucket);
     }
 
     /**
@@ -46,7 +45,7 @@ class Image
         if ($name) {
             $this->img       = $_FILES[$name];
             $this->handle    = new Upload($this->img);
-            $this->_new_name = $this->s3->sanitizeFilename(uniqid("", true).$this->handle->file_src_name);
+            $this->_new_name = $this->s3->sanitizeFilename(uniqid("", true) . $this->handle->file_src_name);
         }
     }
 
@@ -61,9 +60,9 @@ class Image
     public function getFromPath($name = false, $path = false)
     {
         if ($path && $name) {
-            $this->img       = $path.'/'.$name;
+            $this->img       = $path . '/' . $name;
             $this->handle    = new Upload($this->img);
-            $this->_new_name = $this->s3->sanitizeFilename(uniqid("", true).$this->handle->file_src_name);
+            $this->_new_name = $this->s3->sanitizeFilename(uniqid("", true) . $this->handle->file_src_name);
         }
     }
 
@@ -73,11 +72,11 @@ class Image
      * @param string $url  File url
      * @param bool   $name Optional name of the destiny file
      *
-     * @return bool -
+     * @return bool
      */
     public function getFromURL($url, $name = false)
     {
-        $tmp_path = sys_get_temp_dir().'/';
+        $tmp_path = sys_get_temp_dir() . '/';
 
         if (Validator::validate(Validator::V_LINK, $url)) {
             $image = getimagesize($url);
@@ -86,25 +85,35 @@ class Image
                 case 'image/png':
                 case 'image/bmp':
                 case 'image/jpeg':
-                    if ($image['mime'] == 'image/gif') $type = '.gif';
-                    if ($image['mime'] == 'image/png') $type = '.png';
-                    if ($image['mime'] == 'image/bmp') $type = '.bmp';
-                    if ($image['mime'] == 'image/jpeg') $type = '.jpg';
+                    if ($image['mime'] == 'image/gif') {
+                        $type = '.gif';
+                    }
+                    if ($image['mime'] == 'image/png') {
+                        $type = '.png';
+                    }
+                    if ($image['mime'] == 'image/bmp') {
+                        $type = '.bmp';
+                    }
+                    if ($image['mime'] == 'image/jpeg') {
+                        $type = '.jpg';
+                    }
 
                     if (!$name) {
-                        $name = uniqid('post-').$type;
+                        $name = uniqid('post-') . $type;
                     } else {
-                        $name .= '-'.uniqid("", true).$type;
+                        $name .= '-' . uniqid("", true) . $type;
                     }
-                    file_put_contents($tmp_path.$name, file_get_contents($url));
+                    file_put_contents($tmp_path . $name, file_get_contents($url));
 
                     $this->getFromPath($name, sys_get_temp_dir());
                     $this->width  = $image[0];
                     $this->height = $image[1];
+                    return true;
                 default:
                     return false;
             }
         }
+        return false;
     }
 
     public function getWidth()
@@ -151,9 +160,11 @@ class Image
      */
     public static function checkMinImageSize($url)
     {
-        $tmp_path = sys_get_temp_dir().'/';
+        $tmp_path = sys_get_temp_dir() . '/';
 
-        if (!Validator::validate(Validator::V_LINK, $url)) return false;
+        if (!Validator::validate(Validator::V_LINK, $url)) {
+            return false;
+        }
 
         $image = getimagesize($url);
 
@@ -168,7 +179,7 @@ class Image
      */
     public function delete($filename, $path)
     {
-        return $this->s3->deleteFile(rtrim($path, '/').'/'.$filename);
+        return $this->s3->deleteFile(rtrim($path, '/') . '/' . $filename);
     }
 
     /**
@@ -193,11 +204,11 @@ class Image
      */
     public function save($path = 'i')
     {
-        $tmp_path = sys_get_temp_dir().'/';
+        $tmp_path = sys_get_temp_dir() . '/';
         $this->handle->process($tmp_path);
 
-        $this->s3->sendFile($tmp_path.$this->handle->file_dst_name, $path, $this->_new_name);
-        unlink($tmp_path.$this->handle->file_dst_name);
+        $this->s3->sendFile($tmp_path . $this->handle->file_dst_name, $path, $this->_new_name);
+        unlink($tmp_path . $this->handle->file_dst_name);
 
         return $this->_new_name;
     }
@@ -214,11 +225,11 @@ class Image
         $this->handle->image_ratio_y = true;
         $this->handle->image_x       = $width;
 
-        $tmp_path = sys_get_temp_dir().'/';
+        $tmp_path = sys_get_temp_dir() . '/';
         $this->handle->process($tmp_path);
 
-        $this->s3->sendFile($tmp_path.$this->handle->file_dst_name, $path, $this->_new_name);
-        unlink($tmp_path.$this->handle->file_dst_name);
+        $this->s3->sendFile($tmp_path . $this->handle->file_dst_name, $path, $this->_new_name);
+        unlink($tmp_path . $this->handle->file_dst_name);
 
         return $this->_new_name;
     }
@@ -235,11 +246,11 @@ class Image
         $this->handle->image_ratio_x = true;
         $this->handle->image_y       = $height;
 
-        $tmp_path = sys_get_temp_dir().'/';
+        $tmp_path = sys_get_temp_dir() . '/';
         $this->handle->process($tmp_path);
 
-        $this->s3->sendFile($tmp_path.$this->handle->file_dst_name, $path, $this->_new_name);
-        unlink($tmp_path.$this->handle->file_dst_name);
+        $this->s3->sendFile($tmp_path . $this->handle->file_dst_name, $path, $this->_new_name);
+        unlink($tmp_path . $this->handle->file_dst_name);
 
         return $this->_new_name;
     }
@@ -258,17 +269,17 @@ class Image
         $this->handle->image_x      = $width;
         $this->handle->image_y      = $height;
 
-        $tmp_path = sys_get_temp_dir().'/';
+        $tmp_path = sys_get_temp_dir() . '/';
         $this->handle->process($tmp_path);
 
-        $this->s3->sendFile($tmp_path.$this->handle->file_dst_name, $path, $this->_new_name);
-        unlink($tmp_path.$this->handle->file_dst_name);
+        $this->s3->sendFile($tmp_path . $this->handle->file_dst_name, $path, $this->_new_name);
+        unlink($tmp_path . $this->handle->file_dst_name);
 
         return $this->_new_name;
     }
 
     /**
-     * Save the current image with fixed width and height cropping the excedent.
+     * Save the current image with fixed width and height cropping the exceeding.
      *
      * @param int    $width  width of the thumbnail
      * @param int    $height height of the thumbnail
@@ -281,10 +292,10 @@ class Image
         $this->handle->image_x          = $width;
         $this->handle->image_y          = $height;
 
-        $tmp_path = sys_get_temp_dir().'/';
+        $tmp_path = sys_get_temp_dir() . '/';
         $this->handle->process($tmp_path);
-        $this->s3->sendFile($tmp_path.$this->handle->file_dst_name, $path, $this->_new_name);
-        unlink($tmp_path.$this->handle->file_dst_name);
+        $this->s3->sendFile($tmp_path . $this->handle->file_dst_name, $path, $this->_new_name);
+        unlink($tmp_path . $this->handle->file_dst_name);
 
         return $this->_new_name;
     }
@@ -300,7 +311,7 @@ class Image
     {
         if (isset($_FILES[$name])) {
             $tempFile = $_FILES[$name]['tmp_name'];
-            if (!empty($tempFile)) {
+            if (!empty($tempFile) && file_exists($tempFile)) {
                 $image = getimagesize($tempFile);
                 switch ($image['mime']) {
                     case 'image/gif':
@@ -312,14 +323,17 @@ class Image
                 }
             }
         }
-        $image = getimagesize($name);
-        switch ($image['mime']) {
-            case 'image/gif':
-            case 'image/png':
-            case 'image/bmp':
-            case 'image/tiff':
-            case 'image/jpeg':
-                return true;
+
+        if (file_exists($name)) {
+            $image = getimagesize($name);
+            switch ($image['mime']) {
+                case 'image/gif':
+                case 'image/png':
+                case 'image/bmp':
+                case 'image/tiff':
+                case 'image/jpeg':
+                    return true;
+            }
         }
 
         return false;
@@ -336,7 +350,7 @@ class Image
     {
         if (isset($_FILES[$name])) {
             $tempFile = $_FILES[$name]['tmp_name'];
-            if (!empty($tempFile)) {
+            if (!empty($tempFile) && file_exists($tempFile)) {
                 $size = getimagesize($tempFile);
 
                 return $size;

@@ -49,7 +49,7 @@ class Model extends PhalconModel implements \JsonSerializable
     }
 
     /**
-     * Uses reflection to get all "public" properties (those that don't begin with a underscore)
+     * Uses reflection to get all public and protected properties (excluding those that begin with a underscore)
      * and parses their names from camelCase to snake_case to be used in Phalcon column mapping
      *
      * @return array
@@ -59,7 +59,7 @@ class Model extends PhalconModel implements \JsonSerializable
         $columnMap = [];
         $child     = new static();
         $reflect   = new \ReflectionObject($child);
-        $props     = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $props     = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED);
         foreach ($props as $prop) {
             if (substr($prop->getName(), 0, 1) !== '_') {
                 $output             = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $prop->getName()));

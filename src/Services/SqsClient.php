@@ -8,6 +8,7 @@
 
 namespace Frogg\Services;
 
+use Aws\Credentials\Credentials;
 use Aws\Sqs\SqsClient as AmazonSqsClient;
 
 class SqsClient
@@ -26,11 +27,13 @@ class SqsClient
      */
     public function __construct(array $config)
     {
+        $credentialsInst = new Credentials(
+            $config['AWS_ACCESS_KEY'],
+            $config['AWS_SECRET_KEY']
+        );
+
         $this->sqsClient = new AmazonSqsClient([
-            'credentials' => [
-                'key'    => $config['AWS_ACCESS_KEY'],
-                'secret' => $config['AWS_SECRET_KEY'],
-            ],
+            'credentials' => $credentialsInst,
             'region'      => $config['AWS_SQS_REGION'],
             'version'     => 'latest',
         ]);
