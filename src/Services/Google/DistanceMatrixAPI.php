@@ -24,8 +24,6 @@ class DistanceMatrixAPI
      *
      * @param array $origins
      * @param array $destinations
-     * @param bool  $metric (default = false) flag to indicate if the result should be returned in metric or imperial
-     * @return array
      *
      * As Google always return the distance value in meters (not km), the function multiplies
      * the result by 0.62 (km:mile) to calculate an approximation in imperial.
@@ -80,9 +78,8 @@ class DistanceMatrixAPI
 
     /**
      * @param array $entities
-     * @return array|string
      */
-    private function formatEntities(array $entities)
+    private function formatEntities(array $entities) : string
     {
         $formattedEntities = array_map(function ($entry) {
             return $entry->getFormattedLocation();
@@ -93,11 +90,9 @@ class DistanceMatrixAPI
     }
 
     /**
-     * @param $data
-     * @return bool
      * @throws \Frogg\Exceptions\ServiceProviderException
      */
-    private function checkResponseStatus($data)
+    private function checkResponseStatus($data) : bool
     {
         $details = isset($data->error_message) ? $data->error_message : '';
 
@@ -121,10 +116,9 @@ class DistanceMatrixAPI
     }
 
     /**
-     * @param $url
      * @return mixed
      */
-    private function processRequest($url)
+    private function processRequest(string $url)
     {
         $response = file_get_contents($url);
         $data     = json_decode($response);
