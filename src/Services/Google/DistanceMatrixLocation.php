@@ -107,7 +107,7 @@ class DistanceMatrixLocation
         }
 
         if ($this->city) {
-            $this->formattedLocation = $this->getCity();
+            $this->formattedLocation = $this->replaceSpaces($this->getCity());
         }
 
         if ($this->state) {
@@ -118,7 +118,7 @@ class DistanceMatrixLocation
             $this->concatLocation($this->getCountry());
         }
 
-        return $this->formattedLocation ? $this->replaceSpaces($this->formattedLocation) : null;
+        return $this->formattedLocation ?: null;
     }
 
     private function replaceSpaces(string $string) : string
@@ -129,9 +129,9 @@ class DistanceMatrixLocation
     private function concatLocation(string $string) : void
     {
         if ($this->formattedLocation) {
-            $this->formattedLocation .= " ";
+            $this->formattedLocation .= "+";
         }
 
-        $this->formattedLocation .= $string;
+        $this->formattedLocation .= $this->replaceSpaces($string);
     }
 }
