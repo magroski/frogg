@@ -10,13 +10,22 @@ class DistanceMatrixDestination
     /** @var DistanceMatrixOrigin */
     private $origin;
 
+    /** @var string */
+    private $address;
+
     /** @var array */
     private $data;
 
-    public function __construct(DistanceMatrixOrigin $origin, array $data)
+    public function __construct(DistanceMatrixOrigin $origin, string $address, array $data)
     {
-        $this->origin = $origin;
-        $this->data   = $data;
+        $this->origin  = $origin;
+        $this->address = $address;
+        $this->data    = $data;
+    }
+
+    public function getAddress() : string
+    {
+        return $this->address;
     }
 
     public function getDistanceValue(bool $convertToMiles = true) : ?float
@@ -26,16 +35,20 @@ class DistanceMatrixDestination
         }
 
         if ($convertToMiles) {
-            return $this->data['distance']['value'] * DistanceMatrixAPI::KM_TO_MILE;
+            return $this->data['distance']['value'] * DistanceMatrixAPI::METER_TO_MILE;
         }
 
         return $this->data['distance']['value'];
     }
 
-    public function getDistanceText() : ?string
+    public function getDistanceText(bool $convertToMiles = true) : ?string
     {
         if (!isset($this->data['distance']['text'])) {
             return null;
+        }
+
+        if ($convertToMiles) {
+            return round($this->data['distance']['value'] * DistanceMatrixAPI::METER_TO_MILE, 2) . " miles";
         }
 
         return $this->data['distance']['text'];
