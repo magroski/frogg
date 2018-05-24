@@ -3,6 +3,8 @@
 namespace Frogg\Services\Google;
 
 use Frogg\Exceptions\ServiceProviderException;
+use Frogg\Services\Google\ValueObject\DistanceMatrixLocation;
+use Frogg\Services\Google\ValueObject\DistanceMatrixResponse;
 
 class DistanceMatrixAPI
 {
@@ -24,16 +26,15 @@ class DistanceMatrixAPI
      *
      * @param DistanceMatrixLocation[] $origins
      * @param DistanceMatrixLocation[] $destinations
-     * @param bool|null $metric
      *
      * As Google always return the distance value in meters (not km), the function multiplies
      * the result by 0.62 (km:mile) to calculate an approximation in imperial.
      * Obs: Be aware that 1 Km = 0.62 miles but 1 meter != 0.62 yards.
      *
-     * @return mixed[]
+     * @return DistanceMatrixResponse
      * @throws ServiceProviderException
      */
-    public function calculateDistanceMatrix(array $origins, array $destinations, ?bool $metric = false) : array
+    public function calculateDistanceMatrix(array $origins, array $destinations) : DistanceMatrixResponse
     {
         $formattedOrigins      = $this->formatEntities($origins);
         $formattedDestinations = $this->formatEntities($destinations);
@@ -54,23 +55,13 @@ class DistanceMatrixAPI
             }
         }
 
-        $finalData  = [];
-        $resultRows = $data->rows;
-        for ($origin = 0; $origin < count($resultRows); $origin++) {
-            $calculatedDistances = $resultRows[$origin]->elements;
-            $finalData[$origin]  = [];
-            for ($destination = 0; $destination < count($calculatedDistances); $destination++) {
-                $element = $calculatedDistances[$destination];
-                if ($element->status !== 'OK') {
-                    continue;
-                }
-                $distanceValue        = $element->distance->value;
-                $distance             = $metric ? $distanceValue : $distanceValue * self::KM_TO_MILE;
-                $finalData[$origin][] = [$origins[$origin], $destinations[$destination], $distance];
-            }
-        }
-
-        return $finalData;
+        return new DistanceMatrixResponse(
+            $data['rows'],
+            explode('|', $formattedOrigins),
+            explode('|', $formattedDestinations),
+            $data['origin_addresses'],
+            $data['destination_addresses']
+        );
     }
 
     private function generateBaseUrl() : string
@@ -98,9 +89,9 @@ class DistanceMatrixAPI
      */
     private function checkResponseStatus($data) : bool
     {
-        $details = isset($data->error_message) ? $data->error_message : '';
+        $details = isset($data['error_message']) ? $data['error_message'] : '';
 
-        switch ($data->status) {
+        switch ($data['status']) {
             case 'OK':
                 return true;
             case 'INVALID_REQUEST':
@@ -125,7 +116,7 @@ class DistanceMatrixAPI
     private function processRequest(string $url)
     {
         $response = file_get_contents($url);
-        $data     = json_decode($response);
+        $data     = json_decode($response, true);
 
         return $data;
     }

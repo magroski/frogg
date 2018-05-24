@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Frogg\Services\Google\DistanceMatrixLocation;
+use Frogg\Services\Google\ValueObject\DistanceMatrixLocation;
 use PHPUnit\Framework\TestCase;
 
 class DistanceMatrixLocationTest extends TestCase

@@ -7,7 +7,7 @@
  */
 
 use Frogg\Services\Google\DistanceMatrixAPI;
-use Frogg\Services\Google\DistanceMatrixLocation;
+use Frogg\Services\Google\ValueObject\DistanceMatrixLocation;
 use PHPUnit\Framework\TestCase;
 
 class DistanceMatrixAPITest extends TestCase
@@ -28,16 +28,40 @@ class DistanceMatrixAPITest extends TestCase
         ];
 
         $api    = new DistanceMatrixAPI('');
-        $matrix = $api->calculateDistanceMatrix($origins, $destinations, true);
+        $matrix = $api->calculateDistanceMatrix($origins, $destinations);
 
+        dd($matrix->getOrigin(0),$matrix->getResponseData());
+
+        /**
+         * Search by idx
+         */
         //Vancouver -> San Francisco
-        $this->assertEquals(1527125, $matrix[0][0][2]);
+        $milesToKm = 1527125 * DistanceMatrixAPI::KM_TO_MILE;
+        $this->assertEquals($milesToKm, $matrix->getOrigin(0)
+                                               ->getDestination(0)
+                                               ->getDistanceValue());
         //Vancouver -> Victoria
-        $this->assertEquals(114204, $matrix[0][1][2]);
+        $milesToKm = 114204 * DistanceMatrixAPI::KM_TO_MILE;
+        $this->assertEquals($milesToKm, $matrix->getOrigin(0)
+                                               ->getDestination(1)
+                                               ->getDistanceValue());
+
+        /**
+         * Search by names
+         */
         //Seattle -> San Francisco
-        $this->assertEquals(1298738, $matrix[1][0][2]);
+        $milesToKm   = 1298738 * DistanceMatrixAPI::KM_TO_MILE;
+        $destination = $matrix->getOriginByName($origins[1]->getFormattedLocation())
+                              ->getDestinationByName($destinations[0]->getFormattedLocation());
+
+        $this->assertEquals($milesToKm, $destination->getDistanceValue());
+
         //Seattle -> Victoria
-        $this->assertEquals(171860, $matrix[1][1][2]);
+        $milesToKm   = 171860 * DistanceMatrixAPI::KM_TO_MILE;
+        $destination = $matrix->getOriginByName($origins[1]->getFormattedLocation())
+                              ->getDestinationByName($destinations[1]->getFormattedLocation());
+
+        $this->assertEquals($milesToKm, $destination->getDistanceValue());
     }
 
     /**
@@ -58,13 +82,13 @@ class DistanceMatrixAPITest extends TestCase
         $matrix = $api->calculateDistanceMatrix($origins, $destinations);
 
         //Vancouver -> San Francisco
-        $this->assertEquals(1527125 * DistanceMatrixAPI::KM_TO_MILE, $matrix[0][0][2]);
+        $this->assertEquals(1527125, $matrix->getOrigin(0)->getDestination(0)->getDistanceValue(false));
         //Vancouver -> Victoria
-        $this->assertEquals(114204 * DistanceMatrixAPI::KM_TO_MILE, $matrix[0][1][2]);
+        $this->assertEquals(114204, $matrix->getOrigin(0)->getDestination(1)->getDistanceValue(false));
         //Seattle -> San Francisco
-        $this->assertEquals(1298738 * DistanceMatrixAPI::KM_TO_MILE, $matrix[1][0][2]);
+        $this->assertEquals(1298738, $matrix->getOrigin(1)->getDestination(0)->getDistanceValue(false));
         //Seattle -> Victoria
-        $this->assertEquals(171860 * DistanceMatrixAPI::KM_TO_MILE, $matrix[1][1][2]);
+        $this->assertEquals(171860, $matrix->getOrigin(1)->getDestination(1)->getDistanceValue(false));
     }
 
 }

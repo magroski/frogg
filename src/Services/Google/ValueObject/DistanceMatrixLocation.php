@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Frogg\Services\Google;
+namespace Frogg\Services\Google\ValueObject;
 
 use Frogg\Services\Google\Exception\DistanceMatrixLocationInvalid;
 
