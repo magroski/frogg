@@ -29,6 +29,9 @@ class DistanceMatrixLocation
     private $placeId;
 
     /** @var string */
+    private $completeAddress;
+
+    /** @var string */
     private $formattedLocation;
 
     public function __construct(
@@ -38,15 +41,17 @@ class DistanceMatrixLocation
         ?string $zipCode = null,
         ?string $latitude = null,
         ?string $longitude = null,
-        ?string $placeId = null
+        ?string $placeId = null,
+        ?string $completeAddress = null
     ) {
-        $this->country   = $country;
-        $this->state     = $state;
-        $this->city      = $city;
-        $this->zipCode   = $zipCode;
-        $this->latitude  = $latitude;
-        $this->longitude = $longitude;
-        $this->placeId   = $placeId;
+        $this->country         = $country;
+        $this->state           = $state;
+        $this->city            = $city;
+        $this->zipCode         = $zipCode;
+        $this->latitude        = $latitude;
+        $this->longitude       = $longitude;
+        $this->placeId         = $placeId;
+        $this->completeAddress = $completeAddress;
 
         if (!$this->getFormattedLocation()) {
             throw new DistanceMatrixLocationInvalid();
@@ -92,6 +97,10 @@ class DistanceMatrixLocation
     {
         if ($this->formattedLocation) {
             return $this->formattedLocation;
+        }
+
+        if ($this->completeAddress) {
+            return $this->formattedLocation = $this->replaceSpaces($this->completeAddress);
         }
 
         if ($this->latitude && $this->longitude) {

@@ -64,4 +64,20 @@ class DistanceMatrixLocationTest extends TestCase
 
         $this->assertEquals('place_id:ChIJpekq4O9zhlQRUNNS_bu6dEM', $location->getFormattedLocation());
     }
+
+    public function testFormatCompleteAddressLocation()
+    {
+        $location = new DistanceMatrixLocation(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            '98-025 Hekaha Street, Suite 205 , Honolulu, HI'
+        );
+
+        $this->assertEquals('98-025+Hekaha+Street,+Suite+205+,+Honolulu,+HI', $location->getFormattedLocation());
+    }
 }
