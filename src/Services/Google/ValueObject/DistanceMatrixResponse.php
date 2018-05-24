@@ -95,7 +95,7 @@ class DistanceMatrixResponse
 
     public function getOrigin(int $index) : DistanceMatrixOrigin
     {
-        if ($this->hasOrigin($index)) {
+        if (!$this->hasOrigin($index)) {
             return new DistanceMatrixOrigin($index, $this->origins[$index], [], $this->destinations);
         }
 
@@ -119,15 +119,6 @@ class DistanceMatrixResponse
 
     public function getDestination(int $originIndex, int $destinationIndex) : DistanceMatrixDestination
     {
-        $origin = $this->getOrigin($originIndex);
-        if (!$origin) {
-            return null;
-        }
-
-        if (!isset($this->rows[$originIndex][$destinationIndex])) {
-            return null;
-        }
-
-        return $origin->getDestination($destinationIndex);
+        return $this->getOrigin($originIndex)->getDestination($destinationIndex);
     }
 }

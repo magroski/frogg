@@ -19,7 +19,7 @@ class DistanceMatrixDestination
         $this->data   = $data;
     }
 
-    public function getDistanceValue(bool $convertToMiles = true) : ?int
+    public function getDistanceValue(bool $convertToMiles = true) : ?float
     {
         if (!isset($this->data['distance']['value'])) {
             return null;
@@ -41,7 +41,7 @@ class DistanceMatrixDestination
         return $this->data['distance']['text'];
     }
 
-    public function getDurationValue() : ?int
+    public function getDurationValue() : ?float
     {
         if (!isset($this->data['duration']['value'])) {
             return null;

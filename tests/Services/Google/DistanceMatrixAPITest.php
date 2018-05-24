@@ -30,8 +30,6 @@ class DistanceMatrixAPITest extends TestCase
         $api    = new DistanceMatrixAPI('');
         $matrix = $api->calculateDistanceMatrix($origins, $destinations);
 
-        dd($matrix->getOrigin(0),$matrix->getResponseData());
-
         /**
          * Search by idx
          */
@@ -58,8 +56,7 @@ class DistanceMatrixAPITest extends TestCase
 
         //Seattle -> Victoria
         $milesToKm   = 171860 * DistanceMatrixAPI::KM_TO_MILE;
-        $destination = $matrix->getOriginByName($origins[1]->getFormattedLocation())
-                              ->getDestinationByName($destinations[1]->getFormattedLocation());
+        $destination = $matrix->getDestinationByName($origins[1]->getFormattedLocation(), $destinations[1]->getFormattedLocation());
 
         $this->assertEquals($milesToKm, $destination->getDistanceValue());
     }
