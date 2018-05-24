@@ -10,10 +10,10 @@ class DistanceMatrixAPI
 {
 
     private $apiKey   = '';
-    private $endpoint = 'http://maps.googleapis.com/maps/api/distancematrix/';
+    private $endpoint = 'https://maps.googleapis.com/maps/api/distancematrix/';
     private $format   = 'json';
 
-    const KM_TO_MILE = 0.621371;
+    const METER_TO_MILE = 0.000621371;
 
     public function __construct(string $apiKey, string $format = 'json')
     {
