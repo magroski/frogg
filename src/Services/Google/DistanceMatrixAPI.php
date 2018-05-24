@@ -22,16 +22,18 @@ class DistanceMatrixAPI
     /**
      * Calculates the distance between multiple origins and destinations
      *
-     * @param array $origins
-     * @param array $destinations
+     * @param DistanceMatrixLocation[] $origins
+     * @param DistanceMatrixLocation[] $destinations
+     * @param bool|null $metric
      *
      * As Google always return the distance value in meters (not km), the function multiplies
      * the result by 0.62 (km:mile) to calculate an approximation in imperial.
      * Obs: Be aware that 1 Km = 0.62 miles but 1 meter != 0.62 yards.
      *
-     * @throws \Frogg\Exceptions\ServiceProviderException
+     * @return mixed[]
+     * @throws ServiceProviderException
      */
-    public function calculateDistanceMatrix(array $origins, array $destinations, bool $metric = false) : array
+    public function calculateDistanceMatrix(array $origins, array $destinations, ?bool $metric = false) : array
     {
         $formattedOrigins      = $this->formatEntities($origins);
         $formattedDestinations = $this->formatEntities($destinations);
@@ -77,11 +79,13 @@ class DistanceMatrixAPI
     }
 
     /**
-     * @param array $entities
+     * @param DistanceMatrixLocation[] $entities
+     *
+     * @return string
      */
     private function formatEntities(array $entities) : string
     {
-        $formattedEntities = array_map(function ($entry) {
+        $formattedEntities = array_map(function (DistanceMatrixLocation $entry) {
             return $entry->getFormattedLocation();
         }, $entities);
         $formattedEntities = implode('|', $formattedEntities);
