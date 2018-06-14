@@ -55,6 +55,10 @@ class DistanceMatrixAPI
             }
         }
 
+        if (!array_key_exists('rows', $data)) {
+            throw new ServiceProviderException('Missing key "rows" on data: ' . print_r($data, true));
+        }
+
         return new DistanceMatrixResponse(
             $data['rows'],
             explode('|', $formattedOrigins),
