@@ -34,12 +34,12 @@ class DistanceMatrixAPITest extends TestCase
          * Search by idx
          */
         //Vancouver -> San Francisco
-        $milesToKm = 1527124.0 * DistanceMatrixAPI::METER_TO_MILE;
+        $milesToKm = 1527124 * DistanceMatrixAPI::METER_TO_MILE;
         $this->assertEquals($milesToKm, $matrix->getOrigin(0)
                                                ->getDestination(0)
                                                ->getDistanceValue());
         //Vancouver -> Victoria
-        $milesToKm = 114204 * DistanceMatrixAPI::METER_TO_MILE;
+        $milesToKm = 114203 * DistanceMatrixAPI::METER_TO_MILE;
         $this->assertEquals($milesToKm, $matrix->getOrigin(0)
                                                ->getDestination(1)
                                                ->getDistanceValue());
@@ -79,9 +79,9 @@ class DistanceMatrixAPITest extends TestCase
         $matrix = $api->calculateDistanceMatrix($origins, $destinations);
 
         //Vancouver -> San Francisco
-        $this->assertEquals(1527124.0, $matrix->getOrigin(0)->getDestination(0)->getDistanceValue(false));
+        $this->assertEquals(1527124, $matrix->getOrigin(0)->getDestination(0)->getDistanceValue(false));
         //Vancouver -> Victoria
-        $this->assertEquals(114204, $matrix->getOrigin(0)->getDestination(1)->getDistanceValue(false));
+        $this->assertEquals(114203, $matrix->getOrigin(0)->getDestination(1)->getDistanceValue(false));
         //Seattle -> San Francisco
         $this->assertEquals(1298738, $matrix->getOrigin(1)->getDestination(0)->getDistanceValue(false));
         //Seattle -> Victoria
