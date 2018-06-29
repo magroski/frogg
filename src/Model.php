@@ -10,10 +10,11 @@ use Phalcon\Mvc\Model as PhalconModel;
 
 /**
  * Class Model
- * @package Frogg
  *
  * @method static static findFirstById(int $id)
  * @method static Model\ResultSet find($params = null)
+ *
+ * @property Di $di
  */
 class Model extends PhalconModel implements \JsonSerializable
 {
