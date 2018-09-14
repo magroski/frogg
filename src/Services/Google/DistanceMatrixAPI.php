@@ -2,7 +2,7 @@
 
 namespace Frogg\Services\Google;
 
-use Frogg\Exceptions\ServiceProviderException;
+use Frogg\Exception\ServiceProviderException;
 use Frogg\Services\Google\ValueObject\DistanceMatrixLocation;
 use Frogg\Services\Google\ValueObject\DistanceMatrixResponse;
 
@@ -89,7 +89,7 @@ class DistanceMatrixAPI
     }
 
     /**
-     * @throws \Frogg\Exceptions\ServiceProviderException
+     * @throws \Frogg\Exception\ServiceProviderException
      */
     private function checkResponseStatus($data) : bool
     {

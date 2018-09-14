@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: magroski
- * Date: 02/10/17
- * Time: 12:25
- */
 
-namespace Frogg\Exceptions;
+namespace Frogg\Exception;
 
 class ServiceProviderException extends \Exception
 {

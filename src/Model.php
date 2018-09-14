@@ -3,6 +3,7 @@
 namespace Frogg;
 
 use Frogg\Crypto\WT;
+use Frogg\Exception\UnableToSaveRecord;
 use Frogg\Model\Criteria;
 use Phalcon\Di;
 use Phalcon\DiInterface;
@@ -172,6 +173,21 @@ class Model extends PhalconModel implements \JsonSerializable
         }
 
         return $newObject;
+    }
+
+    /**
+     * Save the entity or throw an exception.
+     * @param mixed[] $data
+     * @param mixed[] $whiteList
+     * @throws \Frogg\Exception\UnableToSaveRecord
+     */
+    public function saveOrFail(?array $data = null, ?array $whiteList = null) : void
+    {
+        $return = parent::save($data, $whiteList);
+
+        if ($return === false) {
+            throw new UnableToSaveRecord('Unable to save entity. Details: ' . json_encode($this->getMessages()));
+        }
     }
 
     public function getPopulator()

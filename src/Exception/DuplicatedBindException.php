@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dreanmer
- * Date: 29/12/17
- * Time: 11:53
- */
 
-namespace Frogg\Exceptions;
+namespace Frogg\Exception;
 
 class DuplicatedBindException extends \Exception
 {

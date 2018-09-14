@@ -8,7 +8,7 @@
 
 namespace Frogg\Model;
 
-use Frogg\Exceptions\DuplicatedBindException;
+use Frogg\Exception\DuplicatedBindException;
 use Phalcon\Mvc\Model as PhalconModel;
 
 /**

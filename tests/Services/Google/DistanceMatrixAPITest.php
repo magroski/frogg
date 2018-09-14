@@ -14,7 +14,7 @@ class DistanceMatrixAPITest extends TestCase
 {
 
     /**
-     * @throws \Frogg\Exceptions\ServiceProviderException
+     * @throws \Frogg\Exception\ServiceProviderException
      */
     public function testCalculateDistanceMatrixMetric()
     {
@@ -62,7 +62,7 @@ class DistanceMatrixAPITest extends TestCase
     }
 
     /**
-     * @throws \Frogg\Exceptions\ServiceProviderException
+     * @throws \Frogg\Exception\ServiceProviderException
      */
     public function testCalculateDistanceMatrixImperial()
     {
