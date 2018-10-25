@@ -8,30 +8,31 @@ use Phalcon\Mvc\Controller as PhalconController;
 use Phalcon\Mvc\View as PhalconView;
 
 /**
- * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface $dispatcher
- * @property \Phalcon\Mvc\Router|\Phalcon\Mvc\RouterInterface $router
- * @property \Phalcon\Mvc\Url|\Phalcon\Mvc\UrlInterface $url
- * @property \Phalcon\Http\Request|\Phalcon\Http\RequestInterface $request
- * @property \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface $response
- * @property \Phalcon\Http\Response\Cookies|\Phalcon\Http\Response\CookiesInterface $cookies
- * @property \Phalcon\Filter|\Phalcon\FilterInterface $filter
- * @property \Phalcon\Flash\Direct $flash
- * @property \Phalcon\Flash\Session $flashSession
+ * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface                                  $dispatcher
+ * @property \Phalcon\Mvc\Router|\Phalcon\Mvc\RouterInterface                                          $router
+ * @property \Phalcon\Mvc\Url|\Phalcon\Mvc\UrlInterface                                                $url
+ * @property \Phalcon\Http\Request|\Phalcon\Http\RequestInterface                                      $request
+ * @property \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface                                    $response
+ * @property \Phalcon\Http\Response\Cookies|\Phalcon\Http\Response\CookiesInterface                    $cookies
+ * @property \Phalcon\Filter|\Phalcon\FilterInterface                                                  $filter
+ * @property \Phalcon\Flash\Direct                                                                     $flash
+ * @property \Phalcon\Flash\Session                                                                    $flashSession
  * @property \Phalcon\Session\Adapter\Files|\Phalcon\Session\Adapter|\Phalcon\Session\AdapterInterface $session
- * @property \Phalcon\Events\Manager|\Phalcon\Events\ManagerInterface $eventsManager
- * @property \Phalcon\Db\AdapterInterface $db
- * @property \Phalcon\Security $security
- * @property \Phalcon\Crypt|\Phalcon\CryptInterface $crypt
- * @property \Phalcon\Tag $tag
- * @property \Phalcon\Escaper|\Phalcon\EscaperInterface $escaper
- * @property \Phalcon\Annotations\Adapter\Memory|\Phalcon\Annotations\Adapter $annotations
- * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface $modelsManager
- * @property \Phalcon\Mvc\Model\MetaData\Memory|\Phalcon\Mvc\Model\MetadataInterface $modelsMetadata
- * @property \Phalcon\Mvc\Model\Transaction\Manager|\Phalcon\Mvc\Model\Transaction\ManagerInterface $transactionManager
- * @property \Phalcon\Assets\Manager $assets
- * @property \Phalcon\Di|\Phalcon\DiInterface $di
- * @property \Phalcon\Session\Bag|\Phalcon\Session\BagInterface $persistent
- * @property \Phalcon\Mvc\View|\Phalcon\Mvc\ViewInterface $view
+ * @property \Phalcon\Events\Manager|\Phalcon\Events\ManagerInterface                                  $eventsManager
+ * @property \Phalcon\Db\AdapterInterface                                                              $db
+ * @property \Phalcon\Security                                                                         $security
+ * @property \Phalcon\Crypt|\Phalcon\CryptInterface                                                    $crypt
+ * @property \Phalcon\Tag                                                                              $tag
+ * @property \Phalcon\Escaper|\Phalcon\EscaperInterface                                                $escaper
+ * @property \Phalcon\Annotations\Adapter\Memory|\Phalcon\Annotations\Adapter                          $annotations
+ * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface                            $modelsManager
+ * @property \Phalcon\Mvc\Model\MetaData\Memory|\Phalcon\Mvc\Model\MetadataInterface                   $modelsMetadata
+ * @property \Phalcon\Mvc\Model\Transaction\Manager|\Phalcon\Mvc\Model\Transaction\ManagerInterface
+ *           $transactionManager
+ * @property \Phalcon\Assets\Manager                                                                   $assets
+ * @property \Phalcon\Di|\Phalcon\DiInterface                                                          $di
+ * @property \Phalcon\Session\Bag|\Phalcon\Session\BagInterface                                        $persistent
+ * @property \Phalcon\Mvc\View|\Phalcon\Mvc\ViewInterface                                              $view
  */
 class Controller extends PhalconController
 {
@@ -46,7 +47,7 @@ class Controller extends PhalconController
         return in_array($actionName, $this->publicActions) || $auth;
     }
 
-    public function isMobile(): bool
+    public function isMobile() : bool
     {
         $mobileDetector = new MobileDetect();
 
@@ -66,8 +67,8 @@ class Controller extends PhalconController
     /**
      * Syntactic sugar for Phalcon's $dispatcher->forward
      *
-     * @param array|string $routeInfo Array : Key-value array containing route information [namespace, module, controller, action, ...]
-     *                                String : Route url or route name
+     * @param array|string $routeInfo Array : Key-value array containing route information [namespace, module,
+     *                                controller, action, ...] String : Route url or route name
      * @param array        $params    Key-value array containing parameters and values
      */
     public function forward($routeInfo, $params = [])
@@ -93,7 +94,7 @@ class Controller extends PhalconController
         return $this->view->getRender('partials', $file, $params);
     }
 
-    private function encodedArray(array $array): array
+    private function encodedArray(array $array) : array
     {
         $encodedArray = [];
         foreach ($array as $key => $value) {
@@ -114,11 +115,21 @@ class Controller extends PhalconController
     public function getParam($name, $defaultValue = null)
     {
         $encodedParam = null;
-        if ($this->dispatcher->hasParam($name)) $encodedParam = $this->dispatcher->getParam($name);
-        if ($this->request->has($name)) $encodedParam = $this->request->get($name);
-        if ($this->request->hasPost($name)) $encodedParam = $this->request->getPost($name);
-        if ($this->request->hasPut($name)) $encodedParam = $this->request->getPut($name);
-        if ($this->request->hasQuery($name)) $encodedParam = $this->request->getQuery($name);
+        if ($this->dispatcher->hasParam($name)) {
+            $encodedParam = $this->dispatcher->getParam($name);
+        }
+        if ($this->request->has($name)) {
+            $encodedParam = $this->request->get($name);
+        }
+        if ($this->request->hasPost($name)) {
+            $encodedParam = $this->request->getPost($name);
+        }
+        if ($this->request->hasPut($name)) {
+            $encodedParam = $this->request->getPut($name);
+        }
+        if ($this->request->hasQuery($name)) {
+            $encodedParam = $this->request->getQuery($name);
+        }
 
         if ($encodedParam === null) {
             return $defaultValue;
@@ -138,13 +149,110 @@ class Controller extends PhalconController
     public function getDecodedParam($name, $defaultValue = null)
     {
         $decodedParam = null;
-        if ($this->dispatcher->hasParam($name)) $decodedParam = $this->dispatcher->getParam($name);
-        if ($this->request->has($name)) $decodedParam = $this->request->get($name);
-        if ($this->request->hasPost($name)) $decodedParam = $this->request->getPost($name);
-        if ($this->request->hasPut($name)) $decodedParam = $this->request->getPut($name);
-        if ($this->request->hasQuery($name)) $decodedParam = $this->request->getQuery($name);
+        if ($this->dispatcher->hasParam($name)) {
+            $decodedParam = $this->dispatcher->getParam($name);
+        }
+        if ($this->request->has($name)) {
+            $decodedParam = $this->request->get($name);
+        }
+        if ($this->request->hasPost($name)) {
+            $decodedParam = $this->request->getPost($name);
+        }
+        if ($this->request->hasPut($name)) {
+            $decodedParam = $this->request->getPut($name);
+        }
+        if ($this->request->hasQuery($name)) {
+            $decodedParam = $this->request->getQuery($name);
+        }
 
         return $decodedParam ? $decodedParam : $defaultValue;
+    }
+
+    public function getIntParam(string $name, ?int $defaultValue = null) : int
+    {
+        $value = $this->getDecodedParam($name);
+        if (is_null($value)) {
+            if (!is_null($defaultValue)) {
+                return $defaultValue;
+            }
+            throw new \TypeError('Parameter ' . $name . ' is null, int expected');
+        }
+
+        if (!ctype_digit($value)) {
+            throw new \TypeError('Parameter ' . $name . ' is not an int : ' . $value);
+        }
+
+        return intval($value);
+    }
+
+    public function getFloatParam(string $name, ?float $defaultValue = null) : float
+    {
+        $value = $this->getDecodedParam($name);
+        if (is_null($value)) {
+            if (!is_null($defaultValue)) {
+                return $defaultValue;
+            }
+            throw new \TypeError('Parameter ' . $name . ' is null, float expected');
+        }
+
+        $floatVal = floatval($value);
+        if ($floatVal && intval($floatVal) !== $floatVal) {
+            return $floatVal;
+        }
+
+        throw new \TypeError('Parameter ' . $name . ' is not a float : ' . $value);
+    }
+
+    public function getBoolParam(string $name, ?bool $defaultValue = null) : bool
+    {
+        $value = $this->getDecodedParam($name);
+        if (is_null($value)) {
+            if (!is_null($defaultValue)) {
+                return $defaultValue;
+            }
+            throw new \TypeError('Parameter ' . $name . ' is null, bool expected');
+        }
+
+        $filteredValue = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        if (is_null($filteredValue)) {
+            throw new \TypeError('Parameter ' . $name . ' is not a bool : ' . $value);
+        }
+
+        return $filteredValue;
+    }
+
+    public function getStringParam(string $name, ?string $defaultValue = null) : string
+    {
+        $value = $this->getDecodedParam($name);
+        if (is_null($value)) {
+            if (!is_null($defaultValue)) {
+                return $defaultValue;
+            }
+            throw new \TypeError('Parameter ' . $name . ' is null, string expected');
+        }
+
+        if (!is_string($value)) {
+            throw new \TypeError('Parameter ' . $name . ' is not a string : ' . $value);
+        }
+
+        return (string)$value;
+    }
+
+    public function getArrayParam(string $name, ?array $defaultValue = null) : array
+    {
+        $value = $this->getDecodedParam($name);
+        if (is_null($value)) {
+            if (!is_null($defaultValue)) {
+                return $defaultValue;
+            }
+            throw new \TypeError('Parameter ' . $name . ' is null, array expected');
+        }
+
+        if (!is_array($value)) {
+            throw new \TypeError('Parameter ' . $name . ' is not an array : ' . $value);
+        }
+
+        return $value;
     }
 
     /**
@@ -154,7 +262,7 @@ class Controller extends PhalconController
      *
      * @return Response
      */
-    public function setJsonResponse($data = []): Response
+    public function setJsonResponse($data = []) : Response
     {
         $response = new Response();
 
@@ -170,7 +278,7 @@ class Controller extends PhalconController
      */
     public function extractRoutePath(string $route)
     {
-        $url = (strpos($route, '/') === FALSE) ? url($route) : $route;
+        $url = (strpos($route, '/') === false) ? url($route) : $route;
         $this->router->handle($url);
 
         return $this->router->getMatchedRoute()->getPaths();
