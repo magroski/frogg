@@ -165,7 +165,7 @@ class ControllerTest extends TestCase
     public function testShouldGetArrayParam()
     {
         $myValue         = ['a' => 1];
-        $_GET['myParam'] = 'nice';
+        $_GET['myParam'] = ['a' => 1];
 
         $this->assertEquals($myValue, $this->controller->getArrayParam('myParam'));
     }
