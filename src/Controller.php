@@ -112,6 +112,9 @@ class Controller extends PhalconController
         return $encodedArray;
     }
 
+    /**
+     * @deprecated use \Psr\Http\Message\ServerRequestInterface
+     */
     public function getParam($name, $defaultValue = null)
     {
         $encodedParam = null;
@@ -146,6 +149,9 @@ class Controller extends PhalconController
         return $this->utf8WithoutBom(htmlspecialchars($encodedParam));
     }
 
+    /**
+     * @deprecated use \Psr\Http\Message\ServerRequestInterface
+     */
     public function getDecodedParam($name, $defaultValue = null)
     {
         $decodedParam = null;
@@ -168,6 +174,9 @@ class Controller extends PhalconController
         return $decodedParam ? $decodedParam : $defaultValue;
     }
 
+    /**
+     * @deprecated use \Psr\Http\Message\ServerRequestInterface
+     */
     public function getIntParam(string $name, ?int $defaultValue = null) : int
     {
         $value = $this->getDecodedParam($name);
@@ -185,6 +194,9 @@ class Controller extends PhalconController
         return intval($value);
     }
 
+    /**
+     * @deprecated use \Psr\Http\Message\ServerRequestInterface
+     */
     public function getFloatParam(string $name, ?float $defaultValue = null) : float
     {
         $value = $this->getDecodedParam($name);
@@ -203,6 +215,9 @@ class Controller extends PhalconController
         throw new \TypeError('Parameter ' . $name . ' is not a float : ' . $value);
     }
 
+    /**
+     * @deprecated use \Psr\Http\Message\ServerRequestInterface
+     */
     public function getBoolParam(string $name, ?bool $defaultValue = null) : bool
     {
         $value = $this->getDecodedParam($name);
@@ -221,6 +236,9 @@ class Controller extends PhalconController
         return $filteredValue;
     }
 
+    /**
+     * @deprecated use \Psr\Http\Message\ServerRequestInterface
+     */
     public function getStringParam(string $name, ?string $defaultValue = null) : string
     {
         $value = $this->getDecodedParam($name);
@@ -238,6 +256,9 @@ class Controller extends PhalconController
         return (string)$value;
     }
 
+    /**
+     * @deprecated use \Psr\Http\Message\ServerRequestInterface
+     */
     public function getArrayParam(string $name, ?array $defaultValue = null) : array
     {
         $value = $this->getDecodedParam($name);
@@ -261,6 +282,7 @@ class Controller extends PhalconController
      * @param array|mixed $data Data to be json encoded
      *
      * @return Response
+     * @deprecated use \Psr\Http\Message\ResponseInterface
      */
     public function setJsonResponse($data = []) : Response
     {
@@ -303,5 +325,4 @@ class Controller extends PhalconController
 
         return $string;
     }
-
 }
