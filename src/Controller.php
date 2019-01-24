@@ -33,6 +33,7 @@ use Phalcon\Mvc\View as PhalconView;
  * @property \Phalcon\Di|\Phalcon\DiInterface                                                          $di
  * @property \Phalcon\Session\Bag|\Phalcon\Session\BagInterface                                        $persistent
  * @property \Phalcon\Mvc\View|\Phalcon\Mvc\ViewInterface                                              $view
+ * @deprecated this class needs a better separation of concerns.
  */
 class Controller extends PhalconController
 {

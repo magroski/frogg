@@ -4,9 +4,11 @@ namespace Frogg;
 
 use League\Csv\Writer;
 
+/**
+ * @deprecated this class needs a better separation of concerns.
+ */
 class Csv
 {
-
     /**
      * @param        $list
      * @param string $filename

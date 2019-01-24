@@ -34,10 +34,10 @@ namespace Frogg;
  * @author    Colin Verot <colin@verot.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Colin Verot
+ * @deprecated this class needs a better separation of concerns.
  */
 class Upload
 {
-
     /**
      * Class version
      *

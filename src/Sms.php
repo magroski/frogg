@@ -5,9 +5,11 @@ namespace Frogg;
 use Frogg\Sms\Twilio;
 use Frogg\Sms\Tww;
 
+/**
+ * @deprecated this class needs a better separation of concerns.
+ */
 class Sms
 {
-
     protected $gateway;
 
     /**
@@ -48,5 +50,4 @@ class Sms
     {
         return $this->gateway->send($data);
     }
-
 }

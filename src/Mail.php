@@ -5,9 +5,11 @@ namespace Frogg;
 use Aws\Credentials\Credentials;
 use Aws\Ses\SesClient;
 
+/**
+ * @deprecated this class needs to have a better separation of concerns.
+ */
 class Mail
 {
-
     protected $fromName;
     protected $fromEmail;
     protected $bounceAddress;
@@ -86,5 +88,4 @@ class Mail
 
         return $status;
     }
-
 }

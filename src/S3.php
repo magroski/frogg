@@ -8,10 +8,10 @@ use Aws\S3\S3Client;
 /**
  *
  * Amazon S3 abstraction
+ * @deprecated use http://flysystem.thephpleague.com
  */
 class S3
 {
-
     private $obj;
     private $bucket_name;
 

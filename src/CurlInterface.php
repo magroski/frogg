@@ -2,9 +2,11 @@
 
 namespace Frogg;
 
+/**
+ * @deprecated use Guzzle.
+ */
 class CurlInterface
 {
-
     const BASIC = 1;
     const SAFE  = 2;
 
@@ -191,5 +193,4 @@ class CurlInterface
 
         return $result;
     }
-
 }
