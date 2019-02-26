@@ -136,7 +136,7 @@ class Model extends PhalconModel implements \JsonSerializable
         $myData  = [];
         $child   = new static();
         $reflect = new \ReflectionObject($child);
-        $props   = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $props   = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC|\ReflectionProperty::IS_PROTECTED);
         foreach ($props as $prop) {
             $propName = $prop->getName();
             if (substr($propName, 0, 1) !== '_') {
