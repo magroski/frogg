@@ -8,7 +8,7 @@
 
 namespace Frogg\Model;
 
-use Frogg\Exceptions\InvalidAttributeException;
+use Frogg\Exception\InvalidAttributeException;
 use Frogg\Model;
 use Phalcon\Mvc\Model\Resultset\Simple;
 

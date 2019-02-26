@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: magroski
- * Date: 09/10/17
- * Time: 16:23
- */
 
 namespace Frogg\Services;
 
@@ -53,4 +47,20 @@ class SqsClient
         ]);
     }
 
+    /**
+     * Sends a message to AWS SQS service
+     *
+     * @param string $message The content of the message, must be text or a json_encoded array
+     * @param int    $delay   Delay in seconds. Min: 0 Max: 900 (15 minutes)
+     */
+    public function sendDelayedMessage(string $message, int $delay = 0)
+    {
+        $delay = max(0, $delay);
+        $delay = min(900, $delay);
+        $this->sqsClient->sendMessage([
+            'DelaySeconds' => $delay,
+            'MessageBody'  => $message,
+            'QueueUrl'     => $this->queueUrl,
+        ]);
+    }
 }

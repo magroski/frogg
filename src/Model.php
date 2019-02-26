@@ -3,6 +3,7 @@
 namespace Frogg;
 
 use Frogg\Crypto\WT;
+use Frogg\Exception\UnableToSaveRecord;
 use Frogg\Model\Criteria;
 use Phalcon\Di;
 use Phalcon\DiInterface;
@@ -10,16 +11,18 @@ use Phalcon\Mvc\Model as PhalconModel;
 
 /**
  * Class Model
- * @package Frogg
  *
  * @method static static findFirstById(int $id)
  * @method static Model\ResultSet find($params = null)
+ *
+ * @property Di $di
  */
 class Model extends PhalconModel implements \JsonSerializable
 {
+    public $populator = null;
 
     //This option will set the id of the clone to null
-    const CLONE_RM_ID      = 1;
+    const CLONE_RM_ID = 1;
     //This option will set the id of the clone to null AND save it to the DB
     const CLONE_CREATE_NEW = 2;
 
@@ -35,11 +38,11 @@ class Model extends PhalconModel implements \JsonSerializable
      */
     public static function query(DiInterface $dependencyInjector = null)
     {
-        $class = '\\'.get_called_class().'Criteria';
+        $class = '\\' . get_called_class() . 'Criteria';
         if (class_exists($class)) {
             /** @var \Frogg\Model\Criteria $criteria */
             $criteria = new $class();
-            $criteria->setDI($dependencyInjector ? : Di::getDefault());
+            $criteria->setDI($dependencyInjector ?: Di::getDefault());
             $criteria->setModelName(get_called_class());
         } else {
             $criteria = (new Criteria())->setModelName(get_called_class())->setAlias(get_called_class());
@@ -75,7 +78,7 @@ class Model extends PhalconModel implements \JsonSerializable
      *
      * @return string A permalink formatted string
      */
-    public function permalinkFor(string $attribute): string
+    public function permalinkFor(string $attribute) : string
     {
         $tmp = new Permalink($this->$attribute);
 
@@ -87,7 +90,7 @@ class Model extends PhalconModel implements \JsonSerializable
      *
      * @return string A permalink formatted string
      */
-    public function permalinkForValues(array $values): string
+    public function permalinkForValues(array $values) : string
     {
         for ($i = 0; $i < count($values); $i++) {
             $values[$i] = Permalink::createSlug($values[$i]);
@@ -97,7 +100,7 @@ class Model extends PhalconModel implements \JsonSerializable
         return $this->getNumeration($value);
     }
 
-    public function tokenId($key): string
+    public function tokenId($key) : string
     {
         return WT::encode(['id' => $this->id], $key);
     }
@@ -109,18 +112,18 @@ class Model extends PhalconModel implements \JsonSerializable
         return isset($data->id) ? static::findFirstById($data->id) : false;
     }
 
-    private function getNumeration($slug): string
+    private function getNumeration($slug) : string
     {
         $resultset = $this->getReadConnection()->query("SELECT `permalink`
-														FROM `".$this->getSource()."`
+														FROM `" . $this->getSource() . "`
 														WHERE `permalink` = '$slug'
 														LIMIT 1");
         $i         = 1;
         $tmp       = $slug;
         while ($resultset->numRows()) {
-            $slug      = $tmp.'-'.$i++;
+            $slug      = $tmp . '-' . $i++;
             $resultset = $this->getReadConnection()->query("SELECT `permalink`
-															FROM `".$this->getSource()."`
+															FROM `" . $this->getSource() . "`
 															WHERE `permalink` = '$slug'
 															LIMIT 1");
         }
@@ -171,4 +174,32 @@ class Model extends PhalconModel implements \JsonSerializable
 
         return $newObject;
     }
+
+    /**
+     * Save the entity or throw an exception.
+     * @param mixed[] $data
+     * @param mixed[] $whiteList
+     * @throws \Frogg\Exception\UnableToSaveRecord
+     */
+    public function saveOrFail(?array $data = null, ?array $whiteList = null) : void
+    {
+        $return = parent::save($data, $whiteList);
+
+        if ($return === false) {
+            throw new UnableToSaveRecord('Unable to save entity. Details: ' . json_encode($this->getMessages()));
+        }
+    }
+
+    public function getPopulator()
+    {
+        return $this->populator;
+    }
+
+    public function setPopulator($populator) : self
+    {
+        $this->populator = $populator;
+
+        return $this;
+    }
+
 }

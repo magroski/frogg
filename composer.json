@@ -24,7 +24,7 @@
     },
     "minimum-stability": "stable",
     "require": {
-        "php": "^7.0",
+        "php": "^7.1",
         "aws/aws-sdk-php": "^3.27",
         "twilio/sdk": "^5.3",
         "mobiledetect/mobiledetectlib": "^2.8",

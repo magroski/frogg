@@ -10,13 +10,15 @@ class Mail
 
     protected $fromName;
     protected $fromEmail;
+    protected $bounceAddress;
     protected $ses;
     protected $t;
 
     public function __construct(array $credentials)
     {
-        $this->fromName  = $credentials['fromName'];
-        $this->fromEmail = $credentials['fromEmail'];
+        $this->fromName      = $credentials['fromName'];
+        $this->fromEmail     = $credentials['fromEmail'];
+        $this->bounceAddress = $credentials['bounceAddress'];
 
         $credentialsInst = new Credentials(
             $credentials['AWS_ACCESS_KEY'],
@@ -30,9 +32,16 @@ class Mail
         ]);
     }
 
+    public function setBounceAddress(string $bounceAddress) : void
+    {
+        $this->bounceAddress = $bounceAddress;
+    }
+
     public function send($subject, $body, $to, $text = false)
     {
-        if (!is_array($to)) $to = [$to];
+        if (!is_array($to)) {
+            $to = [$to];
+        }
         $body = preg_replace('/[\s\t\n]+/', ' ', $body);
 
         foreach ($to as $key => $value) {
@@ -61,6 +70,10 @@ class Mail
                 ],
             ],
         ];
+
+        if (!empty($this->bounceAddress)) {
+            $email_data['ReturnPath'] = $this->bounceAddress;
+        }
 
         if ($text) {
             $email_data['Message']['Body']['Text'] = [
