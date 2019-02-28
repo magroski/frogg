@@ -65,7 +65,7 @@ class Controller extends PhalconController
     }
 
     /**
-     * Syntactic sugar for Phalcon's $dispatcher->forward
+     * Syntactical sugar for Phalcon's $dispatcher->forward
      *
      * @param array|string $routeInfo Array : Key-value array containing route information [namespace, module,
      *                                controller, action, ...] String : Route url or route name
