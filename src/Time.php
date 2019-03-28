@@ -18,6 +18,7 @@ class Time
      * Constructor
      *
      * @param int|null $time Unix timestamp OR a string timestamp (YYYY-MM-DD)
+     * @throws \Exception
      */
     public function __construct($time = 0)
     {

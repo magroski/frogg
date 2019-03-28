@@ -5,6 +5,7 @@ namespace Frogg;
 use Frogg\Crypto\WT;
 use Frogg\Exception\UnableToSaveRecord;
 use Frogg\Model\Criteria;
+use Frogg\Model\ResultSet;
 use Phalcon\Di;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\Model as PhalconModel;
@@ -28,7 +29,7 @@ class Model extends PhalconModel implements \JsonSerializable
 
     public function getResultsetClass()
     {
-        return 'Frogg\Model\ResultSet';
+        return ResultSet::class;
     }
 
     /**

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: magroski
- * Date: 02/10/17
- * Time: 12:14
- */
 
 namespace Frogg\Model;
 

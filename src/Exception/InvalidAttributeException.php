@@ -2,7 +2,7 @@
 
 namespace Frogg\Exception;
 
-class InvalidAttributeException extends \Exception
+class InvalidAttributeException extends \RuntimeException
 {
     /**
      * InvalidAttributeException constructor.
