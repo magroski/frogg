@@ -57,10 +57,10 @@ class S3
             $filename = $this->sanitizeFilename($filename);
 
             if ($path) {
-                $full_path = $this->bucket_name.'/'.$path.'/'.$filename;
-                $dest_path = $path.'/'.$filename;
+                $full_path = $this->bucket_name . '/' . $path . '/' . $filename;
+                $dest_path = $path . '/' . $filename;
             } else {
-                $full_path = $this->bucket_name.'/'.$filename;
+                $full_path = $this->bucket_name . '/' . $filename;
                 $dest_path = $filename;
             }
             $objectInfo = [

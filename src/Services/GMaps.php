@@ -19,17 +19,20 @@ class GMaps
      *
      * @param mixed $locationA 'City,State' string or [city,state] array
      * @param mixed $locationB 'City,State' string or [city,state] array
-     * @param bool  $metric    (default = false) flag to indicate if the result should be returned in metric or imperial
+     * @param bool  $metric    (default = false) flag to indicate if the result should be returned in metric or
+     *                         imperial
      *
-     * @return int Distance in meters (if the flag is true) or its "equivalent" imperial value (calculated by multiplying meters by
+     * @return int Distance in meters (if the flag is true) or its "equivalent" imperial value (calculated by
+     *             multiplying meters by
      *             0.621371)
      *
      * Obs: 1 Km = 0.62 miles but 1 meter != 0.62 yards.
-     * So, the returned value can only be in meters (if flag is active) or an approximation in miles, not yards. Thanks, America.
+     * So, the returned value can only be in meters (if flag is active) or an approximation in miles, not yards.
+     * Thanks, America.
      *
      * @throws \Exception When one of the given addresses is not found
      */
-    public function calculateDistance($locationA, $locationB, $metric = false): int
+    public function calculateDistance($locationA, $locationB, $metric = false) : int
     {
         $locationA = is_array($locationA) ? implode(',', $locationA) : $locationA;
         $locationB = is_array($locationB) ? implode(',', $locationB) : $locationB;
@@ -38,11 +41,11 @@ class GMaps
             return 0;
         }
 
-        $response = file_get_contents('https://maps.googleapis.com/maps/api/distancematrix/json?origins='.urlencode($locationA).'&destinations='.urlencode($locationB).'&key='.$this->apiKey);
+        $response = file_get_contents('https://maps.googleapis.com/maps/api/distancematrix/json?origins=' . urlencode($locationA) . '&destinations=' . urlencode($locationB) . '&key=' . $this->apiKey);
         $data     = json_decode($response);
 
         if ($data->rows[0]->elements[0]->status == 'NOT_FOUND') {
-            throw new \Exception('GoogleMaps exception: ADDRESS NOT FOUND. ['.$locationA.' | '.$locationB.']', 1);
+            throw new \Exception('GoogleMaps exception: ADDRESS NOT FOUND. [' . $locationA . ' | ' . $locationB . ']', 1);
         }
         if ($data->rows[0]->elements[0]->status == 'ZERO_RESULTS') {
             return 9999999;
@@ -62,19 +65,19 @@ class GMaps
      *
      * @throws \Exception When the given address was not found
      */
-    public function generateLink(string $keyword): string
+    public function generateLink(string $keyword) : string
     {
-        $response = file_get_contents('https://maps.googleapis.com/maps/api/place/textsearch/json?query='.urlencode($keyword).'&key='.$this->apiKey);
+        $response = file_get_contents('https://maps.googleapis.com/maps/api/place/textsearch/json?query=' . urlencode($keyword) . '&key=' . $this->apiKey);
         $data     = json_decode($response);
 
         if (empty($data->results) || $data->status == 'ZERO_RESULTS') {
-            throw new \Exception('GoogleMaps exception: ADDRESS NOT FOUND. ['.$keyword.']', 1);
+            throw new \Exception('GoogleMaps exception: ADDRESS NOT FOUND. [' . $keyword . ']', 1);
         }
 
         $lat = $data->results[0]->geometry->location->lat;
         $lng = $data->results[0]->geometry->location->lng;
 
-        return 'http://maps.google.com/maps?q='.$lat.','.$lng.'&z=17';
+        return 'http://maps.google.com/maps?q=' . $lat . ',' . $lng . '&z=17';
     }
 
 }

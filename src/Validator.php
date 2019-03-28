@@ -48,7 +48,7 @@ class Validator
      *
      * @return bool is the value is valid
      */
-    public static function validate($regex, $var): bool
+    public static function validate($regex, $var) : bool
     {
         return preg_match($regex, $var) == 1;
     }
@@ -60,7 +60,7 @@ class Validator
      *
      * @return bool if the encoding is UTF-8
      */
-    public static function isUTF8(string $string): bool
+    public static function isUTF8(string $string) : bool
     {
         return mb_detect_encoding($string, 'UTF-8', true) == 'UTF-8';
     }
@@ -72,7 +72,7 @@ class Validator
      *
      * @return string Returns the string trimmed, without tags and encoded with htmlspecialchars
      */
-    public static function sanitize(string $string): string
+    public static function sanitize(string $string) : string
     {
         return htmlspecialchars(strip_tags(trim($string)), ENT_QUOTES);
     }
@@ -84,15 +84,17 @@ class Validator
      *
      * @return string The string without protocol (http[s]://) and the last /
      */
-    public static function sanitizeUrl(string $url): string
+    public static function sanitizeUrl(string $url) : string
     {
         $url_no_protocol = $url;
         if (stristr($url, "https://")) {
             $tmp             = explode("https://", $url);
             $url_no_protocol = $tmp[1];
-        } else if (stristr($url, "http://")) {
-            $tmp             = explode("http://", $url);
-            $url_no_protocol = $tmp[1];
+        } else {
+            if (stristr($url, "http://")) {
+                $tmp             = explode("http://", $url);
+                $url_no_protocol = $tmp[1];
+            }
         }
 
         if ($url_no_protocol == '') {

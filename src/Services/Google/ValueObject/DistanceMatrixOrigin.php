@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Frogg\Services\Google\ValueObject;
-
 
 class DistanceMatrixOrigin
 {

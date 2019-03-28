@@ -27,7 +27,7 @@ class DateInterval
     /**
      * @return int Interval in years
      */
-    public function toYears(): int
+    public function toYears() : int
     {
         return floor($this->toDays() / 365);
     }
@@ -35,7 +35,7 @@ class DateInterval
     /**
      * @return int Interval in months
      */
-    public function toMonths(): int
+    public function toMonths() : int
     {
         return floor(($this->toDays()) / 30);
     }
@@ -43,7 +43,7 @@ class DateInterval
     /**
      * @return int Interval in days
      */
-    public function toDays(): int
+    public function toDays() : int
     {
         return floor(($this->toHours()) / 24);
     }
@@ -51,7 +51,7 @@ class DateInterval
     /**
      * @return int Interval in hours
      */
-    public function toHours(): int
+    public function toHours() : int
     {
         return floor(($this->toMinutes()) / 60);
     }
@@ -59,7 +59,7 @@ class DateInterval
     /**
      * @return int Interval in minutes
      */
-    public function toMinutes(): int
+    public function toMinutes() : int
     {
         return floor(($this->toSeconds()) / 60);
     }
@@ -67,7 +67,7 @@ class DateInterval
     /**
      * @return int Interval in seconds
      */
-    public function toSeconds(): int
+    public function toSeconds() : int
     {
         return $this->time * 1;
     }

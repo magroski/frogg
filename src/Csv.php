@@ -18,7 +18,7 @@ class Csv
     static function export($list, $filename = 'data', $separator = ',', $enclosure = '"')
     {
         header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename='.$filename.'.csv');
+        header('Content-Disposition: attachment; filename=' . $filename . '.csv');
 
         $writer = Writer::createFromPath('php://output', 'w');
         $writer->insertAll($list); //using an array

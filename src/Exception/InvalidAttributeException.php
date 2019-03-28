@@ -11,6 +11,6 @@ class InvalidAttributeException extends \RuntimeException
      */
     public function __construct($message)
     {
-        parent::__construct('Attribute \''.$message.'\' does not exist on the current object');
+        parent::__construct('Attribute \'' . $message . '\' does not exist on the current object');
     }
 }

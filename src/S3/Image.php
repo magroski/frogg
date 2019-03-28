@@ -2,9 +2,7 @@
 
 namespace Frogg\S3;
 
-use Frogg\{
-    S3, Upload, Validator
-};
+use Frogg\{S3, Upload, Validator};
 
 class Image
 {
@@ -108,11 +106,13 @@ class Image
                     $this->getFromPath($name, sys_get_temp_dir());
                     $this->width  = $image[0];
                     $this->height = $image[1];
+
                     return true;
                 default:
                     return false;
             }
         }
+
         return false;
     }
 
