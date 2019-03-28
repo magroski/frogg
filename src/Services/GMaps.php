@@ -23,8 +23,7 @@ class GMaps
      *                         imperial
      *
      * @return int Distance in meters (if the flag is true) or its "equivalent" imperial value (calculated by
-     *             multiplying meters by
-     *             0.621371)
+     *             multiplying meters by 0.621371)
      *
      * Obs: 1 Km = 0.62 miles but 1 meter != 0.62 yards.
      * So, the returned value can only be in meters (if flag is active) or an approximation in miles, not yards.

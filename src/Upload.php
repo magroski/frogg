@@ -5171,67 +5171,31 @@ class Upload
         while ($Y >= 0) {
             $X = 0;
             while ($X < $bmp['width']) {
-                if ($bmp['bits_per_pixel'] == 24) {
-                    $color = unpack("V", substr($im, $P, 3) . $vide);
-                } else {
-                    if ($bmp['bits_per_pixel'] == 16) {
-                        $color    = unpack("n", substr($im, $P, 2));
-                        $color[1] = $palette[$color[1] + 1];
-                    } else {
-                        if ($bmp['bits_per_pixel'] == 8) {
-                            $color    = unpack("n", $vide . substr($im, $P, 1));
-                            $color[1] = $palette[$color[1] + 1];
-                        } else {
-                            if ($bmp['bits_per_pixel'] == 4) {
-                                $color = unpack("n", $vide . substr($im, floor($P), 1));
-                                if (($P * 2) % 2 == 0) {
-                                    $color[1] = ($color[1] >> 4);
-                                } else {
-                                    $color[1] = ($color[1] & 0x0F);
-                                }
-                                $color[1] = $palette[$color[1] + 1];
-                            } else {
-                                if ($bmp['bits_per_pixel'] == 1) {
-                                    $color = unpack("n", $vide . substr($im, floor($P), 1));
-                                    if (($P * 8) % 8 == 0) {
-                                        $color[1] = $color[1] >> 7;
-                                    } else {
-                                        if (($P * 8) % 8 == 1) {
-                                            $color[1] = ($color[1] & 0x40) >> 6;
-                                        } else {
-                                            if (($P * 8) % 8 == 2) {
-                                                $color[1] = ($color[1] & 0x20) >> 5;
-                                            } else {
-                                                if (($P * 8) % 8 == 3) {
-                                                    $color[1] = ($color[1] & 0x10) >> 4;
-                                                } else {
-                                                    if (($P * 8) % 8 == 4) {
-                                                        $color[1] = ($color[1] & 0x8) >> 3;
-                                                    } else {
-                                                        if (($P * 8) % 8 == 5) {
-                                                            $color[1] = ($color[1] & 0x4) >> 2;
-                                                        } else {
-                                                            if (($P * 8) % 8 == 6) {
-                                                                $color[1] = ($color[1] & 0x2) >> 1;
-                                                            } else {
-                                                                if (($P * 8) % 8 == 7) {
-                                                                    $color[1] = ($color[1] & 0x1);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    $color[1] = $palette[$color[1] + 1];
-                                } else {
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                }
+                if ($bmp['bits_per_pixel'] == 24)
+                    $color = unpack("V", substr($im, $P, 3).$vide);
+                else if ($bmp['bits_per_pixel'] == 16) {
+                    $color    = unpack("n", substr($im, $P, 2));
+                    $color[1] = $palette[$color[1] + 1];
+                } else if ($bmp['bits_per_pixel'] == 8) {
+                    $color    = unpack("n", $vide.substr($im, $P, 1));
+                    $color[1] = $palette[$color[1] + 1];
+                } else if ($bmp['bits_per_pixel'] == 4) {
+                    $color = unpack("n", $vide.substr($im, floor($P), 1));
+                    if (($P * 2) % 2 == 0) $color[1] = ($color[1] >> 4); else $color[1] = ($color[1] & 0x0F);
+                    $color[1] = $palette[$color[1] + 1];
+                } else if ($bmp['bits_per_pixel'] == 1) {
+                    $color = unpack("n", $vide.substr($im, floor($P), 1));
+                    if (($P * 8) % 8 == 0) $color[1] = $color[1] >> 7;
+                    else if (($P * 8) % 8 == 1) $color[1] = ($color[1] & 0x40) >> 6;
+                    else if (($P * 8) % 8 == 2) $color[1] = ($color[1] & 0x20) >> 5;
+                    else if (($P * 8) % 8 == 3) $color[1] = ($color[1] & 0x10) >> 4;
+                    else if (($P * 8) % 8 == 4) $color[1] = ($color[1] & 0x8) >> 3;
+                    else if (($P * 8) % 8 == 5) $color[1] = ($color[1] & 0x4) >> 2;
+                    else if (($P * 8) % 8 == 6) $color[1] = ($color[1] & 0x2) >> 1;
+                    else if (($P * 8) % 8 == 7) $color[1] = ($color[1] & 0x1);
+                    $color[1] = $palette[$color[1] + 1];
+                } else
+                    return FALSE;
                 imagesetpixel($res, $X, $Y, $color[1]);
                 $X++;
                 $P += $bmp['bytes_per_pixel'];
