@@ -11,6 +11,6 @@ class DuplicatedBindException extends \Exception
      */
     public function __construct($bind)
     {
-        parent::__construct('`'.$bind.'` bind was already added to this query, to overwriting it (skiping this check), pass bindType [`skipBindCheck` => true]');
+        parent::__construct('`' . $bind . '` bind was already added to this query, to overwriting it (skiping this check), pass bindType [`skipBindCheck` => true]');
     }
 }

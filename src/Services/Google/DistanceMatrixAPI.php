@@ -112,7 +112,8 @@ class DistanceMatrixAPI
             case 'UNKNOWN_ERROR';
                 return false;
         }
-    	return true;
+
+        return true;
     }
 
     /**

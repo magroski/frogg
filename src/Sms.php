@@ -41,8 +41,8 @@ class Sms
      *                    * 'to'     - number without country code,
      *                    * 'from' - number that will send the message,
      *
-     * @throws \Exception
      * @return bool
+     * @throws \Exception
      */
     public function send(array $data)
     {

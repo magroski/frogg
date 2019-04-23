@@ -29,16 +29,18 @@ class CurlInterface
     public function postJson(string $url, $data = [], $dataQuery = [])
     {
         $query = http_build_query($dataQuery);
-        $ch    = curl_init($url.'?'.$query);
+        $ch    = curl_init($url . '?' . $query);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         if ($this->authType == self::BASIC) {
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
-        } else if ($this->authType == self::SAFE) {
-            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
-            curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
+        } else {
+            if ($this->authType == self::SAFE) {
+                curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
+                curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
+            }
         }
         $result = curl_exec($ch);
         curl_close($ch);
@@ -60,15 +62,17 @@ class CurlInterface
     {
         $params = implode('/', $data);
         $query  = http_build_query($dataQuery);
-        $ch     = curl_init($url.$params.'?'.$query);
+        $ch     = curl_init($url . $params . '?' . $query);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         if ($this->authType == self::BASIC) {
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
-        } else if ($this->authType == self::SAFE) {
-            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
-            curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
+        } else {
+            if ($this->authType == self::SAFE) {
+                curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
+                curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
+            }
         }
         $result = curl_exec($ch);
         curl_close($ch);
@@ -90,14 +94,16 @@ class CurlInterface
     {
         $params = implode('/', $data);
         $query  = http_build_query($dataQuery);
-        $ch     = curl_init($url.$params.'?'.$query);
+        $ch     = curl_init($url . $params . '?' . $query);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         if ($this->authType == self::BASIC) {
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
-        } else if ($this->authType == self::SAFE) {
-            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
-            curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
+        } else {
+            if ($this->authType == self::SAFE) {
+                curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
+                curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
+            }
         }
         $result = curl_exec($ch);
         curl_close($ch);
@@ -118,14 +124,16 @@ class CurlInterface
     public function getQuery(string $url, $data = [], $dataQuery = [])
     {
         $data = array_merge($data, $dataQuery);
-        $ch   = curl_init($url.'?'.http_build_query($data));
+        $ch   = curl_init($url . '?' . http_build_query($data));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         if ($this->authType == self::BASIC) {
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
-        } else if ($this->authType == self::SAFE) {
-            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
-            curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
+        } else {
+            if ($this->authType == self::SAFE) {
+                curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
+                curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
+            }
         }
         $result = curl_exec($ch);
         curl_close($ch);
@@ -146,15 +154,17 @@ class CurlInterface
     {
         $query  = http_build_query($dataQuery);
         $params = implode('/', $data);
-        $ch     = curl_init($url.$params.'?'.$query);
+        $ch     = curl_init($url . $params . '?' . $query);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         if ($this->authType == self::BASIC) {
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
-        } else if ($this->authType == self::SAFE) {
-            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
-            curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
+        } else {
+            if ($this->authType == self::SAFE) {
+                curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
+                curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
+            }
         }
         $result = curl_exec($ch);
         curl_close($ch);
@@ -174,7 +184,7 @@ class CurlInterface
     public function putReq(string $url, $data = [], $dataQuery = [])
     {
         $query = http_build_query($dataQuery);
-        $ch    = curl_init($url.'?'.$query);
+        $ch    = curl_init($url . '?' . $query);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
@@ -182,9 +192,11 @@ class CurlInterface
         if ($this->authType == self::BASIC) {
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
-        } else if ($this->authType == self::SAFE) {
-            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
-            curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
+        } else {
+            if ($this->authType == self::SAFE) {
+                curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
+                curl_setopt($ch, CURLOPT_USERPWD, $this->authParam);
+            }
         }
         $result = curl_exec($ch);
         curl_close($ch);

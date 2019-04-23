@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: magroski
- * Date: 02/10/17
- * Time: 12:14
- */
 
 namespace Frogg\Model;
 
@@ -23,7 +17,7 @@ class ResultSet extends Simple
      * @return array
      * @throws InvalidAttributeException When the attribute is not found on the object
      */
-    public function getAttribute(string $attributeName): array
+    public function getAttribute(string $attributeName) : array
     {
         if ($this->isEmpty()) {
             return [];
@@ -48,7 +42,7 @@ class ResultSet extends Simple
      * @return array
      * @throws InvalidAttributeException Thrown if one of the attributes is not found on the object
      */
-    public function getAttributes(...$attributeNames): array
+    public function getAttributes(...$attributeNames) : array
     {
         if (func_num_args() === 0) {
             return [];
@@ -86,7 +80,7 @@ class ResultSet extends Simple
      * @return array
      * @throws InvalidAttributeException When the attribute is not found on the object
      */
-    public function groupBy(string $attributeName, $asObject = true): array
+    public function groupBy(string $attributeName, $asObject = true) : array
     {
         if ($this->isEmpty()) {
             return [];
@@ -116,7 +110,7 @@ class ResultSet extends Simple
      *
      * @return array
      */
-    public function toObjectArray(): array
+    public function toObjectArray() : array
     {
         if ($this->isEmpty()) {
             return [];
@@ -132,7 +126,7 @@ class ResultSet extends Simple
     /**
      * @return bool true if the ResultSet is empty
      */
-    public function isEmpty(): bool
+    public function isEmpty() : bool
     {
         return $this->count() === 0;
     }
@@ -140,7 +134,7 @@ class ResultSet extends Simple
     /**
      * @return bool true if the ResultSet is not empty
      */
-    public function isNotEmpty(): bool
+    public function isNotEmpty() : bool
     {
         return $this->count() > 0;
     }
@@ -151,7 +145,7 @@ class ResultSet extends Simple
      * @return array
      * @throws InvalidAttributeException When the object has no 'id' field
      */
-    public function getIds(): array
+    public function getIds() : array
     {
         return $this->getAttribute('id');
     }

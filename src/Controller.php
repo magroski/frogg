@@ -6,6 +6,7 @@ use Detection\MobileDetect;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Controller as PhalconController;
 use Phalcon\Mvc\View as PhalconView;
+use TypeError;
 
 /**
  * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface                                  $dispatcher
@@ -65,7 +66,7 @@ class Controller extends PhalconController
     }
 
     /**
-     * Syntactic sugar for Phalcon's $dispatcher->forward
+     * Syntactical sugar for Phalcon's $dispatcher->forward
      *
      * @param array|string $routeInfo Array : Key-value array containing route information [namespace, module,
      *                                controller, action, ...] String : Route url or route name
@@ -175,11 +176,11 @@ class Controller extends PhalconController
             if (!is_null($defaultValue)) {
                 return $defaultValue;
             }
-            throw new \TypeError('Parameter ' . $name . ' is null, int expected');
+            throw new TypeError('Parameter ' . $name . ' is null, int expected');
         }
 
         if (!ctype_digit($value)) {
-            throw new \TypeError('Parameter ' . $name . ' is not an int : ' . $value);
+            throw new TypeError('Parameter ' . $name . ' is not an int : ' . $value);
         }
 
         return intval($value);
@@ -192,7 +193,7 @@ class Controller extends PhalconController
             if (!is_null($defaultValue)) {
                 return $defaultValue;
             }
-            throw new \TypeError('Parameter ' . $name . ' is null, float expected');
+            throw new TypeError('Parameter ' . $name . ' is null, float expected');
         }
 
         $floatVal = floatval($value);
@@ -200,7 +201,7 @@ class Controller extends PhalconController
             return $floatVal;
         }
 
-        throw new \TypeError('Parameter ' . $name . ' is not a float : ' . $value);
+        throw new TypeError('Parameter ' . $name . ' is not a float : ' . $value);
     }
 
     public function getBoolParam(string $name, ?bool $defaultValue = null) : bool
@@ -210,12 +211,12 @@ class Controller extends PhalconController
             if (!is_null($defaultValue)) {
                 return $defaultValue;
             }
-            throw new \TypeError('Parameter ' . $name . ' is null, bool expected');
+            throw new TypeError('Parameter ' . $name . ' is null, bool expected');
         }
 
         $filteredValue = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         if (is_null($filteredValue)) {
-            throw new \TypeError('Parameter ' . $name . ' is not a bool : ' . $value);
+            throw new TypeError('Parameter ' . $name . ' is not a bool : ' . $value);
         }
 
         return $filteredValue;
@@ -228,11 +229,11 @@ class Controller extends PhalconController
             if (!is_null($defaultValue)) {
                 return $defaultValue;
             }
-            throw new \TypeError('Parameter ' . $name . ' is null, string expected');
+            throw new TypeError('Parameter ' . $name . ' is null, string expected');
         }
 
         if (!is_string($value)) {
-            throw new \TypeError('Parameter ' . $name . ' is not a string : ' . $value);
+            throw new TypeError('Parameter ' . $name . ' is not a string : ' . $value);
         }
 
         return (string)$value;
@@ -245,11 +246,11 @@ class Controller extends PhalconController
             if (!is_null($defaultValue)) {
                 return $defaultValue;
             }
-            throw new \TypeError('Parameter ' . $name . ' is null, array expected');
+            throw new TypeError('Parameter ' . $name . ' is null, array expected');
         }
 
         if (!is_array($value)) {
-            throw new \TypeError('Parameter ' . $name . ' is not an array : ' . $value);
+            throw new TypeError('Parameter ' . $name . ' is not an array : ' . $value);
         }
 
         return $value;

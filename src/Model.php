@@ -5,6 +5,7 @@ namespace Frogg;
 use Frogg\Crypto\WT;
 use Frogg\Exception\UnableToSaveRecord;
 use Frogg\Model\Criteria;
+use Frogg\Model\ResultSet;
 use Phalcon\Di;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\Model as PhalconModel;
@@ -28,7 +29,7 @@ class Model extends PhalconModel implements \JsonSerializable
 
     public function getResultsetClass()
     {
-        return 'Frogg\Model\ResultSet';
+        return ResultSet::class;
     }
 
     /**
@@ -136,7 +137,7 @@ class Model extends PhalconModel implements \JsonSerializable
         $myData  = [];
         $child   = new static();
         $reflect = new \ReflectionObject($child);
-        $props   = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC|\ReflectionProperty::IS_PROTECTED);
+        $props   = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED);
         foreach ($props as $prop) {
             $propName = $prop->getName();
             if (substr($propName, 0, 1) !== '_') {

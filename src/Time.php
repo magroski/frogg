@@ -18,6 +18,7 @@ class Time
      * Constructor
      *
      * @param int|null $time Unix timestamp OR a string timestamp (YYYY-MM-DD)
+     * @throws \Exception
      */
     public function __construct($time = 0)
     {
@@ -32,15 +33,15 @@ class Time
     /**
      * Returns the date formatted as an Unix timestamp
      */
-    public function __toString(): string
+    public function __toString() : string
     {
-        return $this->getUnixTstamp().'';
+        return $this->getUnixTstamp() . '';
     }
 
     /**
      * Returns the date formatted as an Unix timestamp
      */
-    public function getUnixTstamp(): int
+    public function getUnixTstamp() : int
     {
         return $this->time;
     }
@@ -48,15 +49,15 @@ class Time
     /**
      * Returns the date formatted as a database timestamp (yyyy-mm-dd hh:ii:ss)
      */
-    public function getTstamp(): string
+    public function getTstamp() : string
     {
-        return $this->getYear().'-'.$this->getMonth().'-'.$this->getDay().' '.$this->getHours().':'.$this->getMinutes().':'.$this->getSeconds();
+        return $this->getYear() . '-' . $this->getMonth() . '-' . $this->getDay() . ' ' . $this->getHours() . ':' . $this->getMinutes() . ':' . $this->getSeconds();
     }
 
     /**
      * Returns the year of the stored time variable
      */
-    public function getYear(): string
+    public function getYear() : string
     {
         return date('Y', $this->time);
     }
@@ -65,7 +66,7 @@ class Time
      * Returns the month of the stored time variable  <br/>
      * Value between 01 and 12 (with leading zeros)
      */
-    public function getMonth(): string
+    public function getMonth() : string
     {
         return date('m', $this->time);
     }
@@ -74,7 +75,7 @@ class Time
      * Returns the day of the month of the stored time variable  <br/>
      * Value between 01 and 31 (with leading zeros)
      */
-    public function getDay(): string
+    public function getDay() : string
     {
         return date('d', $this->time);
     }
@@ -83,7 +84,7 @@ class Time
      * Returns the day of the month of the stored time variable  <br/>
      * Value between 1 and 31 (without leading zeros)
      */
-    public function getDayNoZero(): string
+    public function getDayNoZero() : string
     {
         return date('j', $this->time);
     }
@@ -92,7 +93,7 @@ class Time
      * Returns the hour of the day of the stored time variable  <br/>
      * Value between 00 and 23 (with leading zeros)
      */
-    public function getHours(): string
+    public function getHours() : string
     {
         return date('H', $this->time);
     }
@@ -103,7 +104,7 @@ class Time
      *
      * @return string Date minute as string
      */
-    public function getMinutes(): string
+    public function getMinutes() : string
     {
         return date('i', $this->time);
     }
@@ -112,7 +113,7 @@ class Time
      * Returns the seconds of the minute of the stored time variable  <br/>
      * Value between 00 and 59 (with leading zeros)
      */
-    public function getSeconds(): string
+    public function getSeconds() : string
     {
         return date('s', $this->time);
     }
@@ -125,7 +126,7 @@ class Time
      * @return Time
      *
      */
-    public function add(int $seconds): self
+    public function add(int $seconds) : self
     {
         $this->time += $seconds;
 
@@ -139,7 +140,7 @@ class Time
      *
      * @return Time
      */
-    public function subtract(int $seconds): self
+    public function subtract(int $seconds) : self
     {
         $this->time -= $seconds;
 
@@ -154,7 +155,7 @@ class Time
      *
      * @return DateInterval
      */
-    public function diff($time): DateInterval
+    public function diff($time) : DateInterval
     {
         $tmp = new self($time);
 
@@ -181,7 +182,7 @@ class Time
      *
      * @return string
      */
-    public function format(string $mask): string
+    public function format(string $mask) : string
     {
         /**
          *
@@ -214,7 +215,7 @@ class Time
      *
      * @return int
      */
-    public static function secondsFromMinutes(int $minutes): int
+    public static function secondsFromMinutes(int $minutes) : int
     {
         return self::MINUTE * $minutes;
     }
@@ -226,7 +227,7 @@ class Time
      *
      * @return int
      */
-    public static function secondsFromHours(int $hours): int
+    public static function secondsFromHours(int $hours) : int
     {
         return self::HOUR * $hours;
     }
@@ -238,7 +239,7 @@ class Time
      *
      * @return int
      */
-    public static function secondsFromDays(int $days): int
+    public static function secondsFromDays(int $days) : int
     {
         return self::DAY * $days;
     }

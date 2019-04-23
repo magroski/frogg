@@ -2,7 +2,7 @@
 
 namespace Frogg\Exception;
 
-class InvalidAttributeException extends \Exception
+class InvalidAttributeException extends \RuntimeException
 {
     /**
      * InvalidAttributeException constructor.
@@ -11,6 +11,6 @@ class InvalidAttributeException extends \Exception
      */
     public function __construct($message)
     {
-        parent::__construct('Attribute \''.$message.'\' does not exist on the current object');
+        parent::__construct('Attribute \'' . $message . '\' does not exist on the current object');
     }
 }
