@@ -164,6 +164,7 @@ class Criteria extends PhalconModel\Criteria
 
     public function findFirst($conditions = false, $bindParams = null, $bindTypes = null)
     {
+        $this->limit(1);
         if ($conditions) {
             $this->andWhere($conditions, $bindParams, $bindTypes);
         }
