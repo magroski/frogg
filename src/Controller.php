@@ -82,9 +82,9 @@ class Controller extends PhalconController
         $this->dispatcher->forward($requestData);
     }
 
-    public function redirect($url)
+    public function redirect($url, $externalRedirect = false, $statusCode = 302)
     {
-        $this->response->redirect($url);
+        $this->response->redirect($url, $externalRedirect, $statusCode);
         $this->view->disable();
     }
 
