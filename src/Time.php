@@ -4,6 +4,9 @@ namespace Frogg;
 
 use Frogg\Time\DateInterval;
 
+/**
+ * @deprecated Use magroski/time-buddy
+ */
 class Time
 {
 

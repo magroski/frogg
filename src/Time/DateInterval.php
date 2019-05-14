@@ -2,6 +2,9 @@
 
 namespace Frogg\Time;
 
+/**
+ * @deprecated Use magroski/time-buddy
+ */
 class DateInterval
 {
 
