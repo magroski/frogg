@@ -16,6 +16,7 @@ http://creativecommons.org/publicdomain/zero/1.0/legalcode
 */
 
 // A class containing functions for computing diffs and formatting the output.
+/** @deprecated use magroski/diff */
 class Diff
 {
 
