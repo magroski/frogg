@@ -2,6 +2,9 @@
 
 namespace Frogg\Crypto;
 
+/**
+ * @deprecated Use magroski/wt
+ */
 class WT
 {
 
