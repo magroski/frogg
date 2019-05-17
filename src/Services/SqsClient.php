@@ -5,6 +5,7 @@ namespace Frogg\Services;
 use Aws\Credentials\Credentials;
 use Aws\Sqs\SqsClient as AmazonSqsClient;
 
+/** @deprecated use magroski/simple-sqs */
 class SqsClient
 {
     protected $sqsClient;
