@@ -2,6 +2,9 @@
 
 namespace Frogg\Sms;
 
+/**
+ * @deprecated use magroski/tww
+ */
 class Tww
 {
 

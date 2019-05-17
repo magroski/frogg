@@ -4,6 +4,9 @@ namespace Frogg\Sms;
 
 use Twilio\Rest\Client;
 
+/**
+ * @deprecated use magroski/twilio
+ */
 class Twilio
 {
 
