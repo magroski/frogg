@@ -2,6 +2,9 @@
 
 namespace Frogg;
 
+/**
+ * @deprecated use Guzzle
+ */
 class CurlInterface
 {
 

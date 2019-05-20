@@ -4,6 +4,9 @@ namespace Frogg;
 
 use League\Csv\Writer;
 
+/**
+ * @deprecated Just set a header using the framework
+ */
 class Csv
 {
 

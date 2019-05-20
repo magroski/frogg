@@ -5,6 +5,9 @@ namespace Frogg;
 use Aws\Credentials\Credentials;
 use Aws\Ses\SesClient;
 
+/**
+ * @deprecated Use magroski/simple-ses
+ */
 class Mail
 {
 
