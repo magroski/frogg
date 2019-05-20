@@ -3,8 +3,7 @@
 namespace Frogg;
 
 /**
- * This class is used to validate data inputs.
- * Some of the most used regular expressions are defined below.
+ * @deprecated Simply use regex, filter_var, or Respect/Validation
  */
 class Validator
 {
