@@ -4,6 +4,7 @@ namespace Frogg\S3;
 
 use Frogg\{S3, Upload, Validator};
 
+/** @deprecated Use magroski/bob-ross */
 class Image
 {
 

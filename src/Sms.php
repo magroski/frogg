@@ -5,6 +5,7 @@ namespace Frogg;
 use Frogg\Sms\Twilio;
 use Frogg\Sms\Tww;
 
+/** @deprecated  */
 class Sms
 {
 

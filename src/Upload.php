@@ -34,6 +34,7 @@ namespace Frogg;
  * @author    Colin Verot <colin@verot.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Colin Verot
+ * @deprecated Use magroski/bob-ross
  */
 class Upload
 {

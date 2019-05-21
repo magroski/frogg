@@ -5,10 +5,7 @@ namespace Frogg;
 use Aws\Credentials\Credentials;
 use Aws\S3\S3Client;
 
-/**
- *
- * Amazon S3 abstraction
- */
+/** @deprecated Use magroski/bob-ross */
 class S3
 {
 
