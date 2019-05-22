@@ -2,6 +2,7 @@
 
 namespace Frogg;
 
+/** @deprecated use magroski/permalink */
 class Permalink
 {
 
