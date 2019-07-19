@@ -192,6 +192,9 @@ class Model extends PhalconModel implements \JsonSerializable
 
         $arr = [];
         foreach ($this->getMessages() as $message) {
+            if (\is_string($message)) {
+                $arr[] = $message;
+            }
             $arr[$message->getField()][] = $message->getMessage();
         }
 
