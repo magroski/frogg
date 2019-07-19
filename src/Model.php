@@ -186,9 +186,16 @@ class Model extends PhalconModel implements \JsonSerializable
     {
         $return = parent::save($data, $whiteList);
 
-        if ($return === false) {
-            throw new UnableToSaveRecord('Unable to save entity. Details: ' . json_encode($this->getMessages()));
+        if ($return === true) {
+            return;
         }
+
+        $arr = [];
+        foreach ($this->getMessages() as $message) {
+            $arr[$message->getField()][] = $message->getMessage();
+        }
+
+        throw new UnableToSaveRecord('Unable to save entity. Details: ' . json_encode($arr));
     }
 
     public function getPopulator()
