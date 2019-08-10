@@ -48,6 +48,14 @@ class SqsClient
         ]);
     }
 
+    public function sendMessageAsync(string $message)
+    {
+        $this->sqsClient->sendMessageAsync([
+            'MessageBody' => $message,
+            'QueueUrl'    => $this->queueUrl,
+        ]);
+    }
+
     /**
      * Sends a message to AWS SQS service
      *
@@ -59,6 +67,17 @@ class SqsClient
         $delay = max(0, $delay);
         $delay = min(900, $delay);
         $this->sqsClient->sendMessage([
+            'DelaySeconds' => $delay,
+            'MessageBody'  => $message,
+            'QueueUrl'     => $this->queueUrl,
+        ]);
+    }
+
+    public function sendDelayedMessageAsync(string $message, int $delay = 0)
+    {
+        $delay = max(0, $delay);
+        $delay = min(900, $delay);
+        $this->sqsClient->sendMessageAsync([
             'DelaySeconds' => $delay,
             'MessageBody'  => $message,
             'QueueUrl'     => $this->queueUrl,
