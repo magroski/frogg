@@ -29,7 +29,7 @@
         "twilio/sdk": "^5.3",
         "mobiledetect/mobiledetectlib": "^2.8",
         "google/apiclient": "^2.1",
-        "microsoft/microsoft-graph": "1.0.*",
+        "microsoft/microsoft-graph": "1.0.* || 1.22.*",
 		"league/oauth2-client": "^2.0",
         "magroski/socialauth": "~1.0.0",
         "league/csv": "^9.0"
