@@ -106,11 +106,11 @@ class ResultSet extends Simple
     }
 
     /**
-     * Returns the ResultSet as an array containg instances of each entry original Model
+     * Returns the ResultSet as an array contain instances of each entry original Model
      *
      * @return array
      */
-    public function toObjectArray() : array
+    public function toObject() : array
     {
         if ($this->isEmpty()) {
             return [];
@@ -118,9 +118,9 @@ class ResultSet extends Simple
 
         $skeleton = $this->_model;
 
-        return array_map(function ($entry) use ($skeleton) {
+        return $this->filter(function ($entry) use ($skeleton) {
             return Model::cloneResult($skeleton, $entry);
-        }, $this->toArray());
+        });
     }
 
     /**
