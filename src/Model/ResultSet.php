@@ -4,6 +4,7 @@ namespace Frogg\Model;
 
 use Frogg\Exception\InvalidAttributeException;
 use Frogg\Model;
+use Generator;
 use Phalcon\Mvc\Model\Resultset\Simple;
 
 class ResultSet extends Simple
@@ -106,11 +107,12 @@ class ResultSet extends Simple
     }
 
     /**
-     * Returns the ResultSet as an array containg instances of each entry original Model
+     * Returns the ResultSet as an array contain instances of each entry original Model
      *
+     * @deprecated Versão antiga
      * @return array
      */
-    public function toObjectArray() : array
+    public function toObjectArray(): array
     {
         if ($this->isEmpty()) {
             return [];
@@ -121,6 +123,34 @@ class ResultSet extends Simple
         return array_map(function ($entry) use ($skeleton) {
             return Model::cloneResult($skeleton, $entry);
         }, $this->toArray());
+    }
+
+    /**
+     * Returns the ResultSet as an array contain instances of each entry original Model, in iterable generator
+     *
+     * @return Generator
+     */
+    public function toGenerator(): Generator
+    {
+        if ($this->isEmpty()) {
+            yield;
+        }
+
+        $skeleton = $this->_model;
+        $this->rewind();
+
+        // read loop (Model)
+        while($this->valid()) {
+            //toArray for single result, per row
+            yield Model::cloneResult($skeleton, $this->current()->toArray());
+
+            // if garbage enable, force cycle, free memory
+            if (gc_enabled()) {
+                gc_collect_cycles();
+            }
+
+            $this->next();
+        }
     }
 
     /**
