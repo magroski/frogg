@@ -56,10 +56,8 @@ class Criteria extends PhalconModel\Criteria
      *       ->execute();
      *
      * @param array|string $columns
-     *
-     * @return static
      */
-    public function columns($columns)
+    public function columns($columns) : PhalconModel\CriteriaInterface
     {
         if (!is_array($columns)) {
             return parent::columns($columns);
@@ -100,7 +98,7 @@ class Criteria extends PhalconModel\Criteria
         return $this->removeSoftDelete();
     }
 
-    public function createBuilder()
+    public function createBuilder() : PhalconModel\Query\BuilderInterface
     {
         if (method_exists(parent::class, 'createBuilder')) {
             return parent::createBuilder();
@@ -113,7 +111,7 @@ class Criteria extends PhalconModel\Criteria
         }
     }
 
-    public function execute()
+    public function execute() : PhalconModel\ResultsetInterface
     {
         foreach ($this->modelCriterias as $criteria => $value) {
             $method = lcfirst($criteria);
@@ -197,13 +195,8 @@ class Criteria extends PhalconModel\Criteria
 
     /**
      * Defaults merge to true on bind params
-     *
-     * @param array $bindParams
-     * @param bool  $merge
-     *
-     * @return PhalconModel\Criteria|void
      */
-    public function bind(array $bindParams, $merge = true)
+    public function bind(array $bindParams, bool $merge = false) : PhalconModel\CriteriaInterface
     {
         return parent::bind($bindParams, $merge);
     }
@@ -224,11 +217,8 @@ class Criteria extends PhalconModel\Criteria
      *
      *
      * @param array $bindTypes
-     * @param bool  $merge
-     *
-     * @return PhalconModel\Criteria|void
      */
-    public function bindTypes(array $bindTypes, $merge = true)
+    public function bindTypes(array $bindTypes) : PhalconModel\CriteriaInterface
     {
         if (is_array($bindTypes)) {
             $params = $this->getParams();
@@ -243,16 +233,10 @@ class Criteria extends PhalconModel\Criteria
             }
         }
 
-        if ($merge) {
-            $query_types = $this->getQuery()->getBindTypes();
-            $bindTypes   = array_merge($query_types ?: [], $bindTypes);
-        }
-
         return parent::bindTypes($bindTypes);
     }
 
     /**
-     * @param       $name
      * @param array $arguments
      *
      * @return $this

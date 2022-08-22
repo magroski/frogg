@@ -7,6 +7,9 @@ use Frogg\Model;
 use Generator;
 use Phalcon\Mvc\Model\Resultset\Simple;
 
+/**
+ * @property \Phalcon\Mvc\ModelInterface $_model
+ */
 class ResultSet extends Simple
 {
 
@@ -71,42 +74,6 @@ class ResultSet extends Simple
     }
 
     /**
-     * Returns an array containing the query results grouped by a given attribute value.
-     * Example: $persons->groupBy('name');
-     * > [ 'Peter' => [entry1, entry2, ...], 'Anne' => [entry3], ...];
-     *
-     * @param string $attributeName Attribute name
-     * @param bool   $asObject      Flag to decide if you want to fecth the entries as object or as key-value arrays
-     *
-     * @return array
-     * @throws InvalidAttributeException When the attribute is not found on the object
-     */
-    public function groupBy(string $attributeName, $asObject = true) : array
-    {
-        if ($this->isEmpty()) {
-            return [];
-        }
-
-        $entries = $this->toArray();
-        if (!array_key_exists($attributeName, $entries[0])) {
-            throw new InvalidAttributeException($attributeName);
-        }
-
-        $result = [];
-
-        //This ResultSet is an Iterable, so when iterating over it each entry is an Object that extends Frogg\Model
-        foreach ($this as $entry) {
-            $groupKey = $entry->$attributeName;
-            if (!array_key_exists($groupKey, $result)) {
-                $result[$groupKey] = [];
-            }
-            $result[$groupKey][] = $asObject ? $entry : $entry->toArray();
-        }
-
-        return $result;
-    }
-
-    /**
      * Returns the ResultSet as an array contain instances of each entry original Model
      *
      * @deprecated Versão antiga
@@ -123,34 +90,6 @@ class ResultSet extends Simple
         return array_map(function ($entry) use ($skeleton) {
             return Model::cloneResult($skeleton, $entry);
         }, $this->toArray());
-    }
-
-    /**
-     * Returns the ResultSet as an array contain instances of each entry original Model, in iterable generator
-     *
-     * @return Generator
-     */
-    public function toGenerator(): Generator
-    {
-        if ($this->isEmpty()) {
-            yield;
-        }
-
-        $skeleton = $this->_model;
-        $this->rewind();
-
-        // read loop (Model)
-        while($this->valid()) {
-            //toArray for single result, per row
-            yield Model::cloneResult($skeleton, $this->current()->toArray());
-
-            // if garbage enable, force cycle, free memory
-            if (gc_enabled()) {
-                gc_collect_cycles();
-            }
-
-            $this->next();
-        }
     }
 
     /**

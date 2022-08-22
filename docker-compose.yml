@@ -1,0 +1,10 @@
+version: '3.5'
+
+services:
+  image-builder:
+    build: ./
+    image: frogg/php:latest
+  app:
+    image: frogg/php:latest
+    volumes:
+      - "./:/var/www"

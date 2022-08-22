@@ -4,13 +4,17 @@ namespace Frogg\Plugins;
 
 use Phalcon\Events\Event;
 use Phalcon\Mvc\Dispatcher;
-use Phalcon\Mvc\User\Plugin;
+use Phalcon\Di\Injectable;
 
-class Auth extends Plugin
+/**
+ * @property \Phalcon\Session\ManagerInterface $session
+ */
+class Auth extends Injectable
 {
 
     public function beforeExecuteRoute(Event $event, Dispatcher $dispatcher)
     {
+        /** @var \Frogg\Controller $controller */
         $controller = $dispatcher->getActiveController();
         $actionName = $dispatcher->getActionName();
         $auth       = $this->session->get($controller->authLabel);
@@ -19,9 +23,8 @@ class Auth extends Plugin
             $controller->redirect($controller->getUnauthorizedUrl());
 
             return false;
-        } else {
-            $controller->login($auth);
         }
-    }
 
+        $controller->login($auth);
+    }
 }

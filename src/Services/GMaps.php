@@ -40,11 +40,20 @@ class GMaps
             return 0;
         }
 
-        $response = file_get_contents('https://maps.googleapis.com/maps/api/distancematrix/json?origins=' . urlencode($locationA) . '&destinations=' . urlencode($locationB) . '&key=' . $this->apiKey);
+        $response = file_get_contents(
+            'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' . urlencode(
+                $locationA
+            ) . '&destinations=' . urlencode($locationB) . '&key=' . $this->apiKey
+        );
+        if (!$response) {
+            throw new \Exception('Could not get result');
+        }
         $data     = json_decode($response);
 
         if ($data->rows[0]->elements[0]->status == 'NOT_FOUND') {
-            throw new \Exception('GoogleMaps exception: ADDRESS NOT FOUND. [' . $locationA . ' | ' . $locationB . ']', 1);
+            throw new \Exception(
+                'GoogleMaps exception: ADDRESS NOT FOUND. [' . $locationA . ' | ' . $locationB . ']', 1
+            );
         }
         if ($data->rows[0]->elements[0]->status == 'ZERO_RESULTS') {
             return 9999999;
@@ -66,10 +75,17 @@ class GMaps
      */
     public function generateLink(string $keyword) : string
     {
-        $response = file_get_contents('https://maps.googleapis.com/maps/api/place/textsearch/json?query=' . urlencode($keyword) . '&key=' . $this->apiKey);
-        $data     = json_decode($response);
+        $response = file_get_contents(
+            'https://maps.googleapis.com/maps/api/place/textsearch/json?query=' . urlencode(
+                $keyword
+            ) . '&key=' . $this->apiKey
+        );
+        if (!$response) {
+            throw new \Exception('Could not get result');
+        }
+        $data = json_decode($response);
 
-        if (empty($data->results) || $data->status == 'ZERO_RESULTS') {
+        if (empty($data->results) || (property_exists($data, 'status') && $data->status === 'ZERO_RESULTS')) {
             throw new \Exception('GoogleMaps exception: ADDRESS NOT FOUND. [' . $keyword . ']', 1);
         }
 

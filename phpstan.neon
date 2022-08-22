@@ -1,0 +1,9 @@
+parameters:
+  level: max
+  src: src/
+  paths:
+    - src/
+  autoload_directories:
+    - %currentWorkingDirectory%/vendor/phalcon/ide-stubs/src
+  includes:
+    - ../../vendor/phpstan/phpstan-strict-rules/rules.neon

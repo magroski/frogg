@@ -33,11 +33,9 @@ class Model extends PhalconModel implements \JsonSerializable
     }
 
     /**
-     * @param DiInterface|null $dependencyInjector
-     *
-     * @return \Frogg\Model\Criteria $criteria
+     * @return \Frogg\Model\Criteria|\Phalcon\Mvc\Model\CriteriaInterface $criteria
      */
-    public static function query(DiInterface $dependencyInjector = null)
+    public static function query(?Di\DiInterface $dependencyInjector = null) : PhalconModel\CriteriaInterface
     {
         $class = '\\' . get_called_class() . 'Criteria';
         if (class_exists($class)) {
@@ -132,7 +130,7 @@ class Model extends PhalconModel implements \JsonSerializable
         return $slug;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         $myData  = [];
         $child   = new static();
