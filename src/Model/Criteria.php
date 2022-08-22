@@ -22,8 +22,8 @@ use Phalcon\Mvc\Model as PhalconModel;
  *     }
  *
  * @package Frogg
- * @method static addSoftDelete(string $column = 'deleted', int $activeValue = 0) add soft delete criteria to the query
- * @method static removeSoftDelete() removes soft delete criteria from the criteriaQueue
+ * @method self addSoftDelete(string $column = 'deleted', int $activeValue = 0) add soft delete criteria to the query
+ * @method self removeSoftDelete() removes soft delete criteria from the criteriaQueue
  */
 class Criteria extends PhalconModel\Criteria
 {
@@ -36,11 +36,10 @@ class Criteria extends PhalconModel\Criteria
      * @param string $column
      * @param int    $activeValue
      *
-     * @return PhalconModel\Criteria
      * @internal param $add
      *
      */
-    public function softDelete($column = 'deleted', $activeValue = 0)
+    public function softDelete($column = 'deleted', $activeValue = 0)  : PhalconModel\CriteriaInterface
     {
         return $this->andWhere($column . '=' . $activeValue);
     }
@@ -91,7 +90,7 @@ class Criteria extends PhalconModel\Criteria
     /**
      * alias to make more sense when calling it on query building.
      *
-     * @return $this
+     * @return \Phalcon\Mvc\Model\CriteriaInterface
      */
     public function withDeleted()
     {

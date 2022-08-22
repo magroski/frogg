@@ -7,3 +7,7 @@ parameters:
     - %currentWorkingDirectory%/vendor/phalcon/ide-stubs/src
   includes:
     - ../../vendor/phpstan/phpstan-strict-rules/rules.neon
+  ignoreErrors:
+    - "#.*and 'createBuilder' will always evaluate to false.#"
+  excludes_analyse:
+    - %currentWorkingDirectory%/src/Crypto/
