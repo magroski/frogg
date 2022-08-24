@@ -7,9 +7,6 @@ use Frogg\Model;
 use Generator;
 use Phalcon\Mvc\Model\Resultset\Simple;
 
-/**
- * @property \Phalcon\Mvc\ModelInterface $_model
- */
 class ResultSet extends Simple
 {
 
@@ -85,7 +82,7 @@ class ResultSet extends Simple
             return [];
         }
 
-        $skeleton = $this->_model;
+        $skeleton = $this->model;
 
         return array_map(function ($entry) use ($skeleton) {
             return Model::cloneResult($skeleton, $entry);
