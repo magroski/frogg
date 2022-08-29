@@ -118,7 +118,7 @@ class Model extends PhalconModel implements \JsonSerializable
     {
         $data = WT::decode($token, $key);
 
-        return isset($data->id) ? static::findFirstById($data->id) : false;
+        return isset($data->id) ? static::findFirstById($data->id) : null;
     }
 
     private function getNumeration($slug) : string
