@@ -6,8 +6,8 @@ use Frogg\Crypto\WT;
 use Frogg\Exception\UnableToSaveRecord;
 use Frogg\Model\Criteria;
 use Frogg\Model\ResultSet;
-use Phalcon\Di;
-use Phalcon\DiInterface;
+use Phalcon\Di\Di;
+use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model as PhalconModel;
 
 /**
@@ -18,7 +18,7 @@ use Phalcon\Mvc\Model as PhalconModel;
  *
  * @property Di $di
  */
-class Model extends PhalconModel implements \JsonSerializable
+class Model extends PhalconModel
 {
     public $populator = null;
 
@@ -35,7 +35,7 @@ class Model extends PhalconModel implements \JsonSerializable
     /**
      * @return \Frogg\Model\Criteria|\Phalcon\Mvc\Model\CriteriaInterface $criteria
      */
-    public static function query(?Di\DiInterface $dependencyInjector = null) : PhalconModel\CriteriaInterface
+    public static function query(?DiInterface $dependencyInjector = null) : PhalconModel\CriteriaInterface
     {
         $class = '\\' . get_called_class() . 'Criteria';
         if (class_exists($class)) {
