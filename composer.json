@@ -40,6 +40,6 @@
         "phpstan/phpstan-strict-rules": "^1.4"
     },
     "scripts": {
-        "phpstan": "vendor/bin/phpstan analyse --memory-limit=4G"
+        "phpstan": "vendor/bin/phpstan analyse"
     }
 }

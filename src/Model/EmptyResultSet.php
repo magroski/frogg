@@ -21,7 +21,7 @@ class EmptyResultSet extends ResultSet
 
     public function __construct()
     {
-        parent::__construct([], new Model(), null);
+        parent::__construct([], new Model(), false);
     }
 
 }

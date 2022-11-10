@@ -1,12 +1,10 @@
 parameters:
   parallel:
     maximumNumberOfProcesses: 4
-  level: 1
+  level: 4
   paths:
     - src/
   scanDirectories:
     - %currentWorkingDirectory%/vendor/phalcon/ide-stubs/src
-  ignoreErrors:
-    - "#.*and 'createBuilder' will always evaluate to false.#"
-  excludePaths:
-    - %currentWorkingDirectory%/src/Crypto/
+includes:
+    - phpstan-baseline.neon

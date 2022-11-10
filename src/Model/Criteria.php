@@ -71,7 +71,7 @@ class Criteria extends PhalconModel\Criteria
                 return $this->getAlias() . '.*';
             }
 
-            $joins = $this->createBuilder()->getJoins() ?? [];
+            $joins = $this->createBuilder()->getJoins();
 
             foreach ($joins as $join) {
                 if ($join[0] == $column) {
