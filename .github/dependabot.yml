@@ -1,0 +1,14 @@
+version: 2
+updates:
+- package-ecosystem: composer
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "09:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: microsoft/microsoft-graph
+    versions:
+    - 1.25.0
+    - 1.26.0
+    - 1.27.0
