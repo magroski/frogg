@@ -9,7 +9,7 @@ use Aws\Sqs\SqsClient as AmazonSqsClient;
 class SqsClient
 {
     protected AmazonSqsClient $sqsClient;
-    protected string $queueUrl;
+    protected ?string $queueUrl;
 
     /**
      * SqsClient constructor.
