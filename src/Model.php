@@ -118,6 +118,7 @@ class Model extends PhalconModel
 
     public static function getByTokenId(string $token, string $key) : ?ModelInterface
     {
+        /** @var object $data */
         $data = WT::decode($token, $key);
 
         return isset($data->id) ? static::findFirstById($data->id) : null;

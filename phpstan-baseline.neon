@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, mixed given\\.$#"
+			count: 2
+			path: src/Controller.php
+
+		-
 			message: "#^Constant ENCRYPTION_TYPE not found\\.$#"
 			count: 1
 			path: src/Crypto/WT.php
@@ -61,6 +66,16 @@ parameters:
 			path: src/Model/Criteria.php
 
 		-
+			message: "#^Method Frogg\\\\Model\\\\Criteria\\:\\:execute\\(\\) should return Phalcon\\\\Mvc\\\\Model\\\\ResultsetInterface but returns mixed\\.$#"
+			count: 1
+			path: src/Model/Criteria.php
+
+		-
+			message: "#^Parameter \\#2 \\$arguments of method Frogg\\\\Model\\\\Criteria\\:\\:addCriteria\\(\\) expects array, mixed given\\.$#"
+			count: 1
+			path: src/Model/Criteria.php
+
+		-
 			message: "#^Method Frogg\\\\Plugins\\\\Auth\\:\\:beforeExecuteRoute\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Plugins/Auth.php
@@ -69,3 +84,18 @@ parameters:
 			message: "#^Method Frogg\\\\Services\\\\AbstractDiBuilder\\:\\:__construct\\(\\) has parameter \\$config with no value type specified in iterable type Phalcon\\\\Config\\\\Config\\.$#"
 			count: 1
 			path: src/Services/AbstractDiBuilder.php
+
+		-
+			message: "#^Cannot access property \\$results on mixed\\.$#"
+			count: 1
+			path: src/Services/GMaps.php
+
+		-
+			message: "#^Cannot access property \\$rows on mixed\\.$#"
+			count: 3
+			path: src/Services/GMaps.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function urlencode expects string, mixed given\\.$#"
+			count: 2
+			path: src/Services/GMaps.php

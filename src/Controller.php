@@ -302,7 +302,7 @@ class Controller extends PhalconController
      *
      * @param string $route
      *
-     * @return mixed
+     * @return null|array<string,string>
      */
     public function extractRoutePath(string $route)
     {
@@ -323,6 +323,7 @@ class Controller extends PhalconController
             throw new \RuntimeException('Container does not exist');
         }
         $params = array_merge(['for' => $routeName], $params);
+        /** @var \Phalcon\Mvc\Url $url */
         $url    = $di->get('url');
         $url->setBaseUri('/');
 

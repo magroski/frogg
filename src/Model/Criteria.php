@@ -162,7 +162,7 @@ class Criteria extends PhalconModel\Criteria
     }
 
     /**
-     * @return string[]
+     * @return mixed[]
      */
     public function getActiveCriterias() : array
     {

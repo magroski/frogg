@@ -112,7 +112,7 @@ class ResultSet extends Simple
     /**
      * Returns an array containing the id of each object in the ResultSet
      *
-     * @return array<int|string>
+     * @return array<mixed>
      * @throws InvalidAttributeException When the object has no 'id' field
      */
     public function getIds() : array
