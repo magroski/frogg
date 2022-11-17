@@ -1,7 +1,7 @@
 parameters:
   parallel:
     maximumNumberOfProcesses: 4
-  level: 7
+  level: 8
   paths:
     - src/
   scanDirectories:
