@@ -6,6 +6,7 @@ use Frogg\Crypto\WT;
 use Frogg\Exception\UnableToSaveRecord;
 use Frogg\Model\Criteria;
 use Frogg\Model\ResultSet;
+use Phalcon\Db\ResultInterface;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model as PhalconModel;
@@ -128,14 +129,21 @@ class Model extends PhalconModel
 														FROM `" . $this->getSource() . "`
 														WHERE `permalink` = '$slug'
 														LIMIT 1");
+
         $i         = 1;
         $tmp       = $slug;
+        if (is_bool($resultset)) {
+            throw new \RuntimeException('Something wrong when reading data');
+        }
         while ($resultset->numRows()) {
             $slug      = $tmp . '-' . $i++;
             $resultset = $this->getReadConnection()->query("SELECT `permalink`
 															FROM `" . $this->getSource() . "`
 															WHERE `permalink` = '$slug'
 															LIMIT 1");
+            if (is_bool($resultset)) {
+                throw new \RuntimeException('Something wrong when reading data');
+            }
         }
 
         return $slug;

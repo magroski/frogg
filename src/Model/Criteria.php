@@ -29,9 +29,9 @@ use Phalcon\Mvc\ModelInterface;
 class Criteria extends PhalconModel\Criteria
 {
     /**
-     * @var array<string>
+     * @var array<string,mixed>
      */
-    private   array $modelCriterias = [];
+    private array    $modelCriterias = [];
     protected string $alias;
 
     /**
@@ -43,7 +43,7 @@ class Criteria extends PhalconModel\Criteria
      * @internal param $add
      *
      */
-    public function softDelete($column = 'deleted', $activeValue = 0)  : PhalconModel\CriteriaInterface
+    public function softDelete($column = 'deleted', $activeValue = 0) : PhalconModel\CriteriaInterface
     {
         return $this->andWhere($column . '=' . $activeValue);
     }
@@ -170,11 +170,12 @@ class Criteria extends PhalconModel\Criteria
     }
 
     /**
-     * @param string|false $conditions
-     * @param mixed $bindParams
-     * @param mixed $bindTypes
+     * @param string|false             $conditions
+     * @param array<string,mixed>|null $bindParams
+     * @param array<string,mixed>|null $bindTypes
+     * @return \Phalcon\Mvc\Model\Row|\Phalcon\Mvc\ModelInterface|null
      */
-    public function findFirst($conditions = false, $bindParams = null, $bindTypes = null) : ?ModelInterface
+    public function findFirst($conditions = false, $bindParams = null, $bindTypes = null)
     {
         $this->limit(1);
         if ($conditions) {
@@ -185,17 +186,20 @@ class Criteria extends PhalconModel\Criteria
     }
 
     /**
-     * @param mixed        $value
+     * @param string $column
+     * @param mixed  $value
+     * @return \Phalcon\Mvc\Model\Row|\Phalcon\Mvc\ModelInterface|null
      */
-    public function findFirstBy(string $column, $value) : ?ModelInterface
+    public function findFirstBy(string $column, $value)
     {
         return $this->findFirst($this->getAlias() . '.' . $column . ' = :value:', ['value' => $value]);
     }
 
     /**
      * @param int|string $id
+     * @return \Phalcon\Mvc\Model\Row|\Phalcon\Mvc\ModelInterface|null
      */
-    public function findFirstById($id) : ?ModelInterface
+    public function findFirstById($id)
     {
         return $this->findFirstBy('id', $id);
     }
@@ -230,8 +234,10 @@ class Criteria extends PhalconModel\Criteria
      * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'])
      * it will @throws DuplicatedBindException;
      *
-     * but if you want to reassign this bind to another value, you can skip this check using a bind type 'skipBindCheck' = true:
-     * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'], ['skipBindCheck' => true])
+     * but if you want to reassign this bind to another value, you can skip this check using a bind type
+     * 'skipBindCheck' = true:
+     * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'], ['skipBindCheck' =>
+     * true])
      *
      * I'm not proud of it, but some times we will need to skip it and we can't add more
      * parameters to this function cuz it's interfaced...
@@ -268,7 +274,7 @@ class Criteria extends PhalconModel\Criteria
         if (method_exists($this, $name)) {
             $this->modelCriterias[$name] = $arguments;
         } else {
-            Throw new \Exception('Criteria ' . $name . ' does not exist.');
+            throw new \Exception('Criteria ' . $name . ' does not exist.');
         }
 
         return $this;
@@ -297,7 +303,7 @@ class Criteria extends PhalconModel\Criteria
 
     /**
      * @param string $name
-     * @param mixed $arguments
+     * @param mixed  $arguments
      */
     public function __call($name, $arguments) : self
     {
@@ -309,7 +315,7 @@ class Criteria extends PhalconModel\Criteria
                 $criteria = str_replace('remove', '', $name);
                 $this->removeCriteria($criteria);
             } else {
-                Throw new \Exception('Method ' . $name . ' does not exist.');
+                throw new \Exception('Method ' . $name . ' does not exist.');
             }
         }
 
@@ -320,7 +326,7 @@ class Criteria extends PhalconModel\Criteria
      * Apply $filters for query
      *
      * @param array<string,mixed> $filters
-     * @param bool  $strict Exception return if property not exists on model
+     * @param bool                $strict Exception return if property not exists on model
      *
      * @return $this
      * @throws \Exception

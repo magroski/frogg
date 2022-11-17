@@ -6,6 +6,7 @@ use Frogg\Exception\InvalidAttributeException;
 use Frogg\Model;
 use Generator;
 use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Mvc\ModelInterface;
 
 class ResultSet extends Simple
 {
@@ -83,6 +84,9 @@ class ResultSet extends Simple
         }
 
         $skeleton = $this->model;
+        if (!$skeleton instanceof ModelInterface) {
+            throw new \RuntimeException('Invalid type on this->model');
+        }
 
         return array_map(function ($entry) use ($skeleton) {
             return Model::cloneResult($skeleton, $entry);
