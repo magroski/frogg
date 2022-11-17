@@ -26,13 +26,13 @@
     },
     "minimum-stability": "stable",
     "require": {
-        "php": "^7.4",
+        "php": "^8.1",
         "aws/aws-sdk-php": "^3.27",
         "mobiledetect/mobiledetectlib": "^2.8",
         "ext-json": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.4",
+        "phpunit/phpunit": "^9",
         "phalcon/ide-stubs": "^5.1",
         "phpstan/phpstan": "^1.9",
         "phpstan/phpstan-deprecation-rules": "^1.0",
