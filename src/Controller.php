@@ -309,7 +309,7 @@ class Controller extends PhalconController
         $url = (strpos($route, '/') === false) ? $this->url($route) : $route;
         $this->router->handle($url);
 
-        return $this->router->getMatchedRoute()->getPaths();
+        return $this->router->getMatchedRoute() ? $this->router->getMatchedRoute()->getPaths() : null;
     }
 
     /**
