@@ -15,7 +15,7 @@ class ResultSet extends Simple
      *
      * @param string $attributeName Attribute name
      *
-     * @return array
+     * @return array<mixed>
      * @throws InvalidAttributeException When the attribute is not found on the object
      */
     public function getAttribute(string $attributeName) : array
@@ -40,7 +40,7 @@ class ResultSet extends Simple
      *
      * @param string ...$attributeNames A list of attribute names
      *
-     * @return array
+     * @return array<mixed>
      * @throws InvalidAttributeException Thrown if one of the attributes is not found on the object
      */
     public function getAttributes(...$attributeNames) : array
@@ -74,7 +74,7 @@ class ResultSet extends Simple
      * Returns the ResultSet as an array contain instances of each entry original Model
      *
      * @deprecated Versão antiga
-     * @return array
+     * @return array<\Phalcon\Mvc\ModelInterface>
      */
     public function toObjectArray(): array
     {
@@ -108,7 +108,7 @@ class ResultSet extends Simple
     /**
      * Returns an array containing the id of each object in the ResultSet
      *
-     * @return array
+     * @return array<int|string>
      * @throws InvalidAttributeException When the object has no 'id' field
      */
     public function getIds() : array

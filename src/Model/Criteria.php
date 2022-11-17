@@ -10,6 +10,7 @@ namespace Frogg\Model;
 
 use Frogg\Exception\DuplicatedBindException;
 use Phalcon\Mvc\Model as PhalconModel;
+use Phalcon\Mvc\ModelInterface;
 
 /**
  * Class Criteria
@@ -27,8 +28,11 @@ use Phalcon\Mvc\Model as PhalconModel;
  */
 class Criteria extends PhalconModel\Criteria
 {
-    private   $modelCriterias = [];
-    protected $alias;
+    /**
+     * @var array<string>
+     */
+    private   array $modelCriterias = [];
+    protected string $alias;
 
     /**
      * removes soft deleted entries from the result.
@@ -54,7 +58,7 @@ class Criteria extends PhalconModel\Criteria
      *       ->columns([CandidateOpening::class, ExternalReference::class])
      *       ->execute();
      *
-     * @param array|string $columns
+     * @param array<string>|string $columns
      */
     public function columns($columns) : PhalconModel\CriteriaInterface
     {
@@ -123,6 +127,9 @@ class Criteria extends PhalconModel\Criteria
         return $builder->getQuery()->execute();
     }
 
+    /**
+     * @return array<string>
+     */
     public function getSql() : array
     {
         foreach ($this->modelCriterias as $criteria => $value) {
@@ -144,22 +151,30 @@ class Criteria extends PhalconModel\Criteria
         return clone $this;
     }
 
-    public function getPhql()
+    public function getPhql() : string
     {
         return $this->createBuilder()->getPhql();
     }
 
-    public function getQuery()
+    public function getQuery() : PhalconModel\QueryInterface
     {
         return $this->createBuilder()->getQuery();
     }
 
-    public function getActiveCriterias()
+    /**
+     * @return string[]
+     */
+    public function getActiveCriterias() : array
     {
         return $this->modelCriterias;
     }
 
-    public function findFirst($conditions = false, $bindParams = null, $bindTypes = null)
+    /**
+     * @param string|false $conditions
+     * @param mixed $bindParams
+     * @param mixed $bindTypes
+     */
+    public function findFirst($conditions = false, $bindParams = null, $bindTypes = null) : ?ModelInterface
     {
         $this->limit(1);
         if ($conditions) {
@@ -169,31 +184,38 @@ class Criteria extends PhalconModel\Criteria
         return $this->execute()->getFirst();
     }
 
-    public function findFirstBy($column, $value)
+    /**
+     * @param mixed        $value
+     */
+    public function findFirstBy(string $column, $value) : ?ModelInterface
     {
         return $this->findFirst($this->getAlias() . '.' . $column . ' = :value:', ['value' => $value]);
     }
 
-    public function findFirstById($id)
+    /**
+     * @param int|string $id
+     */
+    public function findFirstById($id) : ?ModelInterface
     {
         return $this->findFirstBy('id', $id);
     }
 
-    public function count($column = '*')
+    public function count(string $column = '*') : int
     {
-        return $this->columns('count(' . $column . ') as total')->execute()->getFirst()->total;
+        return (int)$this->columns('count(' . $column . ') as total')->execute()->getFirst()->total;
     }
 
     /**
      * @deprecated
      */
-    private function parentExecute()
+    private function parentExecute() : PhalconModel\ResultsetInterface
     {
         return parent::execute();
     }
 
     /**
      * Defaults merge to true on bind params
+     * @param array<mixed> $bindParams
      */
     public function bind(array $bindParams, bool $merge = false) : PhalconModel\CriteriaInterface
     {
@@ -215,7 +237,7 @@ class Criteria extends PhalconModel\Criteria
      * parameters to this function cuz it's interfaced...
      *
      *
-     * @param array $bindTypes
+     * @param array<mixed> $bindTypes
      */
     public function bindTypes(array $bindTypes) : PhalconModel\CriteriaInterface
     {
@@ -236,12 +258,12 @@ class Criteria extends PhalconModel\Criteria
     }
 
     /**
-     * @param array $arguments
+     * @param array<mixed> $arguments
      *
      * @return $this
      * @throws \Exception
      */
-    public function addCriteria($name, $arguments = [])
+    public function addCriteria(string $name, array $arguments = [])
     {
         if (method_exists($this, $name)) {
             $this->modelCriterias[$name] = $arguments;
@@ -252,7 +274,7 @@ class Criteria extends PhalconModel\Criteria
         return $this;
     }
 
-    public function removeCriteria($name)
+    public function removeCriteria(string $name) : self
     {
         if (isset($this->modelCriterias[$name])) {
             unset($this->modelCriterias[$name]);
@@ -261,19 +283,23 @@ class Criteria extends PhalconModel\Criteria
         return $this;
     }
 
-    public function getAlias()
+    public function getAlias() : string
     {
         return $this->alias;
     }
 
-    public function setAlias($alias)
+    public function setAlias(string $alias) : self
     {
         $this->alias = $alias;
 
         return $this;
     }
 
-    public function __call($name, $arguments)
+    /**
+     * @param string $name
+     * @param mixed $arguments
+     */
+    public function __call($name, $arguments) : self
     {
         if (strpos($name, 'add') !== false) {
             $criteria = str_replace('add', '', $name);
@@ -293,7 +319,7 @@ class Criteria extends PhalconModel\Criteria
     /**
      * Apply $filters for query
      *
-     * @param array $filters
+     * @param array<string,mixed> $filters
      * @param bool  $strict Exception return if property not exists on model
      *
      * @return $this

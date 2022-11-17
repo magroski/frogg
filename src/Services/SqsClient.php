@@ -14,7 +14,7 @@ class SqsClient
     /**
      * SqsClient constructor.
      *
-     * @param array $config Config array expect the following keys:
+     * @param array<string> $config Config array expect the following keys:
      *                      AWS_ACCESS_KEY
      *                      AWS_SECRET_KEY
      *                      AWS_SQS_REGION
