@@ -38,7 +38,7 @@ class ResultSet extends Simple
      * Example: $users->getAttributes('name', 'age');
      * > [ ['name' => 'Peter', 'age' => 20], ['name' => 'Hilda', 'age' => 22] ];
      *
-     * @param array ...$attributeNames A list of attribute names
+     * @param string ...$attributeNames A list of attribute names
      *
      * @return array
      * @throws InvalidAttributeException Thrown if one of the attributes is not found on the object
