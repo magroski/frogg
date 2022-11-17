@@ -5,7 +5,7 @@ namespace Frogg\Services;
 class GMaps
 {
 
-    private $apiKey = '';
+    private string $apiKey = '';
 
     const KM_TO_MILE = 0.621371;
 

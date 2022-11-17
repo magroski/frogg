@@ -40,7 +40,7 @@ class SqsClient
      *
      * @param string $message The content of the message, must be text or a json_encoded array
      */
-    public function sendMessage(string $message)
+    public function sendMessage(string $message) : void
     {
         $this->sqsClient->sendMessage([
             'MessageBody' => $message,
@@ -48,7 +48,7 @@ class SqsClient
         ]);
     }
 
-    public function sendMessageAsync(string $message)
+    public function sendMessageAsync(string $message) : void
     {
         $this->sqsClient->sendMessageAsync([
             'MessageBody' => $message,
@@ -62,7 +62,7 @@ class SqsClient
      * @param string $message The content of the message, must be text or a json_encoded array
      * @param int    $delay   Delay in seconds. Min: 0 Max: 900 (15 minutes)
      */
-    public function sendDelayedMessage(string $message, int $delay = 0)
+    public function sendDelayedMessage(string $message, int $delay = 0) : void
     {
         $delay = max(0, $delay);
         $delay = min(900, $delay);
@@ -73,7 +73,7 @@ class SqsClient
         ]);
     }
 
-    public function sendDelayedMessageAsync(string $message, int $delay = 0)
+    public function sendDelayedMessageAsync(string $message, int $delay = 0) : void
     {
         $delay = max(0, $delay);
         $delay = min(900, $delay);
