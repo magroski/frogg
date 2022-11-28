@@ -1,4 +1,4 @@
-FROM php:8-apache-bullseye
+FROM php:8.1-apache-bullseye
 LABEL version="1.0.0"
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
