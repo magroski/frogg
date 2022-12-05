@@ -4,6 +4,7 @@ namespace Frogg;
 
 use Detection\MobileDetect;
 use Phalcon\Http\Response;
+use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Controller as PhalconController;
 use Phalcon\Mvc\View as PhalconView;
 use TypeError;
@@ -11,29 +12,29 @@ use TypeError;
 /**
  * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface                                  $dispatcher
  * @property \Phalcon\Mvc\Router|\Phalcon\Mvc\RouterInterface                                          $router
- * @property \Phalcon\Mvc\Url|\Phalcon\Mvc\UrlInterface                                                $url
+ * @property \Phalcon\Url|\Phalcon\Url\UrlInterface                                                $url
  * @property \Phalcon\Http\Request|\Phalcon\Http\RequestInterface                                      $request
  * @property \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface                                    $response
  * @property \Phalcon\Http\Response\Cookies|\Phalcon\Http\Response\CookiesInterface                    $cookies
- * @property \Phalcon\Filter|\Phalcon\FilterInterface                                                  $filter
+ * @property \Phalcon\Filter|\Phalcon\Filter\FilterInterface                                                  $filter
  * @property \Phalcon\Flash\Direct                                                                     $flash
  * @property \Phalcon\Flash\Session                                                                    $flashSession
- * @property \Phalcon\Session\Adapter\Files|\Phalcon\Session\Adapter|\Phalcon\Session\AdapterInterface $session
+ * @property \Phalcon\Session\Adapter\Stream|\Phalcon\Session\Adapter\AbstractAdapter|\Phalcon\Storage\Adapter\AdapterInterface $session
  * @property \Phalcon\Events\Manager|\Phalcon\Events\ManagerInterface                                  $eventsManager
- * @property \Phalcon\Db\AdapterInterface                                                              $db
+ * @property \Phalcon\Db\Adapter\AdapterInterface                                                              $db
  * @property \Phalcon\Security                                                                         $security
- * @property \Phalcon\Crypt|\Phalcon\CryptInterface                                                    $crypt
+ * @property \Phalcon\Crypt                                                $crypt
  * @property \Phalcon\Tag                                                                              $tag
- * @property \Phalcon\Escaper|\Phalcon\EscaperInterface                                                $escaper
- * @property \Phalcon\Annotations\Adapter\Memory|\Phalcon\Annotations\Adapter                          $annotations
+ * @property \Phalcon\Escaper                                     $escaper
+ * @property \Phalcon\Annotations\Adapter\Memory|\Phalcon\Annotations\Adapter\AbstractAdapter                          $annotations
  * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface                            $modelsManager
  * @property \Phalcon\Mvc\Model\MetaData\Memory|\Phalcon\Mvc\Model\MetadataInterface                   $modelsMetadata
- * @property \Phalcon\Mvc\Model\Transaction\Manager|\Phalcon\Mvc\Model\Transaction\ManagerInterface
- *           $transactionManager
+ * @property \Phalcon\Mvc\Model\Transaction\Manager|\Phalcon\Mvc\Model\Transaction\ManagerInterface    $transactionManager
  * @property \Phalcon\Assets\Manager                                                                   $assets
- * @property \Phalcon\Di|\Phalcon\DiInterface                                                          $di
- * @property \Phalcon\Session\Bag|\Phalcon\Session\BagInterface                                        $persistent
- * @property \Phalcon\Mvc\View|\Phalcon\Mvc\ViewInterface                                              $view
+ * @property \Phalcon\Di|\Phalcon\Di\DiInterface                                                       $di
+ * @property \Phalcon\Session\Bag                                        $persistent
+ * @property \Phalcon\Mvc\View                                                                         $view
+ * @property mixed $auth
  */
 class Controller extends PhalconController
 {
@@ -215,7 +216,7 @@ class Controller extends PhalconController
         }
 
         $filteredValue = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-        if (is_null($filteredValue)) {
+        if (!is_bool($filteredValue)) {
             throw new TypeError('Parameter ' . $name . ' is not a bool : ' . $value);
         }
 
@@ -260,10 +261,8 @@ class Controller extends PhalconController
      * Short way to build and return a JSON response
      *
      * @param array|mixed $data Data to be json encoded
-     *
-     * @return Response
      */
-    public function setJsonResponse($data = []) : Response
+    public function setJsonResponse($data = []) : ResponseInterface
     {
         $response = new Response();
 
@@ -279,20 +278,29 @@ class Controller extends PhalconController
      */
     public function extractRoutePath(string $route)
     {
-        $url = (strpos($route, '/') === false) ? url($route) : $route;
+        $url = (strpos($route, '/') === false) ? $this->url($route) : $route;
         $this->router->handle($url);
 
         return $this->router->getMatchedRoute()->getPaths();
     }
 
+    private function url(string $routeName, array $params = [], array $query = []) : string
+    {
+        $di     = \Phalcon\Di::getDefault();
+        if ($di=== null) {
+            throw new \RuntimeException('Container does not exist');
+        }
+        $params = array_merge(['for' => $routeName], $params);
+        $url    = $di->get('url');
+        $url->setBaseUri('/');
+
+        return $url->get($params, $query);
+    }
+
     /**
      * Remove BOM of UTF8 string
-     *
-     * @param string $string
-     *
-     * @return string
      */
-    protected function utf8WithoutBom($string)
+    protected function utf8WithoutBom(?string $string) : ?string
     {
         if ($string === null) {
             return null;

@@ -33,20 +33,24 @@ class Model extends PhalconModel implements \JsonSerializable
     }
 
     /**
-     * @param DiInterface|null $dependencyInjector
-     *
-     * @return \Frogg\Model\Criteria $criteria
+     * @return \Frogg\Model\Criteria|\Phalcon\Mvc\Model\CriteriaInterface $criteria
      */
-    public static function query(DiInterface $dependencyInjector = null)
+    public static function query(?Di\DiInterface $dependencyInjector = null) : PhalconModel\CriteriaInterface
     {
         $class = '\\' . get_called_class() . 'Criteria';
         if (class_exists($class)) {
             /** @var \Frogg\Model\Criteria $criteria */
             $criteria = new $class();
-            $criteria->setDI($dependencyInjector ?: Di::getDefault());
+            $container = $dependencyInjector ?: Di::getDefault();
+            if ($container=== null) {
+                throw new \Exception('Container not found');
+            }
+            $criteria->setDI($container);
             $criteria->setModelName(get_called_class());
         } else {
-            $criteria = (new Criteria())->setModelName(get_called_class())->setAlias(get_called_class());
+            /** @var \Frogg\Model\Criteria $criteria */
+            $criteria = (new Criteria())->setModelName(get_called_class());
+            $criteria->setAlias(get_called_class());
         }
 
         return $criteria;
@@ -66,7 +70,8 @@ class Model extends PhalconModel implements \JsonSerializable
         $props     = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED);
         foreach ($props as $prop) {
             if (substr($prop->getName(), 0, 1) !== '_') {
-                $output             = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $prop->getName()));
+                $str = preg_replace('/(?<!^)[A-Z]/', '_$0', $prop->getName()) ?? '';
+                $output             = strtolower($str);
                 $columnMap[$output] = $prop->getName();
             }
         }
@@ -103,14 +108,17 @@ class Model extends PhalconModel implements \JsonSerializable
 
     public function tokenId($key) : string
     {
-        return WT::encode(['id' => $this->id], $key);
+        if (property_exists($this,'id')) {
+            return WT::encode(['id' => $this->id], $key);
+        }
+        return '';
     }
 
     public static function getByTokenId($token, $key)
     {
         $data = WT::decode($token, $key);
 
-        return isset($data->id) ? static::findFirstById($data->id) : false;
+        return isset($data->id) ? static::findFirstById($data->id) : null;
     }
 
     private function getNumeration($slug) : string
@@ -132,7 +140,7 @@ class Model extends PhalconModel implements \JsonSerializable
         return $slug;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         $myData  = [];
         $child   = new static();
@@ -149,11 +157,10 @@ class Model extends PhalconModel implements \JsonSerializable
     }
 
     /**
-     * @param array $options Array of options found in Frogg\Model
      *
      * @return static |\Phalcon\Mvc\ModelInterface Returns a copy of the current object
      */
-    public function clone($options = [])
+    public function clone()
     {
         $newObject = PhalconModel::cloneResult(
             new static(),
@@ -161,30 +168,16 @@ class Model extends PhalconModel implements \JsonSerializable
             PhalconModel::DIRTY_STATE_TRANSIENT
         );
 
-        foreach ($options as $option) {
-            switch ($option) {
-                case self::CLONE_RM_ID:
-                    $newObject->id = null;
-                    break;
-                case self::CLONE_CREATE_NEW:
-                    $newObject->id = null;
-                    $newObject->create();
-                    break;
-            }
-        }
-
         return $newObject;
     }
 
     /**
      * Save the entity or throw an exception.
-     * @param mixed[] $data
-     * @param mixed[] $whiteList
      * @throws \Frogg\Exception\UnableToSaveRecord
      */
-    public function saveOrFail(?array $data = null, ?array $whiteList = null) : void
+    public function saveOrFail() : void
     {
-        $return = parent::save($data, $whiteList);
+        $return = parent::save();
 
         if ($return === true) {
             return;

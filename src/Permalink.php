@@ -153,7 +153,9 @@ class Permalink
             '/-$/'                 => '',
         ];
 
-        return trim(preg_replace(array_keys($a), array_values($a), $title), '\\-_.+ ');
+        $strg = preg_replace(array_keys($a), array_values($a), $title) ?? '';
+
+        return trim($strg, '\\-_.+ ');
     }
 
 }

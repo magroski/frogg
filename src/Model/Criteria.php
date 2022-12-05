@@ -22,8 +22,8 @@ use Phalcon\Mvc\Model as PhalconModel;
  *     }
  *
  * @package Frogg
- * @method static addSoftDelete(string $column = 'deleted', int $activeValue = 0) add soft delete criteria to the query
- * @method static removeSoftDelete() removes soft delete criteria from the criteriaQueue
+ * @method self addSoftDelete(string $column = 'deleted', int $activeValue = 0) add soft delete criteria to the query
+ * @method self removeSoftDelete() removes soft delete criteria from the criteriaQueue
  */
 class Criteria extends PhalconModel\Criteria
 {
@@ -36,11 +36,10 @@ class Criteria extends PhalconModel\Criteria
      * @param string $column
      * @param int    $activeValue
      *
-     * @return PhalconModel\Criteria
      * @internal param $add
      *
      */
-    public function softDelete($column = 'deleted', $activeValue = 0)
+    public function softDelete($column = 'deleted', $activeValue = 0)  : PhalconModel\CriteriaInterface
     {
         return $this->andWhere($column . '=' . $activeValue);
     }
@@ -56,10 +55,8 @@ class Criteria extends PhalconModel\Criteria
      *       ->execute();
      *
      * @param array|string $columns
-     *
-     * @return static
      */
-    public function columns($columns)
+    public function columns($columns) : PhalconModel\CriteriaInterface
     {
         if (!is_array($columns)) {
             return parent::columns($columns);
@@ -93,14 +90,14 @@ class Criteria extends PhalconModel\Criteria
     /**
      * alias to make more sense when calling it on query building.
      *
-     * @return $this
+     * @return \Phalcon\Mvc\Model\CriteriaInterface
      */
     public function withDeleted()
     {
         return $this->removeSoftDelete();
     }
 
-    public function createBuilder()
+    public function createBuilder() : PhalconModel\Query\BuilderInterface
     {
         if (method_exists(parent::class, 'createBuilder')) {
             return parent::createBuilder();
@@ -113,7 +110,7 @@ class Criteria extends PhalconModel\Criteria
         }
     }
 
-    public function execute()
+    public function execute() : PhalconModel\ResultsetInterface
     {
         foreach ($this->modelCriterias as $criteria => $value) {
             $method = lcfirst($criteria);
@@ -197,13 +194,8 @@ class Criteria extends PhalconModel\Criteria
 
     /**
      * Defaults merge to true on bind params
-     *
-     * @param array $bindParams
-     * @param bool  $merge
-     *
-     * @return PhalconModel\Criteria|void
      */
-    public function bind(array $bindParams, $merge = true)
+    public function bind(array $bindParams, bool $merge = false) : PhalconModel\CriteriaInterface
     {
         return parent::bind($bindParams, $merge);
     }
@@ -224,11 +216,8 @@ class Criteria extends PhalconModel\Criteria
      *
      *
      * @param array $bindTypes
-     * @param bool  $merge
-     *
-     * @return PhalconModel\Criteria|void
      */
-    public function bindTypes(array $bindTypes, $merge = true)
+    public function bindTypes(array $bindTypes) : PhalconModel\CriteriaInterface
     {
         if (is_array($bindTypes)) {
             $params = $this->getParams();
@@ -243,16 +232,10 @@ class Criteria extends PhalconModel\Criteria
             }
         }
 
-        if ($merge) {
-            $query_types = $this->getQuery()->getBindTypes();
-            $bindTypes   = array_merge($query_types ?: [], $bindTypes);
-        }
-
         return parent::bindTypes($bindTypes);
     }
 
     /**
-     * @param       $name
      * @param array $arguments
      *
      * @return $this
