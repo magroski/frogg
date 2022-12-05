@@ -1,13 +1,10 @@
 parameters:
-  level: max
-  src: src/
+  parallel:
+    maximumNumberOfProcesses: 4
+  level: 4
   paths:
     - src/
-  autoload_directories:
+  scanDirectories:
     - %currentWorkingDirectory%/vendor/phalcon/ide-stubs/src
-  includes:
-    - ../../vendor/phpstan/phpstan-strict-rules/rules.neon
-  ignoreErrors:
-    - "#.*and 'createBuilder' will always evaluate to false.#"
-  excludes_analyse:
-    - %currentWorkingDirectory%/src/Crypto/
+includes:
+    - phpstan-baseline.neon

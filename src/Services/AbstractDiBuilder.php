@@ -9,7 +9,7 @@ class AbstractDiBuilder extends FactoryDefault
     /**
      * AbstractService constructor.
      */
-    public function __construct($config)
+    public function __construct(\Phalcon\Config\Config $config)
     {
         parent::__construct();
         $this->setShared('config', $config);
@@ -19,7 +19,7 @@ class AbstractDiBuilder extends FactoryDefault
     /**
      *  Register services in di, all methods with prefix [init, initShared]
      */
-    protected function bindServices()
+    protected function bindServices() : void
     {
         $reflection = new \ReflectionObject($this);
         $methods    = $reflection->getMethods();

@@ -8,8 +8,8 @@ use Aws\Sqs\SqsClient as AmazonSqsClient;
 /** @deprecated use magroski/simple-sqs */
 class SqsClient
 {
-    protected $sqsClient;
-    protected $queueUrl;
+    protected AmazonSqsClient $sqsClient;
+    protected ?string $queueUrl;
 
     /**
      * SqsClient constructor.

@@ -71,7 +71,7 @@ class Criteria extends PhalconModel\Criteria
                 return $this->getAlias() . '.*';
             }
 
-            $joins = $this->createBuilder()->getJoins() ?? [];
+            $joins = $this->createBuilder()->getJoins();
 
             foreach ($joins as $join) {
                 if ($join[0] == $column) {
@@ -301,7 +301,7 @@ class Criteria extends PhalconModel\Criteria
      */
     public function applyFilters(array $filters, bool $strict = false)
     {
-        foreach ($filters ?? [] as $filterName => $filterValue) {
+        foreach ($filters as $filterName => $filterValue) {
             if ($filterValue === null) {
                 continue;
             }

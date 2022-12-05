@@ -286,7 +286,7 @@ class Controller extends PhalconController
 
     private function url(string $routeName, array $params = [], array $query = []) : string
     {
-        $di     = \Phalcon\Di::getDefault();
+        $di     = \Phalcon\Di\Di::getDefault();
         if ($di=== null) {
             throw new \RuntimeException('Container does not exist');
         }
