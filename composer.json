@@ -28,7 +28,7 @@
     "require": {
         "php": "^8.1",
         "aws/aws-sdk-php": "^3.27",
-        "mobiledetect/mobiledetectlib": "^2.8",
+        "mobiledetect/mobiledetectlib": "^2.8 || ^3.0",
         "ext-json": "*"
     },
     "require-dev": {
