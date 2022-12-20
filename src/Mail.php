@@ -3,6 +3,7 @@
 namespace Frogg;
 
 use Aws\Credentials\Credentials;
+use Aws\Result;
 use Aws\Ses\SesClient;
 
 /**
@@ -11,12 +12,18 @@ use Aws\Ses\SesClient;
 class Mail
 {
 
-    protected $fromName;
-    protected $fromEmail;
-    protected $bounceAddress;
-    protected $ses;
+    protected string $fromName;
+    protected string $fromEmail;
+    protected string $bounceAddress;
+    protected SesClient $ses;
+    /**
+     * @var mixed
+     */
     protected $t;
 
+    /**
+     * @param array<string> $credentials
+     */
     public function __construct(array $credentials)
     {
         $this->fromName      = $credentials['fromName'];
@@ -40,7 +47,11 @@ class Mail
         $this->bounceAddress = $bounceAddress;
     }
 
-    public function send($subject, $body, $to, $text = false)
+    /**
+     * @param  array<string>|string      $to
+     * @param  string|false      $text
+     */
+    public function send(string $subject, string $body, $to, $text = false) : Result
     {
         if (!is_array($to)) {
             $to = [$to];
@@ -85,9 +96,7 @@ class Mail
             ];
         }
 
-        $status = $this->ses->sendEmail($email_data);
-
-        return $status;
+        return $this->ses->sendEmail($email_data);
     }
 
 }

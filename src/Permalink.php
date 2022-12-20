@@ -6,9 +6,9 @@ namespace Frogg;
 class Permalink
 {
 
-    private $prefix;
-    private $title;
-    private $suffix;
+    private string $prefix;
+    private string $title;
+    private string $suffix;
 
     /**
      * Default constructor for class Frogg\Permalink
@@ -29,7 +29,7 @@ class Permalink
      *
      * @param string $prefix The string that will be used as a prefix
      */
-    public function setPrefix($prefix)
+    public function setPrefix(string $prefix) : void
     {
         $this->prefix = $prefix;
     }
@@ -39,7 +39,7 @@ class Permalink
      *
      * @param string $suffix The string that will be used as a suffix
      */
-    public function setSuffix($suffix)
+    public function setSuffix(string $suffix) : void
     {
         $this->suffix = $suffix;
     }
@@ -61,7 +61,7 @@ class Permalink
      *
      * @return string
      */
-    public static function createSlug($title) : string
+    public static function createSlug(string $title) : string
     {
         $normalizeChars = [
             'Á' => 'A',

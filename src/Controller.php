@@ -39,12 +39,18 @@ use TypeError;
 class Controller extends PhalconController
 {
 
-    public $unauthorizedUrl = '/';
-    public $authLabel       = 'auth';
+    public string $unauthorizedUrl = '/';
+    public string $authLabel       = 'auth';
 
-    protected $publicActions = [];
+    /**
+     * @var array<string>
+     */
+    protected array $publicActions = [];
 
-    public function isAllowed($actionName, $auth)
+    /**
+     * @param  mixed      $auth
+     */
+    public function isAllowed(string $actionName, $auth) : bool
     {
         return in_array($actionName, $this->publicActions) || $auth;
     }
@@ -56,12 +62,15 @@ class Controller extends PhalconController
         return $mobileDetector->isMobile() && !$mobileDetector->isTablet();
     }
 
-    public function login($auth)
+    /**
+     * @param mixed $auth
+     */
+    public function login($auth) : void
     {
         $this->auth = $auth;
     }
 
-    public function getUnauthorizedUrl()
+    public function getUnauthorizedUrl() : string
     {
         return $this->unauthorizedUrl;
     }
@@ -69,11 +78,11 @@ class Controller extends PhalconController
     /**
      * Syntactical sugar for Phalcon's $dispatcher->forward
      *
-     * @param array|string $routeInfo Array : Key-value array containing route information [namespace, module,
+     * @param array<string>|string $routeInfo Array : Key-value array containing route information [namespace, module,
      *                                controller, action, ...] String : Route url or route name
-     * @param array        $params    Key-value array containing parameters and values
+     * @param array<string,string>        $params    Key-value array containing parameters and values
      */
-    public function forward($routeInfo, $params = [])
+    public function forward($routeInfo, $params = []) : void
     {
         if (is_string($routeInfo)) {
             $routeInfo = $this->extractRoutePath($routeInfo);
@@ -83,19 +92,26 @@ class Controller extends PhalconController
         $this->dispatcher->forward($requestData);
     }
 
-    public function redirect($url, $externalRedirect = false, $statusCode = 302)
+    public function redirect(string $url, bool $externalRedirect = false, int $statusCode = 302) : void
     {
         $this->response->redirect($url, $externalRedirect, $statusCode);
         $this->view->disable();
     }
 
-    public function partial($file, $params)
+    /**
+     * @param array<string,mixed>  $params
+     */
+    public function partial(string $file, array $params) : string
     {
         $this->view->disableLevel(PhalconView::LEVEL_LAYOUT);
 
         return $this->view->getRender('partials', $file, $params);
     }
 
+    /**
+     * @param array<mixed> $array
+     * @return array<mixed>
+     */
     private function encodedArray(array $array) : array
     {
         $encodedArray = [];
@@ -114,7 +130,11 @@ class Controller extends PhalconController
         return $encodedArray;
     }
 
-    public function getParam($name, $defaultValue = null)
+    /**
+     * @param array|float|int|mixed|string|null       $defaultValue
+     * @return array|float|int|mixed|string|null
+     */
+    public function getParam(string $name, $defaultValue = null)
     {
         $encodedParam = null;
         if ($this->dispatcher->hasParam($name)) {
@@ -148,7 +168,11 @@ class Controller extends PhalconController
         return $this->utf8WithoutBom(htmlspecialchars($encodedParam));
     }
 
-    public function getDecodedParam($name, $defaultValue = null)
+    /**
+     * @param  mixed      $defaultValue
+     * @return mixed|null
+     */
+    public function getDecodedParam(string $name, $defaultValue = null)
     {
         $decodedParam = null;
         if ($this->dispatcher->hasParam($name)) {
@@ -240,6 +264,10 @@ class Controller extends PhalconController
         return (string)$value;
     }
 
+    /**
+     * @param array<mixed>|null $defaultValue
+     * @return array<mixed>
+     */
     public function getArrayParam(string $name, ?array $defaultValue = null) : array
     {
         $value = $this->getDecodedParam($name);
@@ -274,16 +302,20 @@ class Controller extends PhalconController
      *
      * @param string $route
      *
-     * @return mixed
+     * @return null|array<string,string>
      */
     public function extractRoutePath(string $route)
     {
         $url = (strpos($route, '/') === false) ? $this->url($route) : $route;
         $this->router->handle($url);
 
-        return $this->router->getMatchedRoute()->getPaths();
+        return $this->router->getMatchedRoute() ? $this->router->getMatchedRoute()->getPaths() : null;
     }
 
+    /**
+     * @param array<string>  $params
+     * @param array<string,string>  $query
+     */
     private function url(string $routeName, array $params = [], array $query = []) : string
     {
         $di     = \Phalcon\Di\Di::getDefault();
@@ -291,6 +323,7 @@ class Controller extends PhalconController
             throw new \RuntimeException('Container does not exist');
         }
         $params = array_merge(['for' => $routeName], $params);
+        /** @var \Phalcon\Mvc\Url $url */
         $url    = $di->get('url');
         $url->setBaseUri('/');
 

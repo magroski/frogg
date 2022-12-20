@@ -8,10 +8,13 @@ namespace Frogg\Crypto;
 class WT
 {
 
-    private static $encrypt_method = ENCRYPTION_TYPE;
-    private static $iv             = WT_IV;
+    private static string $encrypt_method = ENCRYPTION_TYPE;
+    private static string $iv             = WT_IV;
 
-    public static function encode($object, $key = WT_KEY) : string
+    /**
+     * @param mixed       $object
+     */
+    public static function encode($object, string $key = WT_KEY) : string
     {
         $json = json_encode($object);
 
@@ -26,7 +29,10 @@ class WT
         return $ivprefix . $output;
     }
 
-    public static function decode($token, $key = WT_KEY)
+    /**
+     * @return mixed
+     */
+    public static function decode(string $token, string $key = WT_KEY)
     {
         $ivprefix = substr($token, 0, 8);
         $token    = substr($token, 8);

@@ -10,6 +10,7 @@ namespace Frogg\Model;
 
 use Frogg\Exception\DuplicatedBindException;
 use Phalcon\Mvc\Model as PhalconModel;
+use Phalcon\Mvc\ModelInterface;
 
 /**
  * Class Criteria
@@ -27,8 +28,11 @@ use Phalcon\Mvc\Model as PhalconModel;
  */
 class Criteria extends PhalconModel\Criteria
 {
-    private   $modelCriterias = [];
-    protected $alias;
+    /**
+     * @var array<string,mixed>
+     */
+    private array    $modelCriterias = [];
+    protected string $alias;
 
     /**
      * removes soft deleted entries from the result.
@@ -39,7 +43,7 @@ class Criteria extends PhalconModel\Criteria
      * @internal param $add
      *
      */
-    public function softDelete($column = 'deleted', $activeValue = 0)  : PhalconModel\CriteriaInterface
+    public function softDelete($column = 'deleted', $activeValue = 0) : PhalconModel\CriteriaInterface
     {
         return $this->andWhere($column . '=' . $activeValue);
     }
@@ -54,7 +58,7 @@ class Criteria extends PhalconModel\Criteria
      *       ->columns([CandidateOpening::class, ExternalReference::class])
      *       ->execute();
      *
-     * @param array|string $columns
+     * @param array<string>|string $columns
      */
     public function columns($columns) : PhalconModel\CriteriaInterface
     {
@@ -123,6 +127,9 @@ class Criteria extends PhalconModel\Criteria
         return $builder->getQuery()->execute();
     }
 
+    /**
+     * @return array<string>
+     */
     public function getSql() : array
     {
         foreach ($this->modelCriterias as $criteria => $value) {
@@ -144,21 +151,30 @@ class Criteria extends PhalconModel\Criteria
         return clone $this;
     }
 
-    public function getPhql()
+    public function getPhql() : string
     {
         return $this->createBuilder()->getPhql();
     }
 
-    public function getQuery()
+    public function getQuery() : PhalconModel\QueryInterface
     {
         return $this->createBuilder()->getQuery();
     }
 
-    public function getActiveCriterias()
+    /**
+     * @return mixed[]
+     */
+    public function getActiveCriterias() : array
     {
         return $this->modelCriterias;
     }
 
+    /**
+     * @param string|false             $conditions
+     * @param array<string,mixed>|null $bindParams
+     * @param array<string,mixed>|null $bindTypes
+     * @return \Phalcon\Mvc\Model\Row|\Phalcon\Mvc\ModelInterface|null
+     */
     public function findFirst($conditions = false, $bindParams = null, $bindTypes = null)
     {
         $this->limit(1);
@@ -169,31 +185,41 @@ class Criteria extends PhalconModel\Criteria
         return $this->execute()->getFirst();
     }
 
-    public function findFirstBy($column, $value)
+    /**
+     * @param string $column
+     * @param mixed  $value
+     * @return \Phalcon\Mvc\Model\Row|\Phalcon\Mvc\ModelInterface|null
+     */
+    public function findFirstBy(string $column, $value)
     {
         return $this->findFirst($this->getAlias() . '.' . $column . ' = :value:', ['value' => $value]);
     }
 
+    /**
+     * @param int|string $id
+     * @return \Phalcon\Mvc\Model\Row|\Phalcon\Mvc\ModelInterface|null
+     */
     public function findFirstById($id)
     {
         return $this->findFirstBy('id', $id);
     }
 
-    public function count($column = '*')
+    public function count(string $column = '*') : int
     {
-        return $this->columns('count(' . $column . ') as total')->execute()->getFirst()->total;
+        return (int)$this->columns('count(' . $column . ') as total')->execute()->getFirst()->total;
     }
 
     /**
      * @deprecated
      */
-    private function parentExecute()
+    private function parentExecute() : PhalconModel\ResultsetInterface
     {
         return parent::execute();
     }
 
     /**
      * Defaults merge to true on bind params
+     * @param array<mixed> $bindParams
      */
     public function bind(array $bindParams, bool $merge = false) : PhalconModel\CriteriaInterface
     {
@@ -208,14 +234,16 @@ class Criteria extends PhalconModel\Criteria
      * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'])
      * it will @throws DuplicatedBindException;
      *
-     * but if you want to reassign this bind to another value, you can skip this check using a bind type 'skipBindCheck' = true:
-     * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'], ['skipBindCheck' => true])
+     * but if you want to reassign this bind to another value, you can skip this check using a bind type
+     * 'skipBindCheck' = true:
+     * $criteria->andWhere('column = :alreadyAddedBind:', ['alreadyAddedBind' => 'other value'], ['skipBindCheck' =>
+     * true])
      *
      * I'm not proud of it, but some times we will need to skip it and we can't add more
      * parameters to this function cuz it's interfaced...
      *
      *
-     * @param array $bindTypes
+     * @param array<mixed> $bindTypes
      */
     public function bindTypes(array $bindTypes) : PhalconModel\CriteriaInterface
     {
@@ -236,23 +264,23 @@ class Criteria extends PhalconModel\Criteria
     }
 
     /**
-     * @param array $arguments
+     * @param array<mixed> $arguments
      *
      * @return $this
      * @throws \Exception
      */
-    public function addCriteria($name, $arguments = [])
+    public function addCriteria(string $name, array $arguments = [])
     {
         if (method_exists($this, $name)) {
             $this->modelCriterias[$name] = $arguments;
         } else {
-            Throw new \Exception('Criteria ' . $name . ' does not exist.');
+            throw new \Exception('Criteria ' . $name . ' does not exist.');
         }
 
         return $this;
     }
 
-    public function removeCriteria($name)
+    public function removeCriteria(string $name) : self
     {
         if (isset($this->modelCriterias[$name])) {
             unset($this->modelCriterias[$name]);
@@ -261,19 +289,23 @@ class Criteria extends PhalconModel\Criteria
         return $this;
     }
 
-    public function getAlias()
+    public function getAlias() : string
     {
         return $this->alias;
     }
 
-    public function setAlias($alias)
+    public function setAlias(string $alias) : self
     {
         $this->alias = $alias;
 
         return $this;
     }
 
-    public function __call($name, $arguments)
+    /**
+     * @param string $name
+     * @param mixed  $arguments
+     */
+    public function __call($name, $arguments) : self
     {
         if (strpos($name, 'add') !== false) {
             $criteria = str_replace('add', '', $name);
@@ -283,7 +315,7 @@ class Criteria extends PhalconModel\Criteria
                 $criteria = str_replace('remove', '', $name);
                 $this->removeCriteria($criteria);
             } else {
-                Throw new \Exception('Method ' . $name . ' does not exist.');
+                throw new \Exception('Method ' . $name . ' does not exist.');
             }
         }
 
@@ -293,8 +325,8 @@ class Criteria extends PhalconModel\Criteria
     /**
      * Apply $filters for query
      *
-     * @param array $filters
-     * @param bool  $strict Exception return if property not exists on model
+     * @param array<string,mixed> $filters
+     * @param bool                $strict Exception return if property not exists on model
      *
      * @return $this
      * @throws \Exception

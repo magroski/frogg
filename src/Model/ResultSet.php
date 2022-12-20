@@ -6,6 +6,7 @@ use Frogg\Exception\InvalidAttributeException;
 use Frogg\Model;
 use Generator;
 use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Mvc\ModelInterface;
 
 class ResultSet extends Simple
 {
@@ -15,7 +16,7 @@ class ResultSet extends Simple
      *
      * @param string $attributeName Attribute name
      *
-     * @return array
+     * @return array<mixed>
      * @throws InvalidAttributeException When the attribute is not found on the object
      */
     public function getAttribute(string $attributeName) : array
@@ -38,9 +39,9 @@ class ResultSet extends Simple
      * Example: $users->getAttributes('name', 'age');
      * > [ ['name' => 'Peter', 'age' => 20], ['name' => 'Hilda', 'age' => 22] ];
      *
-     * @param array ...$attributeNames A list of attribute names
+     * @param string ...$attributeNames A list of attribute names
      *
-     * @return array
+     * @return array<mixed>
      * @throws InvalidAttributeException Thrown if one of the attributes is not found on the object
      */
     public function getAttributes(...$attributeNames) : array
@@ -74,7 +75,7 @@ class ResultSet extends Simple
      * Returns the ResultSet as an array contain instances of each entry original Model
      *
      * @deprecated Versão antiga
-     * @return array
+     * @return array<\Phalcon\Mvc\ModelInterface>
      */
     public function toObjectArray(): array
     {
@@ -83,6 +84,9 @@ class ResultSet extends Simple
         }
 
         $skeleton = $this->model;
+        if (!$skeleton instanceof ModelInterface) {
+            throw new \RuntimeException('Invalid type on this->model');
+        }
 
         return array_map(function ($entry) use ($skeleton) {
             return Model::cloneResult($skeleton, $entry);
@@ -108,7 +112,7 @@ class ResultSet extends Simple
     /**
      * Returns an array containing the id of each object in the ResultSet
      *
-     * @return array
+     * @return array<mixed>
      * @throws InvalidAttributeException When the object has no 'id' field
      */
     public function getIds() : array

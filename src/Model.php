@@ -6,9 +6,11 @@ use Frogg\Crypto\WT;
 use Frogg\Exception\UnableToSaveRecord;
 use Frogg\Model\Criteria;
 use Frogg\Model\ResultSet;
+use Phalcon\Db\ResultInterface;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model as PhalconModel;
+use Phalcon\Mvc\ModelInterface;
 
 /**
  * Class Model
@@ -27,7 +29,7 @@ class Model extends PhalconModel
     //This option will set the id of the clone to null AND save it to the DB
     const CLONE_CREATE_NEW = 2;
 
-    public function getResultsetClass()
+    public function getResultsetClass() : string
     {
         return ResultSet::class;
     }
@@ -60,7 +62,7 @@ class Model extends PhalconModel
      * Uses reflection to get all public and protected properties (excluding those that begin with a underscore)
      * and parses their names from camelCase to snake_case to be used in Phalcon column mapping
      *
-     * @return array
+     * @return array<string,string>
      */
     public function columnMap()
     {
@@ -92,21 +94,21 @@ class Model extends PhalconModel
     }
 
     /**
-     * @param array $values Values that will be used to create a permalink
+     * @param array<mixed> $values Values that will be used to create a permalink
      *
      * @return string A permalink formatted string
      */
     public function permalinkForValues(array $values) : string
     {
-        for ($i = 0; $i < count($values); $i++) {
-            $values[$i] = Permalink::createSlug($values[$i]);
+        foreach ($values as $i => $iValue) {
+            $values[$i] = Permalink::createSlug($iValue);
         }
         $value = implode('-', $values);
 
         return $this->getNumeration($value);
     }
 
-    public function tokenId($key) : string
+    public function tokenId(string $key) : string
     {
         if (property_exists($this,'id')) {
             return WT::encode(['id' => $this->id], $key);
@@ -114,32 +116,43 @@ class Model extends PhalconModel
         return '';
     }
 
-    public static function getByTokenId($token, $key)
+    public static function getByTokenId(string $token, string $key) : ?ModelInterface
     {
+        /** @var object $data */
         $data = WT::decode($token, $key);
 
         return isset($data->id) ? static::findFirstById($data->id) : null;
     }
 
-    private function getNumeration($slug) : string
+    private function getNumeration(string $slug) : string
     {
         $resultset = $this->getReadConnection()->query("SELECT `permalink`
 														FROM `" . $this->getSource() . "`
 														WHERE `permalink` = '$slug'
 														LIMIT 1");
+
         $i         = 1;
         $tmp       = $slug;
+        if (is_bool($resultset)) {
+            throw new \RuntimeException('Something wrong when reading data');
+        }
         while ($resultset->numRows()) {
             $slug      = $tmp . '-' . $i++;
             $resultset = $this->getReadConnection()->query("SELECT `permalink`
 															FROM `" . $this->getSource() . "`
 															WHERE `permalink` = '$slug'
 															LIMIT 1");
+            if (is_bool($resultset)) {
+                throw new \RuntimeException('Something wrong when reading data');
+            }
         }
 
         return $slug;
     }
 
+    /**
+     * @return array<string>
+     */
     public function jsonSerialize() : array
     {
         $myData  = [];
