@@ -1,4 +1,7 @@
-# Frogg
+# This package has been discontinued
+------
+
+## Frogg
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/magroski/frogg.svg?style=flat)](https://packagist.org/packages/magroski/frogg)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.1-8892BF.svg?style=flat)](https://php.net/)
